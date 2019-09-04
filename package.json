@@ -1,0 +1,8 @@
+{
+  "name": "symfony4-user-manager",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/thibaut-decherit/symfony4-user-manager",
+  "author": "Thibaut Decherit <thibaut.decherit@protonmail.com>",
+  "license": "MIT"
+}
