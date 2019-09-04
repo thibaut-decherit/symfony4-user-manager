@@ -1,0 +1,10 @@
+@import './app';
+
+$font-family-base: sans-serif;
+$theme-colors: (
+        'primary': $custom-color-primary,
+        'secondary': $custom-color-secondary,
+        'input': $custom-color-input,
+);
+$input-btn-focus-box-shadow: none;
+$input-btn-focus-width: 0;
