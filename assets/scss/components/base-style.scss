@@ -1,0 +1,42 @@
+@import '../constants/app';
+@import '../overrides/bootstrap';
+
+html {
+  font-size: 1rem;
+}
+
+a {
+  cursor: pointer;
+}
+
+a:active, a:focus {
+  outline: none;
+}
+
+button:active, button:focus {
+  outline: none;
+}
+
+.no-underline {
+  text-decoration: none !important;
+}
+
+.text-ucfirst::first-letter {
+  text-transform: uppercase;
+}
+
+.vh-100 {
+  height: 100vh;
+}
+
+.vh-90 {
+  height: 90vh;
+}
+
+.vh-10 {
+  height: 10vh;
+}
+
+.w-33 {
+  width: 33.33%;
+}
