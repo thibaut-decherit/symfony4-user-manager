@@ -1,0 +1,16 @@
+# Form errors
+
+form_errors:
+  global:
+    max_length: This field cannot be longer than {{ limit }} characters.
+    min_length: This field must contain at least {{ limit }} characters.
+    not_blank: This field cannot be empty.
+  user:
+    alphanumeric_only_username: Your username can only contain alphanumeric characters.
+    breached_password: "This password has been found in known data breaches and is therefore no longer safe,
+    please choose another one"
+    password_length: Your password must be between 8 and 50 characters.
+    repeat_password: The password fields must match.
+    unique_username: This username is already used.
+    valid_email: This email address is not valid.
+    wrong_password: Wrong password.

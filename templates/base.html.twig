@@ -1,16 +1,29 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </body>
+<html lang="{{ 'head.language_code'|trans }}">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="{{ 'head.description'|trans }}"/>
+    <meta property="og:locale" content="{{ 'head.language_code'|trans }}"/>
+    <meta property="og:site_name" content="{{ website_name }}"/>
+    <meta property="og:title" content="{{ page_title is defined ? page_title : website_name }}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:description" content="{{ 'head.description'|trans }}">
+    <meta property="og:url" content="{{ app.request.uri }}"/>
+{#    <meta property="og:image" content="put-image-path-here"/>#}
+{#    <meta name="author" content="put-author-name-here">#}
+    <title>{{ page_title is defined ? page_title ~ " | " }}{{ website_name }}</title>
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+{#    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>#}
+</head>
+<body>
+<div class="container my-5">
+    {% block body %}{% endblock %}
+</div>
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+</body>
 </html>
