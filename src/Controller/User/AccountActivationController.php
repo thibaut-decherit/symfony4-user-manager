@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class AccountActivationController
@@ -41,7 +42,7 @@ class AccountActivationController extends DefaultController
             return $this->redirectToRoute('home');
         }
 
-        return $this->render('User/account-activation-confirm.html.twig', [
+        return $this->render('user/account-activation-confirm.html.twig', [
             'user' => $user
         ]);
     }
@@ -50,11 +51,12 @@ class AccountActivationController extends DefaultController
      * Activates account matching activation token.
      *
      * @param Request $request
+     * @param TranslatorInterface $translator
      * @Route("/activate-account/activate", name="account_activation_activate", methods="POST")
      * @return RedirectResponse
      * @throws AccessDeniedException
      */
-    public function activateAction(Request $request): RedirectResponse
+    public function activateAction(Request $request, TranslatorInterface $translator): RedirectResponse
     {
         if ($this->isCsrfTokenValid('account_activation_activate', $request->get('_csrf_token')) === false) {
             throw new AccessDeniedException('Invalid CSRF token.');
@@ -74,7 +76,7 @@ class AccountActivationController extends DefaultController
 
         $this->addFlash(
             'account-activation-success',
-            $this->get('translator')->trans('flash.user.account_activated_successfully')
+            $translator->trans('flash.user.account_activated_successfully')
         );
 
         if ($user !== null && $user->isActivated() === false) {
