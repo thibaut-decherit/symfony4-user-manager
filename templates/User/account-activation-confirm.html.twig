@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% set page_title = 'page_title.account_activation'|trans %}
+
+{% block body %}
+    <div class="row">
+        <h1 class="col">{{ 'page_title.account_activation'|trans }}</h1>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <p>
+                {{ 'user.account_activation_confirm_instructions'|trans }}
+            </p>
+        </div>
+    </div>
+    {{ include(':Form/User/Button:account-activation-confirm.html.twig') }}
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% set page_title = 'page_title.login'|trans %}
+
+{% block body %}
+    <div class="row">
+        <h1 class="col">{{ 'page_title.login'|trans }}</h1>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <a href="{{ path('home') }}">{{ 'page_title.home'|trans }}</a>
+        </div>
+    </div>
+
+    <div class="alert alert-danger mb-3 text-center d-none" id="login-error-alert"></div>
+
+    {% include ':FlashAlert:flash-alert.html.twig' with {
+        'alertType': 'account-activation-success',
+        'alertId': 'login-flash-alert',
+        'alertStyle': 'success',
+        'textAlign': 'center'
+    } %}
+
+    {% include ':FlashAlert:flash-alert.html.twig' with {
+        'alertType': 'password-reset-success',
+        'alertId': 'login-flash-alert',
+        'alertStyle': 'success',
+        'textAlign': 'center'
+    } %}
+
+    {% include ':FlashAlert:flash-alert.html.twig' with {
+        'alertType': 'login-required-error',
+        'alertId': 'login-flash-alert',
+        'alertStyle': 'danger',
+        'textAlign': 'center'
+    } %}
+
+    {% include ':Form/User:login.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('login') }}
+{% endblock %}

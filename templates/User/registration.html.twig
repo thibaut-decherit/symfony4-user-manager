@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% set page_title = 'page_title.registration'|trans %}
+
+{% block body %}
+    <div class="row">
+        <h1 class="col">{{ 'page_title.registration'|trans }}</h1>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <a href="{{ path('home') }}">{{ 'page_title.home'|trans }}</a>
+        </div>
+    </div>
+
+    {% include ':Form/User:registration.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('registration') }}
+    {{ encore_entry_script_tags('password-strength-meter') }}
+{% endblock %}
