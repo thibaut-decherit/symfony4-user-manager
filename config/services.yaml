@@ -31,3 +31,8 @@ services:
     arguments:
       - '%env(MAILER_SENDER)%'
       - '%env(MAILER_REPLY_TO)%'
+
+  security.logout.handler.account_deletion:
+    class: App\Security\AccountDeletionLogoutHandler
+    arguments:
+      - '@security.logout.handler.session'

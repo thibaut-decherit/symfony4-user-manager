@@ -9,8 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Logout\LogoutHandlerInterface;
 use Symfony\Component\Security\Http\Logout\SessionLogoutHandler;
-use Symfony\Component\Templating\EngineInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Twig\Environment as Twig;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Class AccountDeletionLogoutHandler
@@ -49,9 +52,9 @@ class AccountDeletionLogoutHandler implements LogoutHandlerInterface
     private $translator;
 
     /**
-     * @var EngineInterface
+     * @var Twig
      */
-    private $twigEngine;
+    private $twig;
 
     /**
      * AccountDeletionLogoutHandler constructor.
@@ -59,21 +62,21 @@ class AccountDeletionLogoutHandler implements LogoutHandlerInterface
      * @param MailerService $mailer
      * @param EntityManagerInterface $entityManager
      * @param TranslatorInterface $translator
-     * @param EngineInterface $twigEngine
+     * @param Twig $twig
      */
     public function __construct(
         SessionLogoutHandler $sessionLogoutHandler,
         MailerService $mailer,
         EntityManagerInterface $entityManager,
         TranslatorInterface $translator,
-        EngineInterface $twigEngine
+        Twig $twig
     )
     {
         $this->sessionLogoutHandler = $sessionLogoutHandler;
         $this->mailer = $mailer;
         $this->entityManager = $entityManager;
         $this->translator = $translator;
-        $this->twigEngine = $twigEngine;
+        $this->twig = $twig;
     }
 
     /**
@@ -82,6 +85,9 @@ class AccountDeletionLogoutHandler implements LogoutHandlerInterface
      * @param Request $request
      * @param Response $response
      * @param TokenInterface $token
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function logout(Request $request, Response $response, TokenInterface $token): void
     {
@@ -133,12 +139,15 @@ class AccountDeletionLogoutHandler implements LogoutHandlerInterface
      * @param Request $request
      * @param Response $response
      * @param TokenInterface $token
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     private function userRequestedAccountDeletion(Request $request, Response $response, TokenInterface $token): void
     {
         $user = $token->getUser();
 
-        $successMessage = $this->twigEngine->render(
+        $successMessage = $this->twig->render(
             ':FlashAlert/Message/User:account-deletion-request-success.html.twig', [
                 'user' => $user
             ]
@@ -169,6 +178,9 @@ class AccountDeletionLogoutHandler implements LogoutHandlerInterface
      * @param Request $request
      * @param Response $response
      * @param TokenInterface $token
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     private function userConfirmedAccountDeletion(Request $request, Response $response, TokenInterface $token): void
     {
@@ -194,7 +206,7 @@ class AccountDeletionLogoutHandler implements LogoutHandlerInterface
         $em->remove($user);
         $em->flush();
 
-        $this->mailer->accountDeletionSuccess($user);
+        $this->mailer->accountDeletionSuccess($user, $request->getLocale());
 
         $request->getSession()->getFlashBag()->set(
             'account-deletion-success',
