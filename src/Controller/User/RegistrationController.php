@@ -56,9 +56,9 @@ class RegistrationController extends DefaultController
             $duplicateUser = $userRepository->findOneBy(['email' => $user->getEmail()]);
 
             if (empty($duplicateUser)) {
-                $this->handleSuccessfulRegistration($user, $passwordEncoder);
+                $this->handleSuccessfulRegistration($user, $passwordEncoder, $request->getLocale());
             } else {
-                $this->handleDuplicateUserRegistration($duplicateUser);
+                $this->handleDuplicateUserRegistration($duplicateUser, $request->getLocale());
             }
 
             // Renders and json encode the original form (required to empty form fields)
@@ -96,22 +96,34 @@ class RegistrationController extends DefaultController
      * Sends an email to existing user if registration attempt with already registered email address.
      *
      * @param User $duplicateUser
+     * @param string $locale
      */
-    private function handleDuplicateUserRegistration(User $duplicateUser): void
+    private function handleDuplicateUserRegistration(User $duplicateUser, string $locale): void
     {
         if ($duplicateUser->isActivated()) {
-            $this->container->get('mailer.service')->registrationAttemptOnExistingVerifiedEmailAddress($duplicateUser);
+            $this->container->get('mailer.service')->registrationAttemptOnExistingVerifiedEmailAddress(
+                $duplicateUser,
+                $locale
+            );
         } else {
-            $this->container->get('mailer.service')->registrationAttemptOnExistingUnverifiedEmailAddress($duplicateUser);
+            $this->container->get('mailer.service')->registrationAttemptOnExistingUnverifiedEmailAddress(
+                $duplicateUser,
+                $locale
+            );
         }
     }
 
     /**
      * @param User $user
      * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param string $locale
      * @throws Exception
      */
-    private function handleSuccessfulRegistration(User $user, UserPasswordEncoderInterface $passwordEncoder): void
+    private function handleSuccessfulRegistration(
+        User $user,
+        UserPasswordEncoderInterface $passwordEncoder,
+        string $locale
+    ): void
     {
         $hashedPassword = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
 
@@ -130,7 +142,7 @@ class RegistrationController extends DefaultController
             }
         }
 
-        $this->container->get('mailer.service')->registrationSuccess($user);
+        $this->container->get('mailer.service')->registrationSuccess($user, $locale);
 
         $em->persist($user);
         $em->flush();

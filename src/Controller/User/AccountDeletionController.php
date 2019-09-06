@@ -63,7 +63,10 @@ class AccountDeletionController extends DefaultController
         $user->setAccountDeletionRequestedAt(new DateTime());
 
         $accountDeletionTokenLifetimeInMinutes = ceil($this->getParameter('account_deletion_token_lifetime') / 60);
-        $this->get('mailer.service')->accountDeletionRequest($user, $accountDeletionTokenLifetimeInMinutes);
+        $this->get('mailer.service')->accountDeletionRequest(
+            $user, $accountDeletionTokenLifetimeInMinutes,
+            $request->getLocale()
+        );
 
         $em->flush();
 
@@ -247,7 +250,7 @@ class AccountDeletionController extends DefaultController
         $em->remove($user);
         $em->flush();
 
-        $this->get('mailer.service')->accountDeletionSuccess($user);
+        $this->get('mailer.service')->accountDeletionSuccess($user, $request->getLocale());
 
         $this->addFlash(
             'account-deletion-success',

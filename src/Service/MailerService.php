@@ -5,8 +5,11 @@ namespace App\Service;
 use App\Model\AbstractUser;
 use Swift_Mailer;
 use Swift_Message;
-use Symfony\Component\Templating\EngineInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment as Twig;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Class MailerService
@@ -25,9 +28,9 @@ class MailerService
     private $replyToAddress;
 
     /**
-     * @var EngineInterface
+     * @var Twig
      */
-    private $twigEngine;
+    private $twig;
 
     /**
      * @var Swift_Mailer
@@ -43,21 +46,21 @@ class MailerService
      * MailerService constructor.
      * @param string $mailerAddress
      * @param string $replyToAddress
-     * @param EngineInterface $twigEngine
+     * @param Twig $twig
      * @param Swift_Mailer $swiftMailer
      * @param TranslatorInterface $translatorInterface
      */
     public function __construct(
         string $mailerAddress,
         string $replyToAddress,
-        EngineInterface $twigEngine,
+        Twig $twig,
         Swift_Mailer $swiftMailer,
         TranslatorInterface $translatorInterface
     )
     {
         $this->mailerAddress = $mailerAddress;
         $this->replyToAddress = $replyToAddress;
-        $this->twigEngine = $twigEngine;
+        $this->twig = $twig;
         $this->swiftMailer = $swiftMailer;
         $this->translatorInterface = $translatorInterface;
     }
@@ -67,12 +70,18 @@ class MailerService
      *
      * @param AbstractUser $user
      * @param int $accountDeletionTokenLifetimeInMinutes
+     * @param string $locale
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function accountDeletionRequest(AbstractUser $user, int $accountDeletionTokenLifetimeInMinutes): void
+    public function accountDeletionRequest(
+        AbstractUser $user,
+        int $accountDeletionTokenLifetimeInMinutes,
+        string $locale
+    ): void
     {
-        $locale = $this->translatorInterface->getLocale();
-
-        $emailBody = $this->twigEngine->render(
+        $emailBody = $this->twig->render(
             "Email/$locale/User/account-deletion-request.html.twig", [
                 'user' => $user,
                 'accountDeletionTokenLifetimeInMinutes' => $accountDeletionTokenLifetimeInMinutes
@@ -92,12 +101,14 @@ class MailerService
      * Email sent when user confirms account deletion.
      *
      * @param AbstractUser $user
+     * @param string $locale
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function accountDeletionSuccess(AbstractUser $user): void
+    public function accountDeletionSuccess(AbstractUser $user, string $locale): void
     {
-        $locale = $this->translatorInterface->getLocale();
-
-        $emailBody = $this->twigEngine->render(
+        $emailBody = $this->twig->render(
             "Email/$locale/User/account-deletion-success.html.twig", [
                 'user' => $user,
             ]
@@ -117,12 +128,14 @@ class MailerService
      *
      * @param AbstractUser $user
      * @param int $emailChangeTokenLifetimeInMinutes
+     * @param string $locale
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function emailChange(AbstractUser $user, int $emailChangeTokenLifetimeInMinutes): void
+    public function emailChange(AbstractUser $user, int $emailChangeTokenLifetimeInMinutes, string $locale): void
     {
-        $locale = $this->translatorInterface->getLocale();
-
-        $emailBody = $this->twigEngine->render(
+        $emailBody = $this->twig->render(
             "Email/$locale/User/email-address-change.html.twig", [
                 'user' => $user,
                 'emailChangeTokenLifetimeInMinutes' => $emailChangeTokenLifetimeInMinutes
@@ -140,12 +153,14 @@ class MailerService
 
     /**
      * @param AbstractUser $user
+     * @param string $locale
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function loginAttemptOnNonActivatedAccount(AbstractUser $user): void
+    public function loginAttemptOnNonActivatedAccount(AbstractUser $user, string $locale): void
     {
-        $locale = $this->translatorInterface->getLocale();
-
-        $emailBody = $this->twigEngine->render(
+        $emailBody = $this->twig->render(
             "Email/$locale/User/login-attempt-on-unactivated-account.html.twig", [
                 'user' => $user
             ]
@@ -165,12 +180,14 @@ class MailerService
      *
      * @param AbstractUser $user
      * @param int $passwordResetTokenLifetimeInMinutes
+     * @param string $locale
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function passwordResetRequest(AbstractUser $user, int $passwordResetTokenLifetimeInMinutes): void
+    public function passwordResetRequest(AbstractUser $user, int $passwordResetTokenLifetimeInMinutes, string $locale): void
     {
-        $locale = $this->translatorInterface->getLocale();
-
-        $emailBody = $this->twigEngine->render(
+        $emailBody = $this->twig->render(
             "Email/$locale/User/password-reset-request.html.twig", [
                 'user' => $user,
                 'passwordResetTokenLifetimeInMinutes' => $passwordResetTokenLifetimeInMinutes
@@ -188,12 +205,14 @@ class MailerService
 
     /**
      * @param AbstractUser $user
+     * @param string $locale
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function registrationAttemptOnExistingVerifiedEmailAddress(AbstractUser $user): void
+    public function registrationAttemptOnExistingVerifiedEmailAddress(AbstractUser $user, string $locale): void
     {
-        $locale = $this->translatorInterface->getLocale();
-
-        $emailBody = $this->twigEngine->render(
+        $emailBody = $this->twig->render(
             "Email/$locale/User/registration-attempt-on-existing-verified-email-address.html.twig", [
                 'user' => $user
             ]
@@ -210,12 +229,14 @@ class MailerService
 
     /**
      * @param AbstractUser $user
+     * @param string $locale
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function registrationAttemptOnExistingUnverifiedEmailAddress(AbstractUser $user): void
+    public function registrationAttemptOnExistingUnverifiedEmailAddress(AbstractUser $user, string $locale): void
     {
-        $locale = $this->translatorInterface->getLocale();
-
-        $emailBody = $this->twigEngine->render(
+        $emailBody = $this->twig->render(
             "Email/$locale/User/registration-attempt-on-existing-unverified-email-address.html.twig", [
                 'user' => $user
             ]
@@ -234,12 +255,14 @@ class MailerService
      * Email sent after user registration, it contains an activation link.
      *
      * @param AbstractUser $user
+     * @param string $locale
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function registrationSuccess(AbstractUser $user): void
+    public function registrationSuccess(AbstractUser $user, string $locale): void
     {
-        $locale = $this->translatorInterface->getLocale();
-
-        $emailBody = $this->twigEngine->render(
+        $emailBody = $this->twig->render(
             "Email/$locale/User/registration-success.html.twig", [
                 'user' => $user
             ]
@@ -264,7 +287,9 @@ class MailerService
      */
     private function sendEmail($subject, $from, $to, $replyToAddress, $body, $attachment = null): void
     {
-        $message = Swift_Message::newInstance()
+        $message = new Swift_Message();
+
+        $message
             ->setSubject($subject)
             ->setFrom($from)
             ->setTo($to)

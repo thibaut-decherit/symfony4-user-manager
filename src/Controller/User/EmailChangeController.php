@@ -134,7 +134,11 @@ class EmailChangeController extends DefaultController
             $duplicate = $em->getRepository('App:User')->findOneBy(['email' => $user->getEmailChangePending()]);
             if (is_null($duplicate)) {
                 $emailChangeTokenLifetimeInMinutes = ceil($this->getParameter('email_change_token_lifetime') / 60);
-                $this->get('mailer.service')->emailChange($user, $emailChangeTokenLifetimeInMinutes);
+                $this->get('mailer.service')->emailChange(
+                    $user,
+                    $emailChangeTokenLifetimeInMinutes,
+                    $request->getLocale()
+                );
             }
 
             $em->flush();
