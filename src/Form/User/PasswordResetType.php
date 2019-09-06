@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Form\User;
+namespace App\Form\User;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -10,7 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class PasswordResetType
- * @package AppBundle\Form\User
+ * @package App\Form\User
  */
 class PasswordResetType extends AbstractType
 {
@@ -45,7 +45,7 @@ class PasswordResetType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => 'AppBundle\Entity\User',
+            'data_class' => 'App\Entity\User',
             'validation_groups' => [
                 'Password_Change'
             ]
@@ -57,6 +57,6 @@ class PasswordResetType extends AbstractType
      */
     public function getBlockPrefix(): string
     {
-        return 'appbundle_user';
+        return 'App_user';
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace AppBundle\Controller\User;
+namespace App\Controller\User;
 
-use AppBundle\Controller\DefaultController;
-use AppBundle\Helper\StringHelper;
+use App\Controller\DefaultController;
+use App\Helper\StringHelper;
 use DateTime;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Class AccountDeletionController
- * @package AppBundle\Controller\User
+ * @package App\Controller\User
  */
 class AccountDeletionController extends DefaultController
 {
@@ -50,7 +50,7 @@ class AccountDeletionController extends DefaultController
         while ($loop) {
             $accountDeletionToken = $user->generateSecureToken();
 
-            $duplicate = $em->getRepository('AppBundle:User')->findOneBy([
+            $duplicate = $em->getRepository('App:User')->findOneBy([
                 'accountDeletionToken' => $accountDeletionToken
             ]);
 
@@ -68,7 +68,7 @@ class AccountDeletionController extends DefaultController
         $em->flush();
 
         /*
-         * Confirmation flash alert is handled by AppBundle/Security/AccountDeletionLogoutHandler which will retrieve
+         * Confirmation flash alert is handled by App/Security/AccountDeletionLogoutHandler which will retrieve
          * the following session attribute to know it has to do so.
          */
         $this->get('session')->set('account-deletion-request', true);
@@ -93,7 +93,7 @@ class AccountDeletionController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('AppBundle:User')->findOneBy([
+        $user = $em->getRepository('App:User')->findOneBy([
             'accountDeletionToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountDeletionToken)
         ]);
 
@@ -149,7 +149,7 @@ class AccountDeletionController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('AppBundle:User')->findOneBy([
+        $user = $em->getRepository('App:User')->findOneBy([
             'accountDeletionToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountDeletionToken)
         ]);
 
@@ -184,7 +184,7 @@ class AccountDeletionController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('AppBundle:User')->findOneBy([
+        $user = $em->getRepository('App:User')->findOneBy([
             'accountDeletionToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountDeletionToken)
         ]);
 
@@ -217,7 +217,7 @@ class AccountDeletionController extends DefaultController
 
         /*
          * If user requesting deletion is logged in, he is logged out and account deletion is handled to
-         * AppBundle/EventListener/AccountDeletionLogoutHandler to prevent 500 error "$user must be an instanceof
+         * App/EventListener/AccountDeletionLogoutHandler to prevent 500 error "$user must be an instanceof
          * UserInterface, an object implementing a __toString method, or a primitive string."
          */
         if ($currentUser !== null && $currentUser === $user) {

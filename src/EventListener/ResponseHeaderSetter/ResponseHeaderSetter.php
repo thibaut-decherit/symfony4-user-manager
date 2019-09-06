@@ -1,8 +1,8 @@
 <?php
 
-namespace AppBundle\EventListener\ResponseHeaderSetter;
+namespace App\EventListener\ResponseHeaderSetter;
 
-use AppBundle\EventListener\ResponseHeaderSetter\DynamicResponseHeaderSetter\CspHeaderSetter;
+use App\EventListener\ResponseHeaderSetter\DynamicResponseHeaderSetter\CspHeaderSetter;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -13,9 +13,9 @@ use Symfony\Component\Routing\RouterInterface;
  * Class ResponseHeaderSetter
  *
  * Adds custom headers to every response. Dynamic headers are generated and set in their dedicated class within
- * AppBundle\EventListener\ResponseHeaderSetter\DynamicResponseHeaderSetter namespace.
+ * App\EventListener\ResponseHeaderSetter\DynamicResponseHeaderSetter namespace.
  *
- * @package AppBundle\EventListener\ResponseHeaderSetter
+ * @package App\EventListener\ResponseHeaderSetter
  */
 class ResponseHeaderSetter
 {

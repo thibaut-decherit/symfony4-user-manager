@@ -1,8 +1,8 @@
 <?php
 
-namespace AppBundle\Service;
+namespace App\Service;
 
-use AppBundle\Model\AbstractUser;
+use App\Model\AbstractUser;
 use Swift_Mailer;
 use Swift_Message;
 use Symfony\Component\Templating\EngineInterface;
@@ -10,7 +10,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class MailerService
- * @package AppBundle\Service
+ * @package App\Service
  */
 class MailerService
 {

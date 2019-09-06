@@ -1,8 +1,8 @@
 <?php
 
-namespace AppBundle\Security;
+namespace App\Security;
 
-use AppBundle\Service\MailerService;
+use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +24,7 @@ use Symfony\Component\Translation\TranslatorInterface;
  * To compensate that, this handler MUST call SessionLogoutHandler->logout() manually to ensure the session is still
  * properly invalidated during the logout process.
  *
- * @package AppBundle\Security
+ * @package App\Security
  */
 class AccountDeletionLogoutHandler implements LogoutHandlerInterface
 {
@@ -179,7 +179,7 @@ class AccountDeletionLogoutHandler implements LogoutHandlerInterface
         // Session is properly invalidated
         $this->sessionLogoutHandler->logout($request, $response, $token);
 
-        $user = $em->getRepository('AppBundle:User')->findOneBy([
+        $user = $em->getRepository('App:User')->findOneBy([
             'accountDeletionToken' => $accountDeletionToken
         ]);
 

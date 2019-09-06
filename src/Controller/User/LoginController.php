@@ -1,14 +1,14 @@
 <?php
 
-namespace AppBundle\Controller\User;
+namespace App\Controller\User;
 
-use AppBundle\Controller\DefaultController;
+use App\Controller\DefaultController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class LoginController
- * @package AppBundle\Controller\User
+ * @package App\Controller\User
  */
 class LoginController extends DefaultController
 {

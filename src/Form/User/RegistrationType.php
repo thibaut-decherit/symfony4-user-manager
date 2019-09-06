@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Form\User;
+namespace App\Form\User;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class RegistrationType
- * @package AppBundle\Form\User
+ * @package App\Form\User
  */
 class RegistrationType extends AbstractType
 {
@@ -55,7 +55,7 @@ class RegistrationType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => 'AppBundle\Entity\User',
+            'data_class' => 'App\Entity\User',
             'validation_groups' => [
                 'Registration'
             ]
@@ -67,6 +67,6 @@ class RegistrationType extends AbstractType
      */
     public function getBlockPrefix(): string
     {
-        return 'appbundle_user';
+        return 'App_user';
     }
 }

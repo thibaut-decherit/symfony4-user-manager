@@ -1,9 +1,9 @@
 <?php
 
-namespace AppBundle\Controller\User;
+namespace App\Controller\User;
 
-use AppBundle\Controller\DefaultController;
-use AppBundle\Helper\StringHelper;
+use App\Controller\DefaultController;
+use App\Helper\StringHelper;
 use DateTime;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Class EmailChangeController
- * @package AppBundle\Controller\User
+ * @package App\Controller\User
  *
  */
 class EmailChangeController extends DefaultController
@@ -29,7 +29,7 @@ class EmailChangeController extends DefaultController
     {
         $user = $this->getUser();
 
-        $form = $this->createForm('AppBundle\Form\User\EmailChangeType', $user);
+        $form = $this->createForm('App\Form\User\EmailChangeType', $user);
 
         return $this->render(':Form/User:email-change.html.twig', [
             'form' => $form->createView()
@@ -48,7 +48,7 @@ class EmailChangeController extends DefaultController
     {
         $user = $this->getUser();
 
-        $form = $this->createForm('AppBundle\Form\User\EmailChangeType', $user);
+        $form = $this->createForm('App\Form\User\EmailChangeType', $user);
 
         $form->handleRequest($request);
 
@@ -121,7 +121,7 @@ class EmailChangeController extends DefaultController
             while ($loop) {
                 $token = $user->generateSecureToken();
 
-                $duplicate = $em->getRepository('AppBundle:User')->findOneBy(['emailChangeToken' => $token]);
+                $duplicate = $em->getRepository('App:User')->findOneBy(['emailChangeToken' => $token]);
                 if (is_null($duplicate)) {
                     $loop = false;
                     $user->setEmailChangeToken($token);
@@ -131,7 +131,7 @@ class EmailChangeController extends DefaultController
             $user->setEmailChangeRequestedAt(new DateTime());
 
             // IF email address is not already registered to another account, sends verification email.
-            $duplicate = $em->getRepository('AppBundle:User')->findOneBy(['email' => $user->getEmailChangePending()]);
+            $duplicate = $em->getRepository('App:User')->findOneBy(['email' => $user->getEmailChangePending()]);
             if (is_null($duplicate)) {
                 $emailChangeTokenLifetimeInMinutes = ceil($this->getParameter('email_change_token_lifetime') / 60);
                 $this->get('mailer.service')->emailChange($user, $emailChangeTokenLifetimeInMinutes);
@@ -188,7 +188,7 @@ class EmailChangeController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('AppBundle:User')->findOneBy([
+        $user = $em->getRepository('App:User')->findOneBy([
             'emailChangeToken' => StringHelper::truncateToMySQLVarcharMaxLength($emailChangeToken)
         ]);
 
@@ -245,7 +245,7 @@ class EmailChangeController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('AppBundle:User')->findOneBy([
+        $user = $em->getRepository('App:User')->findOneBy([
             'emailChangeToken' => StringHelper::truncateToMySQLVarcharMaxLength($emailChangeToken)
         ]);
 
@@ -282,7 +282,7 @@ class EmailChangeController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('AppBundle:User')->findOneBy([
+        $user = $em->getRepository('App:User')->findOneBy([
             'emailChangeToken' => StringHelper::truncateToMySQLVarcharMaxLength($emailChangeToken)
         ]);
 
@@ -312,7 +312,7 @@ class EmailChangeController extends DefaultController
             return $this->redirectToRoute('home');
         }
 
-        $duplicate = $em->getRepository('AppBundle:User')->findOneBy([
+        $duplicate = $em->getRepository('App:User')->findOneBy([
             'email' => $user->getEmailChangePending()
         ]);
 

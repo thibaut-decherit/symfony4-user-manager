@@ -1,8 +1,8 @@
 <?php
 
-namespace AppBundle\EventListener;
+namespace App\EventListener;
 
-use AppBundle\Helper\StringHelper;
+use App\Helper\StringHelper;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Security;
 
 /**
  * Class RedirectIfAuthenticated
- * @package AppBundle\EventListener
+ * @package App\EventListener
  */
 class RedirectIfAuthenticated
 {

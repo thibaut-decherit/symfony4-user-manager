@@ -1,9 +1,9 @@
 <?php
 
-namespace AppBundle\Controller\User;
+namespace App\Controller\User;
 
-use AppBundle\Controller\DefaultController;
-use AppBundle\Helper\StringHelper;
+use App\Controller\DefaultController;
+use App\Helper\StringHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Class AccountActivationController
- * @package AppBundle\Controller\User
+ * @package App\Controller\User
  */
 class AccountActivationController extends DefaultController
 {
@@ -33,7 +33,7 @@ class AccountActivationController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('AppBundle:User')->findOneBy([
+        $user = $em->getRepository('App:User')->findOneBy([
             'accountActivationToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountActivationToken)
         ]);
 
@@ -68,7 +68,7 @@ class AccountActivationController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('AppBundle:User')->findOneBy([
+        $user = $em->getRepository('App:User')->findOneBy([
             'accountActivationToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountActivationToken)
         ]);
 

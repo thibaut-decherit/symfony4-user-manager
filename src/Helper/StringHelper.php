@@ -1,12 +1,12 @@
 <?php
 
-namespace AppBundle\Helper;
+namespace App\Helper;
 
 /**
  * Class StringHelper.
  * Utility class for string formatting.
  *
- * @package AppBundle\Helper
+ * @package App\Helper
  */
 class StringHelper
 {

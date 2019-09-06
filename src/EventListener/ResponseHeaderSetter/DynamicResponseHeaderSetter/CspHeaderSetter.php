@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\EventListener\ResponseHeaderSetter\DynamicResponseHeaderSetter;
+namespace App\EventListener\ResponseHeaderSetter\DynamicResponseHeaderSetter;
 
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -13,7 +13,7 @@ use Symfony\Component\Routing\RouterInterface;
  * Adds Content Security Policy header to a response.
  * See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
  *
- * @package AppBundle\EventListener\ResponseHeaderSetter\DynamicResponseHeaderSetter
+ * @package App\EventListener\ResponseHeaderSetter\DynamicResponseHeaderSetter
  */
 class CspHeaderSetter
 {

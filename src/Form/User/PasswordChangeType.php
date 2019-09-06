@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Form\User;
+namespace App\Form\User;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * Class PasswordChangeType
- * @package AppBundle\Form\User
+ * @package App\Form\User
  */
 class PasswordChangeType extends AbstractType
 {
@@ -63,7 +63,7 @@ class PasswordChangeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => 'AppBundle\Entity\User',
+            'data_class' => 'App\Entity\User',
             /*
              * GroupSequence will validate constraints sequentially by iterating through the array, it means that if
              * password length validation fails, length error will be shown and validation will stop there.
@@ -82,6 +82,6 @@ class PasswordChangeType extends AbstractType
      */
     public function getBlockPrefix(): string
     {
-        return 'appbundle_user';
+        return 'App_user';
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace AppBundle\Controller\User;
+namespace App\Controller\User;
 
-use AppBundle\Controller\DefaultController;
-use AppBundle\Helper\StringHelper;
+use App\Controller\DefaultController;
+use App\Helper\StringHelper;
 use DateTime;
 use Exception;
 use SensioLabs\Security\Exception\HttpException;
@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Class PasswordResettingController
- * @package AppBundle\Controller\User
+ * @package App\Controller\User
  * @Route("password-reset")
  */
 class PasswordResetController extends DefaultController
@@ -40,9 +40,9 @@ class PasswordResetController extends DefaultController
             );
 
             if (preg_match('/^.+\@\S+\.\S+$/', $usernameOrEmail)) {
-                $user = $em->getRepository('AppBundle:User')->findOneBy(['email' => $usernameOrEmail]);
+                $user = $em->getRepository('App:User')->findOneBy(['email' => $usernameOrEmail]);
             } else {
-                $user = $em->getRepository('AppBundle:User')->findOneBy(['username' => $usernameOrEmail]);
+                $user = $em->getRepository('App:User')->findOneBy(['username' => $usernameOrEmail]);
             }
 
             $this->addFlash(
@@ -67,7 +67,7 @@ class PasswordResetController extends DefaultController
             while ($loop) {
                 $token = $user->generateSecureToken();
 
-                $duplicate = $em->getRepository('AppBundle:User')->findOneBy(['passwordResetToken' => $token]);
+                $duplicate = $em->getRepository('App:User')->findOneBy(['passwordResetToken' => $token]);
                 if (is_null($duplicate)) {
                     $loop = false;
                     $user->setPasswordResetToken($token);
@@ -103,7 +103,7 @@ class PasswordResetController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('AppBundle:User')->findOneBy([
+        $user = $em->getRepository('App:User')->findOneBy([
             'passwordResetToken' => StringHelper::truncateToMySQLVarcharMaxLength($passwordResetToken)
         ]);
 
@@ -132,7 +132,7 @@ class PasswordResetController extends DefaultController
             return $this->redirectToRoute('password_reset_request');
         }
 
-        $form = $this->createForm('AppBundle\Form\User\PasswordResetType', $user);
+        $form = $this->createForm('App\Form\User\PasswordResetType', $user);
 
         $form->handleRequest($request);
 

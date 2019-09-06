@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\EventListener;
+namespace App\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -8,7 +8,7 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 /**
  * Class OnAuthPasswordRehashIfCostChange
- * @package AppBundle\EventListener
+ * @package App\EventListener
  */
 class OnAuthPasswordRehashIfCostChange
 {

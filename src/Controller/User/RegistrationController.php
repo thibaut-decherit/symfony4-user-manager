@@ -1,9 +1,9 @@
 <?php
 
-namespace AppBundle\Controller\User;
+namespace App\Controller\User;
 
-use AppBundle\Controller\DefaultController;
-use AppBundle\Entity\User;
+use App\Controller\DefaultController;
+use App\Entity\User;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Class RegistrationController
- * @package AppBundle\Controller\User
+ * @package App\Controller\User
  */
 class RegistrationController extends DefaultController
 {
@@ -26,7 +26,7 @@ class RegistrationController extends DefaultController
     public function registerFormAction(): Response
     {
         $user = new User();
-        $form = $this->createForm('AppBundle\Form\User\RegistrationType', $user);
+        $form = $this->createForm('App\Form\User\RegistrationType', $user);
 
         return $this->render('User/registration.html.twig', [
             'user' => $user,
@@ -46,12 +46,12 @@ class RegistrationController extends DefaultController
     public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder): JsonResponse
     {
         $user = new User();
-        $form = $this->createForm('AppBundle\Form\User\RegistrationType', $user);
+        $form = $this->createForm('App\Form\User\RegistrationType', $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:User');
+            $userRepository = $this->getDoctrine()->getManager()->getRepository('App:User');
 
             $duplicateUser = $userRepository->findOneBy(['email' => $user->getEmail()]);
 
@@ -63,7 +63,7 @@ class RegistrationController extends DefaultController
 
             // Renders and json encode the original form (required to empty form fields)
             $user = new User();
-            $form = $this->createForm('AppBundle\Form\User\RegistrationType', $user);
+            $form = $this->createForm('App\Form\User\RegistrationType', $user);
 
             $this->addFlash(
                 'registration-success',
@@ -123,7 +123,7 @@ class RegistrationController extends DefaultController
         while ($loop) {
             $token = $user->generateSecureToken();
 
-            $duplicate = $em->getRepository('AppBundle:User')->findOneBy(['accountActivationToken' => $token]);
+            $duplicate = $em->getRepository('App:User')->findOneBy(['accountActivationToken' => $token]);
             if (is_null($duplicate)) {
                 $loop = false;
                 $user->setAccountActivationToken($token);

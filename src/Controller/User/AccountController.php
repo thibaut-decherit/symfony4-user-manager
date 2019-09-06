@@ -1,8 +1,8 @@
 <?php
 
-namespace AppBundle\Controller\User;
+namespace App\Controller\User;
 
-use AppBundle\Controller\DefaultController;
+use App\Controller\DefaultController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class ManageAccountController
- * @package AppBundle\Controller\User
+ * @package App\Controller\User
  *
  * @Route("/account")
  */
@@ -36,7 +36,7 @@ class AccountController extends DefaultController
     {
         $user = $this->getUser();
 
-        $form = $this->createForm('AppBundle\Form\User\UserInformationType', $user);
+        $form = $this->createForm('App\Form\User\UserInformationType', $user);
 
         return $this->render(':Form/User:account-information.html.twig', [
             'form' => $form->createView()
@@ -54,7 +54,7 @@ class AccountController extends DefaultController
     {
         $user = $this->getUser();
 
-        $form = $this->createForm('AppBundle\Form\User\UserInformationType', $user);
+        $form = $this->createForm('App\Form\User\UserInformationType', $user);
 
         $form->handleRequest($request);
 

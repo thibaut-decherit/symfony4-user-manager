@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class HomeController
- * @package AppBundle\Controller
+ * @package App\Controller
  */
 class HomeController extends DefaultController
 {

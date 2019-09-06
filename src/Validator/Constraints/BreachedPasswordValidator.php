@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Validator\Constraints;
+namespace App\Validator\Constraints;
 
 use Exception;
 use GuzzleHttp\Client as GuzzleClient;

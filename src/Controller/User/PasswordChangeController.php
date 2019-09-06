@@ -1,8 +1,8 @@
 <?php
 
-namespace AppBundle\Controller\User;
+namespace App\Controller\User;
 
-use AppBundle\Controller\DefaultController;
+use App\Controller\DefaultController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Class PasswordChangeController
- * @package AppBundle\Controller\User
+ * @package App\Controller\User
  *
  * @Route("/account/password-change")
  */
@@ -26,7 +26,7 @@ class PasswordChangeController extends DefaultController
     {
         $user = $this->getUser();
 
-        $form = $this->createForm('AppBundle\Form\User\PasswordChangeType', $user);
+        $form = $this->createForm('App\Form\User\PasswordChangeType', $user);
 
         // Password blacklist to be used by zxcvbn.
         $passwordBlacklist = [
@@ -52,7 +52,7 @@ class PasswordChangeController extends DefaultController
     {
         $user = $this->getUser();
 
-        $form = $this->createForm('AppBundle\Form\User\PasswordChangeType', $user);
+        $form = $this->createForm('App\Form\User\PasswordChangeType', $user);
 
         $form->handleRequest($request);
 

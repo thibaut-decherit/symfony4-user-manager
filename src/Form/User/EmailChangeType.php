@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Form\User;
+namespace App\Form\User;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class UserInformationType
- * @package AppBundle\Form\User
+ * @package App\Form\User
  */
 class EmailChangeType extends AbstractType
 {
@@ -36,7 +36,7 @@ class EmailChangeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => 'AppBundle\Entity\User',
+            'data_class' => 'App\Entity\User',
             'validation_groups' => [
                 'Email_Change'
             ]
@@ -48,6 +48,6 @@ class EmailChangeType extends AbstractType
      */
     public function getBlockPrefix(): string
     {
-        return 'appbundle_user';
+        return 'App_user';
     }
 }
