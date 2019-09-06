@@ -5,7 +5,7 @@ import {body} from './helpers/jquery/selectors';
 
 let typingTimer;
 
-body.on('keyup', '#appbundle_user_plainPassword_first', function () {
+body.on('keyup', '#App_user_plainPassword_first', function () {
     clearTimeout(typingTimer);
 
     typingTimer = setTimeout(() => {
@@ -51,8 +51,8 @@ function getCustomBlacklist() {
 
     // Retrieves value of current form inputs that should not be reused as a password.
     const customBlacklistFromInputs = [
-        $('#appbundle_user_username').val(),
-        $('#appbundle_user_email').val()
+        $('#App_user_username').val(),
+        $('#App_user_email').val()
     ];
 
     return customBlacklistFromInputs.concat(customBlacklistArrayFromBackEnd);
