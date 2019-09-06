@@ -26,13 +26,16 @@ services:
 
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
-  App\Service\MailerService:
+  mailer.service:
     public: true
+    class: App\Service\MailerService
     arguments:
-      - '%env(MAILER_SENDER)%'
-      - '%env(MAILER_REPLY_TO)%'
+      $mailerAddress: '%env(MAILER_SENDER)%'
+      $replyToAddress: '%env(MAILER_REPLY_TO)%'
+  App\Service\MailerService: '@mailer.service'
 
   security.logout.handler.account_deletion:
     class: App\Security\AccountDeletionLogoutHandler
     arguments:
-      - '@security.logout.handler.session'
+      $sessionLogoutHandler: '@security.logout.handler.session'
+  App\Security\AccountDeletionLogoutHandler: '@security.logout.handler.account_deletion'
