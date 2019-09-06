@@ -15,28 +15,28 @@
 
     <div class="alert alert-danger mb-3 text-center d-none" id="login-error-alert"></div>
 
-    {% include ':FlashAlert:flash-alert.html.twig' with {
+    {% include 'flashAlert/flash-alert.html.twig' with {
         'alertType': 'account-activation-success',
         'alertId': 'login-flash-alert',
         'alertStyle': 'success',
         'textAlign': 'center'
     } %}
 
-    {% include ':FlashAlert:flash-alert.html.twig' with {
+    {% include 'flashAlert/flash-alert.html.twig' with {
         'alertType': 'password-reset-success',
         'alertId': 'login-flash-alert',
         'alertStyle': 'success',
         'textAlign': 'center'
     } %}
 
-    {% include ':FlashAlert:flash-alert.html.twig' with {
+    {% include 'flashAlert/flash-alert.html.twig' with {
         'alertType': 'login-required-error',
         'alertId': 'login-flash-alert',
         'alertStyle': 'danger',
         'textAlign': 'center'
     } %}
 
-    {% include ':Form/User:login.html.twig' %}
+    {% include 'form/user/login.html.twig' %}
 {% endblock %}
 
 {% block javascripts %}

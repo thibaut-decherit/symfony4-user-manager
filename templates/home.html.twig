@@ -33,7 +33,7 @@
 
     {% if is_granted("ROLE_USER") %}
         <div class="d-flex">
-            <p class="my-2 mr-2">{{ 'flash.user.greeting_authenticated'|trans }}{{ app.user.username }}</p>
+            <p class="my-2 mr-2">{{ 'flash.user.greeting_authenticated'|trans }} {{ app.user.username }}</p>
             <a href="{{ path('account') }}" class="my-2 mr-2">{{ 'page_title.my_account'|trans }}</a>
             <a href="{{ path('logout') }}" class="align-self-center">{{ 'page_title.logout'|trans }}</a>
         </div>

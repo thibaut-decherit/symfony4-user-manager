@@ -24,6 +24,9 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Class LoginFormAuthenticator
@@ -102,14 +105,14 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function supports(Request $request)
     {
-        return 'app_login' === $request->attributes->get('_route') && $request->isMethod('POST');
+        return 'login' === $request->attributes->get('_route') && $request->isMethod('POST');
     }
 
     /**
      * @param Request $request
-     * @return array|mixed|void
+     * @return array
      */
-    public function getCredentials(Request $request)
+    public function getCredentials(Request $request): array
     {
         $username = StringHelper::truncateToMySQLVarcharMaxLength($request->get('username'));
         $password = StringHelper::truncateToPasswordEncoderMaxLength($request->get('password'));
@@ -191,6 +194,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @param Request $request
      * @param AuthenticationException $exception
      * @return JsonResponse
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): JsonResponse
     {
