@@ -82,7 +82,7 @@ class MailerService
     ): void
     {
         $emailBody = $this->twig->render(
-            "Email/$locale/User/account-deletion-request.html.twig", [
+            "email/$locale/user/account-deletion-request.html.twig", [
                 'user' => $user,
                 'accountDeletionTokenLifetimeInMinutes' => $accountDeletionTokenLifetimeInMinutes
             ]
@@ -109,7 +109,7 @@ class MailerService
     public function accountDeletionSuccess(AbstractUser $user, string $locale): void
     {
         $emailBody = $this->twig->render(
-            "Email/$locale/User/account-deletion-success.html.twig", [
+            "email/$locale/user/account-deletion-success.html.twig", [
                 'user' => $user,
             ]
         );
@@ -136,7 +136,7 @@ class MailerService
     public function emailChange(AbstractUser $user, int $emailChangeTokenLifetimeInMinutes, string $locale): void
     {
         $emailBody = $this->twig->render(
-            "Email/$locale/User/email-address-change.html.twig", [
+            "email/$locale/user/email-address-change.html.twig", [
                 'user' => $user,
                 'emailChangeTokenLifetimeInMinutes' => $emailChangeTokenLifetimeInMinutes
             ]
@@ -161,7 +161,7 @@ class MailerService
     public function loginAttemptOnNonActivatedAccount(AbstractUser $user, string $locale): void
     {
         $emailBody = $this->twig->render(
-            "Email/$locale/User/login-attempt-on-unactivated-account.html.twig", [
+            "email/$locale/user/login-attempt-on-unactivated-account.html.twig", [
                 'user' => $user
             ]
         );
@@ -188,7 +188,7 @@ class MailerService
     public function passwordResetRequest(AbstractUser $user, int $passwordResetTokenLifetimeInMinutes, string $locale): void
     {
         $emailBody = $this->twig->render(
-            "Email/$locale/User/password-reset-request.html.twig", [
+            "email/$locale/user/password-reset-request.html.twig", [
                 'user' => $user,
                 'passwordResetTokenLifetimeInMinutes' => $passwordResetTokenLifetimeInMinutes
             ]
@@ -213,7 +213,7 @@ class MailerService
     public function registrationAttemptOnExistingVerifiedEmailAddress(AbstractUser $user, string $locale): void
     {
         $emailBody = $this->twig->render(
-            "Email/$locale/User/registration-attempt-on-existing-verified-email-address.html.twig", [
+            "email/$locale/user/registration-attempt-on-existing-verified-email-address.html.twig", [
                 'user' => $user
             ]
         );
@@ -237,7 +237,7 @@ class MailerService
     public function registrationAttemptOnExistingUnverifiedEmailAddress(AbstractUser $user, string $locale): void
     {
         $emailBody = $this->twig->render(
-            "Email/$locale/User/registration-attempt-on-existing-unverified-email-address.html.twig", [
+            "email/$locale/user/registration-attempt-on-existing-unverified-email-address.html.twig", [
                 'user' => $user
             ]
         );
@@ -263,7 +263,7 @@ class MailerService
     public function registrationSuccess(AbstractUser $user, string $locale): void
     {
         $emailBody = $this->twig->render(
-            "Email/$locale/User/registration-success.html.twig", [
+            "email/$locale/user/registration-success.html.twig", [
                 'user' => $user
             ]
         );
