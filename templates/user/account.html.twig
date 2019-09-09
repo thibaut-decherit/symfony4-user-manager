@@ -13,10 +13,10 @@
         </div>
     </div>
 
-    {{ render(controller('AppBundle\\Controller\\User\\EmailChangeController::changeFormAction')) }}
-    {{ render(controller('AppBundle\\Controller\\User\\AccountController::accountInformationFormAction')) }}
-    {{ render(controller('AppBundle\\Controller\\User\\PasswordChangeController::changeFormAction')) }}
-    {{ render(controller('AppBundle\\Controller\\User\\AccountDeletionController::showAction')) }}
+    {{ render(controller('App\\Controller\\User\\EmailChangeController::changeFormAction')) }}
+    {{ render(controller('App\\Controller\\User\\AccountController::accountInformationFormAction')) }}
+    {{ render(controller('App\\Controller\\User\\PasswordChangeController::changeFormAction')) }}
+    {{ render(controller('App\\Controller\\User\\AccountDeletionController::showAction')) }}
 {% endblock %}
 
 {% block javascripts %}
