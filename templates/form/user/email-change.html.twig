@@ -6,14 +6,14 @@
     }
 }) }}
 
-{% include ':FlashAlert:flash-alert.html.twig' with {
+{% include 'flashAlert/flash-alert.html.twig' with {
     'rawMessage': true,
     'alertType': 'email-change-request-success-raw',
     'alertStyle': 'success',
     'textAlign': 'center'
 } %}
 
-{% include ':FlashAlert:flash-alert.html.twig' with {
+{% include 'flashAlert/flash-alert.html.twig' with {
     'alertType': 'email-change-request-error',
     'alertStyle': 'danger',
     'textAlign': 'center'
