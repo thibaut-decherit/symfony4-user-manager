@@ -36,8 +36,14 @@ security:
       # https://symfony.com/doc/current/security/impersonating_user.html
       # switch_user: true
 
-  # Easy way to control access for large sections of your site
-  # Note: Only the *first* access control that matches will be used
+  # Note : Access control stops at the FIRST match found so it is best practice to order by criticality and start the
+  # list with the most critical path
+  #
+  # Warning : If in the future the website supports locale prefixes (e.g. "en" or "pt", ALL paths MUST be updated
+  # (e.g. with [a-z]{2} pattern, like so: ^/[a-z]{2}/account) or if it supports locales with country specified
+  # (e.g. "pt_BR" or "en_US", then [a-z]{2} pattern won't match)
+  #
+  # If access control is also controller side via @Security annotation, the strictest control will prevail, like so:
+  # IS_AUTHENTICATED_ANONYMOUSLY < IS_AUTHENTICATED_FULLY < ROLE_SOMETHING < ROLE_SOMETHING_2 inheriting of ROLE_SOMETHING
   access_control:
-  # - { path: ^/admin, roles: ROLE_ADMIN }
-  # - { path: ^/profile, roles: ROLE_USER }
+    - { path: ^/account, role: ROLE_USER }
