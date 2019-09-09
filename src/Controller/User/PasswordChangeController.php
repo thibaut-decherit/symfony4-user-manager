@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class PasswordChangeController
@@ -34,7 +35,7 @@ class PasswordChangeController extends DefaultController
             $user->getEmail()
         ];
 
-        return $this->render(':Form/User:password-change.html.twig', [
+        return $this->render('form/user/password-change.html.twig', [
             'form' => $form->createView(),
             'passwordBlacklist' => json_encode($passwordBlacklist)
         ]);
@@ -45,10 +46,15 @@ class PasswordChangeController extends DefaultController
      *
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param TranslatorInterface $translator
      * @Route("/ajax", name="password_change_ajax", methods="POST")
      * @return JsonResponse
      */
-    public function changeAction(Request $request, UserPasswordEncoderInterface $passwordEncoder): JsonResponse
+    public function changeAction(
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder,
+        TranslatorInterface $translator
+    ): JsonResponse
     {
         $user = $this->getUser();
 
@@ -64,10 +70,10 @@ class PasswordChangeController extends DefaultController
 
             $this->addFlash(
                 'password-change-success',
-                $this->get('translator')->trans('flash.user.password_updated')
+                $translator->trans('flash.user.password_updated')
             );
 
-            $template = $this->render(':Form/User:password-change.html.twig', [
+            $template = $this->render('form/user/password-change.html.twig', [
                 'form' => $form->createView()
             ]);
             $jsonTemplate = json_encode($template->getContent());
@@ -84,7 +90,7 @@ class PasswordChangeController extends DefaultController
         $this->getDoctrine()->getManager()->refresh($user);
 
         // Renders and json encode the updated form (with errors)
-        $template = $this->render(':Form/User:password-change.html.twig', [
+        $template = $this->render('form/user/password-change.html.twig', [
             'form' => $form->createView()
         ]);
         $jsonTemplate = json_encode($template->getContent());
