@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use App\Controller\DefaultController;
 use App\Helper\StringHelper;
+use App\Service\MailerService;
 use DateTime;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -11,6 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Class AccountDeletionController
@@ -25,18 +30,19 @@ class AccountDeletionController extends DefaultController
      */
     public function showAction(): Response
     {
-        return $this->render(':User:account-deletion.html.twig');
+        return $this->render('user/account-deletion.html.twig');
     }
 
     /**
      * Sends account deletion link by email to user then log him out.
      *
      * @param Request $request
+     * @param MailerService $mailerService
      * @Route("account/deletion-request", name="account_deletion_request", methods="POST")
      * @return RedirectResponse
      * @throws AccessDeniedException|Exception
      */
-    public function requestAction(Request $request): RedirectResponse
+    public function requestAction(Request $request, MailerService $mailerService): RedirectResponse
     {
         if ($this->isCsrfTokenValid('account_deletion_request', $request->get('_csrf_token')) === false) {
             throw new AccessDeniedException('Invalid CSRF token.');
@@ -63,7 +69,7 @@ class AccountDeletionController extends DefaultController
         $user->setAccountDeletionRequestedAt(new DateTime());
 
         $accountDeletionTokenLifetimeInMinutes = ceil($this->getParameter('account_deletion_token_lifetime') / 60);
-        $this->get('mailer.service')->accountDeletionRequest(
+        $mailerService->accountDeletionRequest(
             $user, $accountDeletionTokenLifetimeInMinutes,
             $request->getLocale()
         );
@@ -83,10 +89,11 @@ class AccountDeletionController extends DefaultController
      * Renders account deletion confirmation view where user can click a button to confirm or cancel the deletion.
      *
      * @param Request $request
+     * @param TranslatorInterface $translator
      * @Route("/delete-account/confirm", name="account_deletion_confirm", methods="GET")
      * @return RedirectResponse
      */
-    public function confirmAction(Request $request): Response
+    public function confirmAction(Request $request, TranslatorInterface $translator): Response
     {
         $accountDeletionToken = $request->get('token');
 
@@ -103,7 +110,7 @@ class AccountDeletionController extends DefaultController
         if ($user === null) {
             $this->addFlash(
                 'account-deletion-error',
-                $this->get('translator')->trans('flash.user.account_deletion_token_expired')
+                $translator->trans('flash.user.account_deletion_token_expired')
             );
 
             return $this->redirectToRoute('home');
@@ -119,13 +126,13 @@ class AccountDeletionController extends DefaultController
 
             $this->addFlash(
                 'account-deletion-error',
-                $this->get('translator')->trans('flash.user.account_deletion_token_expired')
+                $translator->trans('flash.user.account_deletion_token_expired')
             );
 
             return $this->redirectToRoute('home');
         }
 
-        return $this->render('User/account-deletion-confirm.html.twig', [
+        return $this->render('user/account-deletion-confirm.html.twig', [
             'user' => $user
         ]);
     }
@@ -170,10 +177,19 @@ class AccountDeletionController extends DefaultController
      * Removes user matching deletion token if token is not expired.
      *
      * @param Request $request
+     * @param TranslatorInterface $translator
+     * @param MailerService $mailerService
      * @Route("/delete-account/delete", name="account_deletion_delete", methods="POST")
      * @return RedirectResponse
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function deleteAction(Request $request): RedirectResponse
+    public function deleteAction(
+        Request $request,
+        TranslatorInterface $translator,
+        MailerService $mailerService
+    ): RedirectResponse
     {
         if ($this->isCsrfTokenValid('account_deletion_delete', $request->get('_csrf_token')) === false) {
             throw new AccessDeniedException('Invalid CSRF token.');
@@ -194,7 +210,7 @@ class AccountDeletionController extends DefaultController
         if ($user === null) {
             $this->addFlash(
                 'account-deletion-error',
-                $this->get('translator')->trans('flash.user.account_deletion_token_expired')
+                $translator->trans('flash.user.account_deletion_token_expired')
             );
 
             return $this->redirectToRoute('home');
@@ -210,7 +226,7 @@ class AccountDeletionController extends DefaultController
 
             $this->addFlash(
                 'account-deletion-error',
-                $this->get('translator')->trans('flash.user.account_deletion_token_expired')
+                $translator->trans('flash.user.account_deletion_token_expired')
             );
 
             return $this->redirectToRoute('home');
@@ -241,7 +257,7 @@ class AccountDeletionController extends DefaultController
 
             $this->addFlash(
                 'account-deletion-error',
-                $this->get('translator')->trans('flash.user.account_deletion_token_expired')
+                $translator->trans('flash.user.account_deletion_token_expired')
             );
 
             return $this->redirectToRoute('home');
@@ -250,11 +266,11 @@ class AccountDeletionController extends DefaultController
         $em->remove($user);
         $em->flush();
 
-        $this->get('mailer.service')->accountDeletionSuccess($user, $request->getLocale());
+        $mailerService->accountDeletionSuccess($user, $request->getLocale());
 
         $this->addFlash(
             'account-deletion-success',
-            $this->get('translator')->trans('flash.user.account_deletion_success')
+            $translator->trans('flash.user.account_deletion_success')
         );
 
         return $this->redirectToRoute('home');

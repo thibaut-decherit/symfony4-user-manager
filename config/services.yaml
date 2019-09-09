@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+  account_deletion_token_lifetime: 3600 # seconds
   bcrypt_cost: 13
   email_change_request_send_email_again_delay: 120 # seconds
   email_change_token_lifetime: 3600 # seconds
