@@ -4,13 +4,15 @@ namespace App\Controller\User;
 
 use App\Controller\DefaultController;
 use App\Helper\StringHelper;
+use App\Service\MailerService;
 use DateTime;
 use Exception;
-use SensioLabs\Security\Exception\HttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class PasswordResettingController
@@ -23,15 +25,21 @@ class PasswordResetController extends DefaultController
      * Renders and handles password resetting request form.
      *
      * @param Request $request
+     * @param TranslatorInterface $translator
+     * @param MailerService $mailerService
      * @Route("/request", name="password_reset_request", methods={"GET", "POST"})
      * @return Response
      * @throws Exception
      */
-    public function requestAction(Request $request): Response
+    public function requestAction(
+        Request $request,
+        TranslatorInterface $translator,
+        MailerService $mailerService
+    ): Response
     {
         if ($request->isMethod('POST')) {
             if ($this->isCsrfTokenValid('password_reset_request', $request->get('csrfToken')) === false) {
-                throw new HttpException(400);
+                throw new AccessDeniedException('Invalid CSRF token.');
             }
 
             $em = $this->getDoctrine()->getManager();
@@ -47,11 +55,11 @@ class PasswordResetController extends DefaultController
 
             $this->addFlash(
                 'password-reset-request-success',
-                $this->get('translator')->trans('flash.user.password_reset_email_sent')
+                $translator->trans('flash.user.password_reset_email_sent')
             );
 
             if ($user === null) {
-                return $this->render(':User:password-reset-request.html.twig');
+                return $this->render('user/password-reset-request.html.twig');
             }
 
             $passwordResetRequestRetryDelay = $this->getParameter('password_reset_request_send_email_again_delay');
@@ -59,7 +67,7 @@ class PasswordResetController extends DefaultController
             // IF retry delay is not expired, only show success message without sending email and writing in database.
             if ($user->getPasswordResetRequestedAt() !== null
                 && $user->isPasswordResetRequestRetryDelayExpired($passwordResetRequestRetryDelay) === false) {
-                return $this->render(':User:password-reset-request.html.twig');
+                return $this->render('user/password-reset-request.html.twig');
             }
 
             // Generates password reset token and retries if token already exists.
@@ -77,7 +85,7 @@ class PasswordResetController extends DefaultController
             $user->setPasswordResetRequestedAt(new DateTime());
 
             $passwordResetTokenLifetimeInMinutes = ceil($this->getParameter('password_reset_token_lifetime') / 60);
-            $this->get('mailer.service')->passwordResetRequest(
+            $mailerService->passwordResetRequest(
                 $user, $passwordResetTokenLifetimeInMinutes,
                 $request->getLocale()
             );
@@ -85,7 +93,7 @@ class PasswordResetController extends DefaultController
             $em->flush();
         }
 
-        return $this->render(':User:password-reset-request.html.twig');
+        return $this->render('user/password-reset-request.html.twig');
     }
 
     /**
@@ -93,10 +101,15 @@ class PasswordResetController extends DefaultController
      *
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param TranslatorInterface $translator
      * @Route("/reset", name="password_reset", methods={"GET", "POST"})
      * @return Response
      */
-    public function resetAction(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function resetAction(
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder,
+        TranslatorInterface $translator
+    ): Response
     {
         $passwordResetToken = $request->get('token');
 
@@ -113,7 +126,7 @@ class PasswordResetController extends DefaultController
         if ($user === null) {
             $this->addFlash(
                 'password-reset-error',
-                $this->get('translator')->trans('flash.user.password_reset_token_expired')
+                $translator->trans('flash.user.password_reset_token_expired')
             );
 
             return $this->redirectToRoute('password_reset_request');
@@ -129,7 +142,7 @@ class PasswordResetController extends DefaultController
 
             $this->addFlash(
                 'password-reset-error',
-                $this->get('translator')->trans('flash.user.password_reset_token_expired')
+                $translator->trans('flash.user.password_reset_token_expired')
             );
 
             return $this->redirectToRoute('password_reset_request');
@@ -159,7 +172,7 @@ class PasswordResetController extends DefaultController
 
             $this->addFlash(
                 'password-reset-success',
-                $this->get('translator')->trans('flash.user.password_reset_success')
+                $translator->trans('flash.user.password_reset_success')
             );
 
             return $this->redirectToRoute('login');
@@ -172,7 +185,7 @@ class PasswordResetController extends DefaultController
             $user->getPasswordResetToken()
         ];
 
-        return $this->render(':User:password-reset-reset.html.twig', [
+        return $this->render('user/password-reset-reset.html.twig', [
             'form' => $form->createView(),
             'passwordBlacklist' => json_encode($passwordBlacklist)
         ]);
