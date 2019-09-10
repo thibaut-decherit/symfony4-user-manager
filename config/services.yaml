@@ -44,6 +44,13 @@ services:
     tags:
       - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
+  app.on_auth_password_rehash_if_cost_change:
+    class: App\EventListener\OnAuthPasswordRehashIfCostChange
+    arguments:
+      - '%bcrypt_cost%'
+    tags:
+      - { name: kernel.event_listener, event: security.interactive_login, lazy: true }
+
   security.logout.handler.account_deletion:
     class: App\Security\AccountDeletionLogoutHandler
     arguments:
