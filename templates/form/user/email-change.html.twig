@@ -1,0 +1,33 @@
+{{ form_start(form, {
+    'action': path('email_change_request_ajax'),
+    'attr': {
+        'id': 'ajax-form-change-email',
+        'class': 'col p-0 my-3'
+    }
+}) }}
+
+{% include 'flashAlert/flash-alert.html.twig' with {
+    'rawMessage': true,
+    'alertType': 'email-change-request-success-raw',
+    'alertStyle': 'success',
+    'textAlign': 'center'
+} %}
+
+{% include 'flashAlert/flash-alert.html.twig' with {
+    'alertType': 'email-change-request-error',
+    'alertStyle': 'danger',
+    'textAlign': 'center'
+} %}
+
+<div class="form-group">
+    {{ form_label(form.emailChangePending) }}
+    {{ form_widget(form.emailChangePending) }}
+</div>
+
+<div class="form-group">
+    <input
+            class="btn btn-primary border-0 rounded-0 text-white" type="submit"
+            value="{{ 'global.form.save_changes'|trans }}"
+    />
+</div>
+{{ form_end(form) }}

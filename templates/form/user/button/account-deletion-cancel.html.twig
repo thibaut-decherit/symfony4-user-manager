@@ -1,0 +1,15 @@
+<form
+        action="{{ path('account_deletion_cancel') }}" method="post" id="form-button-account-deletion-cancel"
+        class="mr-2"
+>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('account_deletion_cancel') }}" id="csrf-token"/>
+    <input
+            type="hidden" name="account_deletion_token" value="{{ user.accountDeletionToken }}"
+            id="account-deletion-token"
+    />
+    <input
+            class="btn btn-secondary border-0 form-control rounded-0 text-white" type="submit" id="_submit"
+            name="_submit"
+            value="{{ 'global.form.cancel'|trans }}"
+    />
+</form>

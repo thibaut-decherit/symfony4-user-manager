@@ -8,7 +8,7 @@ form_errors:
   user:
     alphanumeric_only_username: Your username can only contain alphanumeric characters.
     breached_password: "This password has been found in known data breaches and is therefore no longer safe,
-    please choose another one"
+    please choose another one."
     password_length: Your password must be between 8 and 50 characters.
     repeat_password: The password fields must match.
     unique_username: This username is already used.

@@ -3,39 +3,39 @@
 {% block body %}
     <h1>{{ website_name }}</h1>
 
-{#    {% include ':FlashAlert:flash-alert.html.twig' with {#}
-{#        'alertType': 'email-change-error',#}
-{#        'alertStyle': 'danger',#}
-{#        'textAlign': 'center'#}
-{#    } %}#}
-{#    {% include ':FlashAlert:flash-alert.html.twig' with {#}
-{#        'rawMessage': true,#}
-{#        'alertType': 'email-change-success-raw',#}
-{#        'alertStyle': 'success',#}
-{#        'textAlign': 'center'#}
-{#    } %}#}
-{#    {% include ':FlashAlert:flash-alert.html.twig' with {#}
-{#        'rawMessage': true,#}
-{#        'alertType': 'account-deletion-request-success-raw',#}
-{#        'alertStyle': 'success',#}
-{#        'textAlign': 'center'#}
-{#    } %}#}
-{#    {% include ':FlashAlert:flash-alert.html.twig' with {#}
-{#        'alertType': 'account-deletion-success',#}
-{#        'alertStyle': 'success',#}
-{#        'textAlign': 'center'#}
-{#    } %}#}
-{#    {% include ':FlashAlert:flash-alert.html.twig' with {#}
-{#        'alertType': 'account-deletion-error',#}
-{#        'alertStyle': 'danger',#}
-{#        'textAlign': 'center'#}
-{#    } %}#}
+    {% include 'flashAlert/flash-alert.html.twig' with {
+        'alertType': 'email-change-error',
+        'alertStyle': 'danger',
+        'textAlign': 'center'
+    } %}
+    {% include 'flashAlert/flash-alert.html.twig' with {
+        'rawMessage': true,
+        'alertType': 'email-change-success-raw',
+        'alertStyle': 'success',
+        'textAlign': 'center'
+    } %}
+    {% include 'flashAlert/flash-alert.html.twig' with {
+        'rawMessage': true,
+        'alertType': 'account-deletion-request-success-raw',
+        'alertStyle': 'success',
+        'textAlign': 'center'
+    } %}
+    {% include 'flashAlert/flash-alert.html.twig' with {
+        'alertType': 'account-deletion-success',
+        'alertStyle': 'success',
+        'textAlign': 'center'
+    } %}
+    {% include 'flashAlert/flash-alert.html.twig' with {
+        'alertType': 'account-deletion-error',
+        'alertStyle': 'danger',
+        'textAlign': 'center'
+    } %}
 
     {% if is_granted("ROLE_USER") %}
         <div class="d-flex">
-{#            <p class="my-2 mr-2">{{ 'flash.user.greeting_authenticated'|trans }}{{ app.user.username }}</p>#}
-{#            <a href="{{ path('account') }}" class="my-2 mr-2">{{ 'page_title.my_account'|trans }}</a>#}
-{#            <a href="{{ path('logout') }}" class="align-self-center">{{ 'page_title.logout'|trans }}</a>#}
+            <p class="my-2 mr-2">{{ 'flash.user.greeting_authenticated'|trans }} {{ app.user.username }}</p>
+            <a href="{{ path('account') }}" class="my-2 mr-2">{{ 'page_title.my_account'|trans }}</a>
+            <a href="{{ path('logout') }}" class="align-self-center">{{ 'page_title.logout'|trans }}</a>
         </div>
     {% else %}
         <p class="my-2">{{ 'flash.user.greeting_anonymous'|trans }}</p>
@@ -43,9 +43,9 @@
 
     <div class="row my-3">
         <div class="col d-flex flex-column align-items-start">
-{#            <a href="{{ path('registration') }}">{{ 'page_title.registration'|trans }}</a>#}
-{#            <a href="{{ path('login') }}">{{ 'page_title.login'|trans }}</a>#}
-{#            <a href="{{ path('password_reset_request') }}">{{ 'page_title.password_reset'|trans }}</a>#}
+            <a href="{{ path('registration') }}">{{ 'page_title.registration'|trans }}</a>
+            <a href="{{ path('login') }}">{{ 'page_title.login'|trans }}</a>
+            <a href="{{ path('password_reset_request') }}">{{ 'page_title.password_reset'|trans }}</a>
         </div>
     </div>
 {% endblock %}

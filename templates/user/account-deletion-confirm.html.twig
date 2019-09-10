@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% set page_title = 'page_title.account_deletion'|trans %}
+
+{% block body %}
+    <div class="row">
+        <h1 class="col">{{ 'page_title.account_deletion'|trans }}</h1>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <p>{{ 'user.account_deletion_confirm_instructions'|trans }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col d-flex justify-content-center">
+            {{ include('form/user/button/account-deletion-cancel.html.twig') }}
+            {{ include('form/user/button/account-deletion-confirm.html.twig') }}
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,6 @@
+<p>Hey {{ user.username }}!</p>
+<p>
+    A login attempt to your account has been detected but you have not yet verified your email address.
+    You can do so by clicking
+    <a href="{{ url('account_activation_confirm', {'token' : user.accountActivationToken}) }}">here</a>.
+</p>

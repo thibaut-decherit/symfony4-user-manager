@@ -1,0 +1,28 @@
+<form action="{{ path('login') }}" method="post" id="ajax-form-login" class="col p-0 my-3">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('login') }}" id="csrf-token"/>
+
+    <div class="form-group">
+        <input
+                type="text" class="form-control border-input rounded-0" id="username"
+                name="username" placeholder="{{ 'user.username'|trans }} or {{ 'user.email_address'|trans }}"
+                aria-label="email" aria-describedby="email" required="required"
+        />
+    </div>
+
+    <div class="form-group">
+        <input
+                type="password" class="form-control border-input rounded-0" id="password" name="password"
+                placeholder="{{ 'user.password'|trans }}" aria-label="password" aria-describedby="password"
+                required="required"
+        />
+    </div>
+    <div class="col d-flex justify-content-between form-group form-check">
+        <input class="form-check-input" type="checkbox" id="remember_me" name="_remember_me" value="on"/>
+        <label class="form-check-label" for="remember_me">{{ 'user.remember_me'|trans }}</label>
+    </div>
+    <input
+            class="btn btn-primary border-0 form-control rounded-0 text-white" type="submit" id="_submit"
+            name="_submit"
+            value="{{ 'user.login'|trans }}"
+    />
+</form>

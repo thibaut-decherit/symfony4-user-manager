@@ -1,14 +1,34 @@
 security:
   # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
   providers:
-    in_memory:
-      memory: null
+    users:
+      entity:
+        class: App\Entity\User
+
+  encoders:
+    App\Entity\User:
+      algorithm: bcrypt
+      cost: '%bcrypt_cost%'
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
     main:
       anonymous: true
+      guard:
+        authenticators:
+          - App\Security\LoginFormAuthenticator
+      logout:
+        path: logout
+        target: /
+        invalidate_session: false
+        handlers:
+          - security.logout.handler.account_deletion
+      remember_me:
+        secret: '%kernel.secret%'
+        secure: true
+        # where to redirect after logout
+        # target: app_any_route
 
       # activate different ways to authenticate
       # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -16,8 +36,14 @@ security:
       # https://symfony.com/doc/current/security/impersonating_user.html
       # switch_user: true
 
-  # Easy way to control access for large sections of your site
-  # Note: Only the *first* access control that matches will be used
+  # Note : Access control stops at the FIRST match found so it is best practice to order by criticality and start the
+  # list with the most critical path
+  #
+  # Warning : If in the future the website supports locale prefixes (e.g. "en" or "pt", ALL paths MUST be updated
+  # (e.g. with [a-z]{2} pattern, like so: ^/[a-z]{2}/account) or if it supports locales with country specified
+  # (e.g. "pt_BR" or "en_US", then [a-z]{2} pattern won't match)
+  #
+  # If access control is also controller side via @Security annotation, the strictest control will prevail, like so:
+  # IS_AUTHENTICATED_ANONYMOUSLY < IS_AUTHENTICATED_FULLY < ROLE_SOMETHING < ROLE_SOMETHING_2 inheriting of ROLE_SOMETHING
   access_control:
-  # - { path: ^/admin, roles: ROLE_ADMIN }
-  # - { path: ^/profile, roles: ROLE_USER }
+    - { path: ^/account, role: ROLE_USER }

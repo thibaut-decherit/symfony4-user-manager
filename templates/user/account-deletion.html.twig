@@ -1,0 +1,30 @@
+<button type="button" class="btn btn-danger rounded-0" data-toggle="modal" data-target="#account-deletion-modal">
+    {{ 'user.delete_account'|trans }}
+</button>
+
+<div class="modal fade" id="account-deletion-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true"
+>
+    <div class="modal-dialog modal-lg h-75 my-0 mx-auto d-flex flex-column justify-content-center" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col">
+                        {{ 'user.account_deletion_question'|trans }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ 'user.account_deletion_instructions'|trans }}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal">
+                    {{ 'global.form.cancel'|trans }}
+                </button>
+                {% include 'form/user/button/account-deletion-request.html.twig' %}
+            </div>
+        </div>
+    </div>
+</div>

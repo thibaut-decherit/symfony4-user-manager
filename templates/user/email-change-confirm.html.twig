@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% set page_title = 'page_title.email_address_change'|trans %}
+
+{% block body %}
+    <div class="row">
+        <h1 class="col">{{ 'page_title.email_address_change'|trans }}</h1>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <p>
+                {{ 'user.email_address_change_confirm_instructions_1/2'|trans }}
+                <span class="font-weight-bold">{{ user.email }}</span>
+                {{ 'user.email_address_change_confirm_instructions_2/2'|trans }}
+                <span class="font-weight-bold">{{ user.emailChangePending }}</span>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col d-flex justify-content-center">
+            {{ include('form/user/button/email-change-cancel.html.twig') }}
+            {{ include('form/user/button/email-change-confirm.html.twig') }}
+        </div>
+    </div>
+
+{% endblock %}

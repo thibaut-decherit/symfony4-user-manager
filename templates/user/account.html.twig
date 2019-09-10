@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% set page_title = 'page_title.my_account'|trans %}
+
+{% block body %}
+    <div class="row">
+        <h1 class="col">{{ 'page_title.my_account'|trans }}</h1>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <a href="{{ path('home') }}">{{ 'page_title.home'|trans }}</a>
+        </div>
+    </div>
+
+    {{ render(controller('App\\Controller\\User\\EmailChangeController::changeFormAction')) }}
+    {{ render(controller('App\\Controller\\User\\AccountController::accountInformationFormAction')) }}
+    {{ render(controller('App\\Controller\\User\\PasswordChangeController::changeFormAction')) }}
+    {{ render(controller('App\\Controller\\User\\AccountDeletionController::showAction')) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('email-change') }}
+    {{ encore_entry_script_tags('account-information') }}
+    {{ encore_entry_script_tags('password-change') }}
+    {{ encore_entry_script_tags('password-strength-meter') }}
+{% endblock %}
