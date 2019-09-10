@@ -39,8 +39,12 @@ services:
       $replyToAddress: '%env(MAILER_REPLY_TO)%'
   App\Service\MailerService: '@mailer.service'
 
+  kernel.listener.redirect_if_authenticated:
+    class: App\EventListener\RedirectIfAuthenticated
+    tags:
+      - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
   security.logout.handler.account_deletion:
     class: App\Security\AccountDeletionLogoutHandler
     arguments:
       $sessionLogoutHandler: '@security.logout.handler.session'
-  App\Security\AccountDeletionLogoutHandler: '@security.logout.handler.account_deletion'
