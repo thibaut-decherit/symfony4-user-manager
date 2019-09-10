@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Validator\Constraints as CustomAssert;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
@@ -87,7 +88,9 @@ abstract class AbstractUser implements UserInterface
      *     maxMessage="form_errors.user.password_length",
      *     groups={"Password_Change", "Registration"}
      * )
-     *
+     * @CustomAssert\BreachedPassword(
+     *     groups={"Password_Change", "Registration"}
+     * )
      */
     protected $plainPassword;
 
