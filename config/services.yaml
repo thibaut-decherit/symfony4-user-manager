@@ -1,3 +1,7 @@
+imports:
+  - resource: response_header_setter/response_headers.yaml
+  - resource: response_header_setter/content_security_policy.yaml
+
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 
@@ -44,10 +48,20 @@ services:
     tags:
       - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
+  kernel.listener.response_header_setter:
+    class: App\EventListener\ResponseHeaderSetter\ResponseHeaderSetter
+    arguments:
+      $kernelEnvironment: '%kernel.environment%'
+      $simpleHeaders: '%response_headers%'
+      $requestStack: '@request_stack'
+      $cspConfig: '%content_security_policy%'
+    tags:
+      - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+
   app.on_auth_password_rehash_if_cost_change:
     class: App\EventListener\OnAuthPasswordRehashIfCostChange
     arguments:
-      - '%bcrypt_cost%'
+      $cost: '%bcrypt_cost%'
     tags:
       - { name: kernel.event_listener, event: security.interactive_login, lazy: true }
 

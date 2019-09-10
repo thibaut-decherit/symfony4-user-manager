@@ -1,0 +1,40 @@
+parameters:
+  content_security_policy:
+    report_uri:
+      # Either match (data must contain route name, use that if your logger is included in the app)
+      # or plain (data must contain URL)
+      mode: # match|plain
+      data: # route_name|http://example.com/csp-report-uri-endpoint
+
+    # OPTIONAL
+    # MANDATORY if directives.strict is defined and not empty
+    # Routes where directives.strict will be applied instead of directives.lax
+    strict_routes: []
+
+    # Either lax or strict
+    # See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy#Directives
+    # Settings below are a good base setup.
+    directives:
+
+      lax:
+        base-uri:
+          - "'self'"
+        default-src:
+          - "'none'"
+        connect-src:
+          - "'self'"
+        font-src:
+          - "'self'"
+        form-action:
+          - "'self'"
+        img-src:
+          - "'self'"
+          - 'data:' # Required for Symfony SVGs (e.g. times icon in form input with validation error)
+        script-src:
+          - "'self'"
+        style-src:
+          - "'self'"
+
+      # OPTIONAL
+      # MANDATORY if strict_routes is defined and not empty
+      strict: []
