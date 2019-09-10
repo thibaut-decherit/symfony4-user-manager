@@ -58,7 +58,7 @@ class OnAuthPasswordRehashIfCostChange
 
         if (password_needs_rehash($currentHashedPassword, PASSWORD_BCRYPT, $options)) {
             $em = $this->entityManager;
-            $plainPassword = $event->getRequest()->request->get('_password');
+            $plainPassword = $event->getRequest()->request->get('password');
 
             $user->setPassword(
                 $this->passwordEncoder->encodePassword($user, $plainPassword)
