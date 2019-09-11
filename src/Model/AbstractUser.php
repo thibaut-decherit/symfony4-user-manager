@@ -136,7 +136,6 @@ abstract class AbstractUser implements UserInterface
      * )
      * @Assert\Email(
      *      message = "form_errors.user.valid_email",
-     *      checkMX = true,
      *      groups={"Email_Change"}
      * )
      */
