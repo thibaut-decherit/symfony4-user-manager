@@ -64,12 +64,6 @@ class EmailChangeController extends DefaultController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($user->getEmailChangePending() === $user->getEmail()) {
-                /*
-                 * $user must be refreshed or invalid POST data will conflict with logged-in user and crash the session,
-                 * this line is not needed when editing with ajax any other entity than User
-                 */
-                $this->getDoctrine()->getManager()->refresh($user);
-
                 $this->addFlash(
                     'email-change-request-error',
                     $translator->trans('flash.user.already_current_email_address')
@@ -90,8 +84,6 @@ class EmailChangeController extends DefaultController
             // IF retry delay is not expired, displays error message.
             if ($user->getEmailChangeRequestedAt() !== null
                 && $user->isEmailChangeRequestRetryDelayExpired($emailChangeRequestRetryDelay) === false) {
-                $this->getDoctrine()->getManager()->refresh($user);
-
                 // Displays a flash message informing user that he has to wait $limit minutes between each attempt
                 $limit = ceil($emailChangeRequestRetryDelay / 60);
                 $errorMessage = '';
@@ -170,8 +162,6 @@ class EmailChangeController extends DefaultController
                 'template' => $jsonTemplate
             ], 200);
         }
-
-        $this->getDoctrine()->getManager()->refresh($user);
 
         // Renders and json encode the updated form (with errors)
         $template = $this->render('form/user/email-change.html.twig', [

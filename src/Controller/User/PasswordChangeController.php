@@ -84,12 +84,6 @@ class PasswordChangeController extends DefaultController
             ], 200);
         }
 
-        /*
-         * $user must be refreshed or invalid POST data will conflict with logged-in user and crash the session,
-         * this line is not needed when editing with ajax any other entity than User
-         */
-        $this->getDoctrine()->getManager()->refresh($user);
-
         // Renders and json encode the updated form (with errors)
         $template = $this->render('form/user/password-change.html.twig', [
             'form' => $form->createView()

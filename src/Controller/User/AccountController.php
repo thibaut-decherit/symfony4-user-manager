@@ -80,8 +80,9 @@ class AccountController extends DefaultController
         }
 
         /*
-         * $user must be refreshed or invalid POST data will conflict with logged-in user and crash the session,
-         * this line is not needed when editing with ajax any other entity than User
+         * $user must be refreshed or invalid POST data (username) will conflict with logged-in user and Symfony will
+         * logout the user.
+         * See https://symfony.com/doc/current/security/user_provider.html#understanding-how-users-are-refreshed-from-the-session
          */
         $this->getDoctrine()->getManager()->refresh($user);
 
