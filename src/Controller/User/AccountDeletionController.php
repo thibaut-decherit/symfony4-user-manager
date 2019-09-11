@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -39,11 +40,16 @@ class AccountDeletionController extends DefaultController
      *
      * @param Request $request
      * @param MailerService $mailer
+     * @param CsrfTokenManagerInterface $csrfTokenManager
      * @Route("account/deletion-request", name="account_deletion_request", methods="POST")
      * @return RedirectResponse
      * @throws AccessDeniedException|Exception
      */
-    public function requestAction(Request $request, MailerService $mailer): RedirectResponse
+    public function requestAction(
+        Request $request,
+        MailerService $mailer,
+        CsrfTokenManagerInterface $csrfTokenManager
+    ): RedirectResponse
     {
         if ($this->isCsrfTokenValid('account_deletion_request', $request->get('_csrf_token')) === false) {
             throw new AccessDeniedException('Invalid CSRF token.');
@@ -83,7 +89,13 @@ class AccountDeletionController extends DefaultController
          */
         $this->get('session')->set('account-deletion-request', true);
 
-        return $this->redirectToRoute('logout');
+        /*
+         * CSRF protection is enabled for logout so the token must be added to the url or user will get an invalid token
+         * exception.
+         */
+        return $this->redirectToRoute('logout', [
+            '_csrf_token' => $csrfTokenManager->getToken('logout')->getValue()
+        ]);
     }
 
     /**
@@ -180,6 +192,7 @@ class AccountDeletionController extends DefaultController
      * @param Request $request
      * @param TranslatorInterface $translator
      * @param MailerService $mailer
+     * @param CsrfTokenManagerInterface $csrfTokenManager
      * @Route("/delete-account/delete", name="account_deletion_delete", methods="POST")
      * @return RedirectResponse
      * @throws LoaderError
@@ -189,7 +202,8 @@ class AccountDeletionController extends DefaultController
     public function deleteAction(
         Request $request,
         TranslatorInterface $translator,
-        MailerService $mailer
+        MailerService $mailer,
+        CsrfTokenManagerInterface $csrfTokenManager
     ): RedirectResponse
     {
         if ($this->isCsrfTokenValid('account_deletion_delete', $request->get('_csrf_token')) === false) {
@@ -243,7 +257,13 @@ class AccountDeletionController extends DefaultController
         if ($currentUser !== null && $currentUser === $user) {
             $this->get('session')->set('account-deletion-confirmation', $user->getAccountDeletionToken());
 
-            return $this->redirectToRoute('logout');
+            /*
+             * CSRF protection is enabled for logout so the token must be added to the url or user will get an invalid
+             * token exception.
+             */
+            return $this->redirectToRoute('logout', [
+                '_csrf_token' => $csrfTokenManager->getToken('logout')->getValue()
+            ]);
         }
 
         $em = $this->getDoctrine()->getManager();

@@ -7,6 +7,7 @@ global:
     confirm: Confirm
     submit: Submit
     save_changes: Save Changes
+  logout: Logout
 
 
 #Head
@@ -24,7 +25,6 @@ page_title:
   email_address_change: Change Email Address
   home: Home
   login: Login
-  logout: Logout
   my_account: My Account
   password_reset: Reset Password
   registration: Registration
