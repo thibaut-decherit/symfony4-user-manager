@@ -3,6 +3,7 @@
 namespace App\Controller\User;
 
 use App\Controller\DefaultController;
+use App\Form\User\PasswordChangeType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +28,7 @@ class PasswordChangeController extends DefaultController
     {
         $user = $this->getUser();
 
-        $form = $this->createForm('App\Form\User\PasswordChangeType', $user);
+        $form = $this->createForm(PasswordChangeType::class, $user);
 
         // Password blacklist to be used by zxcvbn.
         $passwordBlacklist = [
@@ -58,7 +59,7 @@ class PasswordChangeController extends DefaultController
     {
         $user = $this->getUser();
 
-        $form = $this->createForm('App\Form\User\PasswordChangeType', $user);
+        $form = $this->createForm(PasswordChangeType::class, $user);
 
         $form->handleRequest($request);
 
@@ -82,12 +83,6 @@ class PasswordChangeController extends DefaultController
                 'template' => $jsonTemplate
             ], 200);
         }
-
-        /*
-         * $user must be refreshed or invalid POST data will conflict with logged-in user and crash the session,
-         * this line is not needed when editing with ajax any other entity than User
-         */
-        $this->getDoctrine()->getManager()->refresh($user);
 
         // Renders and json encode the updated form (with errors)
         $template = $this->render('form/user/password-change.html.twig', [

@@ -136,7 +136,6 @@ abstract class AbstractUser implements UserInterface
      * )
      * @Assert\Email(
      *      message = "form_errors.user.valid_email",
-     *      checkMX = true,
      *      groups={"Email_Change"}
      * )
      */
@@ -543,92 +542,6 @@ abstract class AbstractUser implements UserInterface
 
     public function eraseCredentials()
     {
-    }
-
-    /**
-     * Checks whether the user's account has expired.
-     *
-     * Internally, if this method returns false, the authentication system
-     * will throw an AccountExpiredException and prevent login.
-     *
-     * @return bool true if the user's account is non expired, false otherwise
-     *
-     * @see AccountExpiredException
-     */
-    public function isAccountNonExpired(): bool
-    {
-        return true;
-    }
-
-    /**
-     * Checks whether the user is locked.
-     *
-     * Internally, if this method returns false, the authentication system
-     * will throw a LockedException and prevent login.
-     *
-     * @return bool true if the user is not locked, false otherwise
-     *
-     * @see LockedException
-     */
-    public function isAccountNonLocked(): bool
-    {
-        return true;
-    }
-
-    /**
-     * Checks whether the user's credentials (password) has expired.
-     *
-     * Internally, if this method returns false, the authentication system
-     * will throw a CredentialsExpiredException and prevent login.
-     *
-     * @return bool true if the user's credentials are non expired, false otherwise
-     *
-     * @see CredentialsExpiredException
-     */
-    public function isCredentialsNonExpired(): bool
-    {
-        return true;
-    }
-
-    /**
-     * Checks if user has activated his account.
-     *
-     * @return bool true if the user is enabled, false otherwise
-     *
-     * @see DisabledException
-     */
-    public function isEnabled(): bool
-    {
-        return $this->activated;
-    }
-
-    /**
-     * @param UserInterface $user
-     * @return bool
-     */
-    public function isEqualTo(UserInterface $user): bool
-    {
-        if (!$user instanceof AbstractUser) {
-
-            return false;
-        }
-
-        if ($this->password !== $user->getPassword()) {
-
-            return false;
-        }
-
-        if ($this->salt !== $user->getSalt()) {
-
-            return false;
-        }
-
-        if ($this->username !== $user->getUsername()) {
-
-            return false;
-        }
-
-        return true;
     }
 
     /**

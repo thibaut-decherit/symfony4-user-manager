@@ -3,6 +3,7 @@
 namespace App\Controller\User;
 
 use App\Controller\DefaultController;
+use App\Form\User\UserInformationType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +38,7 @@ class AccountController extends DefaultController
     {
         $user = $this->getUser();
 
-        $form = $this->createForm('App\Form\User\UserInformationType', $user);
+        $form = $this->createForm(UserInformationType::class, $user);
 
         return $this->render('form/user/account-information.html.twig', [
             'form' => $form->createView()
@@ -56,7 +57,7 @@ class AccountController extends DefaultController
     {
         $user = $this->getUser();
 
-        $form = $this->createForm('App\Form\User\UserInformationType', $user);
+        $form = $this->createForm(UserInformationType::class, $user);
 
         $form->handleRequest($request);
 
@@ -79,8 +80,9 @@ class AccountController extends DefaultController
         }
 
         /*
-         * $user must be refreshed or invalid POST data will conflict with logged-in user and crash the session,
-         * this line is not needed when editing with ajax any other entity than User
+         * $user must be refreshed or invalid POST data (username) will conflict with logged-in user and Symfony will
+         * logout the user.
+         * See https://symfony.com/doc/current/security/user_provider.html#understanding-how-users-are-refreshed-from-the-session
          */
         $this->getDoctrine()->getManager()->refresh($user);
 

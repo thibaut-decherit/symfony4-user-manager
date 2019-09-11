@@ -62,12 +62,12 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     /**
      * @var TranslatorInterface
      */
-    private $translatorInterface;
+    private $translator;
 
     /**
      * @var SessionInterface
      */
-    private $sessionInterface;
+    private $session;
 
     /**
      * @var MailerService
@@ -80,8 +80,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @param RouterInterface $router
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @param CsrfTokenManagerInterface $csrfTokenManager
-     * @param TranslatorInterface $translatorInterface
-     * @param SessionInterface $sessionInterface
+     * @param TranslatorInterface $translator
+     * @param SessionInterface $session
      * @param MailerService $mailer
      */
     public function __construct(
@@ -89,8 +89,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         RouterInterface $router,
         UserPasswordEncoderInterface $passwordEncoder,
         CsrfTokenManagerInterface $csrfTokenManager,
-        TranslatorInterface $translatorInterface,
-        SessionInterface $sessionInterface,
+        TranslatorInterface $translator,
+        SessionInterface $session,
         MailerService $mailer
     )
     {
@@ -98,8 +98,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $this->router = $router;
         $this->passwordEncoder = $passwordEncoder;
         $this->csrfTokenManager = $csrfTokenManager;
-        $this->translatorInterface = $translatorInterface;
-        $this->sessionInterface = $sessionInterface;
+        $this->translator = $translator;
+        $this->session = $session;
         $this->mailer = $mailer;
     }
 
@@ -202,19 +202,25 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         // IF account is not yet activated, send a reminder email with an activation link
         if ($exception instanceof DisabledException) {
-            $usernameOrEmail = $request->request->get('_username');
+            $usernameOrEmail = $request->request->get('username');
             $user = null;
 
             if (preg_match('/^.+@\S+\.\S+$/', $usernameOrEmail)) {
-                $user = $this->em->getRepository(User::class)->findOneBy(['email' => $usernameOrEmail]);
+                $user = $this->em->getRepository(User::class)->findOneBy([
+                    'email' => $usernameOrEmail,
+                    'activated' => false
+                ]);
             } else {
-                $user = $this->em->getRepository(User::class)->findOneBy(['username' => $usernameOrEmail]);
+                $user = $this->em->getRepository(User::class)->findOneBy([
+                    'username' => $usernameOrEmail,
+                    'activated' => false
+                ]);
             }
 
-            $this->mailer->loginAttemptOnNonActivatedAccount($user);
+            $this->mailer->loginAttemptOnNonActivatedAccount($user, $request->getLocale());
         }
 
-        $errorMessage = $this->translatorInterface->trans('flash.user.invalid_credentials');
+        $errorMessage = $this->translator->trans('flash.user.invalid_credentials');
 
         return new JsonResponse([
             'errorMessage' => $errorMessage
@@ -238,9 +244,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function start(Request $request, AuthenticationException $exception = null): RedirectResponse
     {
-        $this->sessionInterface->getFlashBag()->add(
+        $this->session->getFlashBag()->add(
             'login-required-error',
-            $this->translatorInterface->trans('flash.user.login_required')
+            $this->translator->trans('flash.user.login_required')
         );
         $url = $this->router->generate('login');
 

@@ -2,6 +2,7 @@
 
 namespace App\Form\User;
 
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -63,7 +64,7 @@ class PasswordChangeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => 'App\Entity\User',
+            'data_class' => User::class,
             /*
              * GroupSequence will validate constraints sequentially by iterating through the array, it means that if
              * password length validation fails, length error will be shown and validation will stop there.

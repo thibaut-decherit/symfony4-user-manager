@@ -6,10 +6,6 @@
   cursor: not-allowed;
 }
 
-.btn-primary:focus {
-  color: white;
-}
-
 @include media-breakpoint-up(xs) {
   html {
     font-size: 1rem;

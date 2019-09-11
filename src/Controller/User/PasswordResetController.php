@@ -3,6 +3,8 @@
 namespace App\Controller\User;
 
 use App\Controller\DefaultController;
+use App\Entity\User;
+use App\Form\User\PasswordResetType;
 use App\Helper\StringHelper;
 use App\Service\MailerService;
 use DateTime;
@@ -26,7 +28,7 @@ class PasswordResetController extends DefaultController
      *
      * @param Request $request
      * @param TranslatorInterface $translator
-     * @param MailerService $mailerService
+     * @param MailerService $mailer
      * @Route("/request", name="password_reset_request", methods={"GET", "POST"})
      * @return Response
      * @throws Exception
@@ -34,7 +36,7 @@ class PasswordResetController extends DefaultController
     public function requestAction(
         Request $request,
         TranslatorInterface $translator,
-        MailerService $mailerService
+        MailerService $mailer
     ): Response
     {
         if ($request->isMethod('POST')) {
@@ -48,9 +50,9 @@ class PasswordResetController extends DefaultController
             );
 
             if (preg_match('/^.+\@\S+\.\S+$/', $usernameOrEmail)) {
-                $user = $em->getRepository('App:User')->findOneBy(['email' => $usernameOrEmail]);
+                $user = $em->getRepository(User::class)->findOneBy(['email' => $usernameOrEmail]);
             } else {
-                $user = $em->getRepository('App:User')->findOneBy(['username' => $usernameOrEmail]);
+                $user = $em->getRepository(User::class)->findOneBy(['username' => $usernameOrEmail]);
             }
 
             $this->addFlash(
@@ -75,7 +77,7 @@ class PasswordResetController extends DefaultController
             while ($loop) {
                 $token = $user->generateSecureToken();
 
-                $duplicate = $em->getRepository('App:User')->findOneBy(['passwordResetToken' => $token]);
+                $duplicate = $em->getRepository(User::class)->findOneBy(['passwordResetToken' => $token]);
                 if (is_null($duplicate)) {
                     $loop = false;
                     $user->setPasswordResetToken($token);
@@ -85,7 +87,7 @@ class PasswordResetController extends DefaultController
             $user->setPasswordResetRequestedAt(new DateTime());
 
             $passwordResetTokenLifetimeInMinutes = ceil($this->getParameter('password_reset_token_lifetime') / 60);
-            $mailerService->passwordResetRequest(
+            $mailer->passwordResetRequest(
                 $user, $passwordResetTokenLifetimeInMinutes,
                 $request->getLocale()
             );
@@ -119,7 +121,7 @@ class PasswordResetController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('App:User')->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'passwordResetToken' => StringHelper::truncateToMySQLVarcharMaxLength($passwordResetToken)
         ]);
 
@@ -148,7 +150,7 @@ class PasswordResetController extends DefaultController
             return $this->redirectToRoute('password_reset_request');
         }
 
-        $form = $this->createForm('App\Form\User\PasswordResetType', $user);
+        $form = $this->createForm(PasswordResetType::class, $user);
 
         $form->handleRequest($request);
 

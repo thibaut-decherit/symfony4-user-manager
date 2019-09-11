@@ -5,24 +5,24 @@ namespace App\Validator\Constraints;
 use Exception;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BreachedPasswordValidator extends ConstraintValidator
 {
     /**
      * @var TranslatorInterface
      */
-    private $translatorInterface;
+    private $translator;
 
     /**
      * BreachedPasswordValidator constructor.
-     * @param TranslatorInterface $translatorInterface
+     * @param TranslatorInterface $translator
      */
-    public function __construct(TranslatorInterface $translatorInterface)
+    public function __construct(TranslatorInterface $translator)
     {
-        $this->translatorInterface = $translatorInterface;
+        $this->translator = $translator;
     }
 
     /**
@@ -63,7 +63,7 @@ class BreachedPasswordValidator extends ConstraintValidator
 
         // Constraint violation if hashes match (strpos returns an integer if there is a match and false otherwise)
         if (is_int(mb_strpos($breachedPasswordsSuffixes, $plainPasswordSHA1Suffix, 0, 'UTF-8'))) {
-            $constraint->message = $this->translatorInterface->trans('form_errors.user.breached_password', [], 'validators');
+            $constraint->message = $this->translator->trans('form_errors.user.breached_password', [], 'validators');
             $this->context->buildViolation($constraint->message)->addViolation();
         }
     }

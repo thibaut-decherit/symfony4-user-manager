@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Entity\User;
 use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,8 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Logout\LogoutHandlerInterface;
 use Symfony\Component\Security\Http\Logout\SessionLogoutHandler;
-use Twig\Environment as Twig;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment as Twig;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -191,7 +192,7 @@ class AccountDeletionLogoutHandler implements LogoutHandlerInterface
         // Session is properly invalidated
         $this->sessionLogoutHandler->logout($request, $response, $token);
 
-        $user = $em->getRepository('App:User')->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'accountDeletionToken' => $accountDeletionToken
         ]);
 

@@ -3,6 +3,7 @@
 namespace App\Controller\User;
 
 use App\Controller\DefaultController;
+use App\Entity\User;
 use App\Helper\StringHelper;
 use App\Service\MailerService;
 use DateTime;
@@ -37,12 +38,12 @@ class AccountDeletionController extends DefaultController
      * Sends account deletion link by email to user then log him out.
      *
      * @param Request $request
-     * @param MailerService $mailerService
+     * @param MailerService $mailer
      * @Route("account/deletion-request", name="account_deletion_request", methods="POST")
      * @return RedirectResponse
      * @throws AccessDeniedException|Exception
      */
-    public function requestAction(Request $request, MailerService $mailerService): RedirectResponse
+    public function requestAction(Request $request, MailerService $mailer): RedirectResponse
     {
         if ($this->isCsrfTokenValid('account_deletion_request', $request->get('_csrf_token')) === false) {
             throw new AccessDeniedException('Invalid CSRF token.');
@@ -56,7 +57,7 @@ class AccountDeletionController extends DefaultController
         while ($loop) {
             $accountDeletionToken = $user->generateSecureToken();
 
-            $duplicate = $em->getRepository('App:User')->findOneBy([
+            $duplicate = $em->getRepository(User::class)->findOneBy([
                 'accountDeletionToken' => $accountDeletionToken
             ]);
 
@@ -69,7 +70,7 @@ class AccountDeletionController extends DefaultController
         $user->setAccountDeletionRequestedAt(new DateTime());
 
         $accountDeletionTokenLifetimeInMinutes = ceil($this->getParameter('account_deletion_token_lifetime') / 60);
-        $mailerService->accountDeletionRequest(
+        $mailer->accountDeletionRequest(
             $user, $accountDeletionTokenLifetimeInMinutes,
             $request->getLocale()
         );
@@ -103,7 +104,7 @@ class AccountDeletionController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('App:User')->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'accountDeletionToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountDeletionToken)
         ]);
 
@@ -159,7 +160,7 @@ class AccountDeletionController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('App:User')->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'accountDeletionToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountDeletionToken)
         ]);
 
@@ -178,7 +179,7 @@ class AccountDeletionController extends DefaultController
      *
      * @param Request $request
      * @param TranslatorInterface $translator
-     * @param MailerService $mailerService
+     * @param MailerService $mailer
      * @Route("/delete-account/delete", name="account_deletion_delete", methods="POST")
      * @return RedirectResponse
      * @throws LoaderError
@@ -188,7 +189,7 @@ class AccountDeletionController extends DefaultController
     public function deleteAction(
         Request $request,
         TranslatorInterface $translator,
-        MailerService $mailerService
+        MailerService $mailer
     ): RedirectResponse
     {
         if ($this->isCsrfTokenValid('account_deletion_delete', $request->get('_csrf_token')) === false) {
@@ -203,7 +204,7 @@ class AccountDeletionController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('App:User')->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'accountDeletionToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountDeletionToken)
         ]);
 
@@ -266,7 +267,7 @@ class AccountDeletionController extends DefaultController
         $em->remove($user);
         $em->flush();
 
-        $mailerService->accountDeletionSuccess($user, $request->getLocale());
+        $mailer->accountDeletionSuccess($user, $request->getLocale());
 
         $this->addFlash(
             'account-deletion-success',

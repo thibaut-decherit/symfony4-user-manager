@@ -3,6 +3,8 @@
 namespace App\Controller\User;
 
 use App\Controller\DefaultController;
+use App\Entity\User;
+use App\Form\User\EmailChangeType;
 use App\Helper\StringHelper;
 use App\Service\MailerService;
 use DateTime;
@@ -31,7 +33,7 @@ class EmailChangeController extends DefaultController
     {
         $user = $this->getUser();
 
-        $form = $this->createForm('App\Form\User\EmailChangeType', $user);
+        $form = $this->createForm(EmailChangeType::class, $user);
 
         return $this->render('form/user/email-change.html.twig', [
             'form' => $form->createView()
@@ -43,7 +45,7 @@ class EmailChangeController extends DefaultController
      *
      * @param Request $request
      * @param TranslatorInterface $translator
-     * @param MailerService $mailerService
+     * @param MailerService $mailer
      * @Route("account/email-change/request-ajax", name="email_change_request_ajax", methods="POST")
      * @return JsonResponse
      * @throws Exception
@@ -51,23 +53,17 @@ class EmailChangeController extends DefaultController
     public function changeRequestAction(
         Request $request,
         TranslatorInterface $translator,
-        MailerService $mailerService
+        MailerService $mailer
     ): JsonResponse
     {
         $user = $this->getUser();
 
-        $form = $this->createForm('App\Form\User\EmailChangeType', $user);
+        $form = $this->createForm(EmailChangeType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($user->getEmailChangePending() === $user->getEmail()) {
-                /*
-                 * $user must be refreshed or invalid POST data will conflict with logged-in user and crash the session,
-                 * this line is not needed when editing with ajax any other entity than User
-                 */
-                $this->getDoctrine()->getManager()->refresh($user);
-
                 $this->addFlash(
                     'email-change-request-error',
                     $translator->trans('flash.user.already_current_email_address')
@@ -88,8 +84,6 @@ class EmailChangeController extends DefaultController
             // IF retry delay is not expired, displays error message.
             if ($user->getEmailChangeRequestedAt() !== null
                 && $user->isEmailChangeRequestRetryDelayExpired($emailChangeRequestRetryDelay) === false) {
-                $this->getDoctrine()->getManager()->refresh($user);
-
                 // Displays a flash message informing user that he has to wait $limit minutes between each attempt
                 $limit = ceil($emailChangeRequestRetryDelay / 60);
                 $errorMessage = '';
@@ -129,7 +123,7 @@ class EmailChangeController extends DefaultController
             while ($loop) {
                 $token = $user->generateSecureToken();
 
-                $duplicate = $em->getRepository('App:User')->findOneBy(['emailChangeToken' => $token]);
+                $duplicate = $em->getRepository(User::class)->findOneBy(['emailChangeToken' => $token]);
                 if (is_null($duplicate)) {
                     $loop = false;
                     $user->setEmailChangeToken($token);
@@ -139,10 +133,10 @@ class EmailChangeController extends DefaultController
             $user->setEmailChangeRequestedAt(new DateTime());
 
             // IF email address is not already registered to another account, sends verification email.
-            $duplicate = $em->getRepository('App:User')->findOneBy(['email' => $user->getEmailChangePending()]);
+            $duplicate = $em->getRepository(User::class)->findOneBy(['email' => $user->getEmailChangePending()]);
             if (is_null($duplicate)) {
                 $emailChangeTokenLifetimeInMinutes = ceil($this->getParameter('email_change_token_lifetime') / 60);
-                $mailerService->emailChange(
+                $mailer->emailChange(
                     $user,
                     $emailChangeTokenLifetimeInMinutes,
                     $request->getLocale()
@@ -168,8 +162,6 @@ class EmailChangeController extends DefaultController
                 'template' => $jsonTemplate
             ], 200);
         }
-
-        $this->getDoctrine()->getManager()->refresh($user);
 
         // Renders and json encode the updated form (with errors)
         $template = $this->render('form/user/email-change.html.twig', [
@@ -201,7 +193,7 @@ class EmailChangeController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('App:User')->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'emailChangeToken' => StringHelper::truncateToMySQLVarcharMaxLength($emailChangeToken)
         ]);
 
@@ -258,7 +250,7 @@ class EmailChangeController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('App:User')->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'emailChangeToken' => StringHelper::truncateToMySQLVarcharMaxLength($emailChangeToken)
         ]);
 
@@ -296,7 +288,7 @@ class EmailChangeController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('App:User')->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'emailChangeToken' => StringHelper::truncateToMySQLVarcharMaxLength($emailChangeToken)
         ]);
 
@@ -326,7 +318,7 @@ class EmailChangeController extends DefaultController
             return $this->redirectToRoute('home');
         }
 
-        $duplicate = $em->getRepository('App:User')->findOneBy([
+        $duplicate = $em->getRepository(User::class)->findOneBy([
             'email' => $user->getEmailChangePending()
         ]);
 
