@@ -40,7 +40,7 @@ class MailerService
     /**
      * @var TranslatorInterface
      */
-    private $translatorInterface;
+    private $translator;
 
     /**
      * MailerService constructor.
@@ -48,21 +48,21 @@ class MailerService
      * @param string $replyToAddress
      * @param Twig $twig
      * @param Swift_Mailer $swiftMailer
-     * @param TranslatorInterface $translatorInterface
+     * @param TranslatorInterface $translator
      */
     public function __construct(
         string $mailerAddress,
         string $replyToAddress,
         Twig $twig,
         Swift_Mailer $swiftMailer,
-        TranslatorInterface $translatorInterface
+        TranslatorInterface $translator
     )
     {
         $this->mailerAddress = $mailerAddress;
         $this->replyToAddress = $replyToAddress;
         $this->twig = $twig;
         $this->swiftMailer = $swiftMailer;
-        $this->translatorInterface = $translatorInterface;
+        $this->translator = $translator;
     }
 
     /**
@@ -89,7 +89,7 @@ class MailerService
         );
 
         $this->sendEmail(
-            $this->translatorInterface->trans('mailer.subjects.account_deletion_request'),
+            $this->translator->trans('mailer.subjects.account_deletion_request'),
             [$this->mailerAddress => 'UserManager'],
             $user->getEmail(),
             $this->replyToAddress,
@@ -115,7 +115,7 @@ class MailerService
         );
 
         $this->sendEmail(
-            $this->translatorInterface->trans('mailer.subjects.account_deletion_success'),
+            $this->translator->trans('mailer.subjects.account_deletion_success'),
             [$this->mailerAddress => 'UserManager'],
             $user->getEmail(),
             $this->replyToAddress,
@@ -143,7 +143,7 @@ class MailerService
         );
 
         $this->sendEmail(
-            $this->translatorInterface->trans('mailer.subjects.email_address_change'),
+            $this->translator->trans('mailer.subjects.email_address_change'),
             [$this->mailerAddress => 'UserManager'],
             $user->getEmailChangePending(),
             $this->replyToAddress,
@@ -167,7 +167,7 @@ class MailerService
         );
 
         $this->sendEmail(
-            $this->translatorInterface->trans('mailer.subjects.login_attempt'),
+            $this->translator->trans('mailer.subjects.login_attempt'),
             [$this->mailerAddress => 'UserManager'],
             $user->getEmail(),
             $this->replyToAddress,
@@ -195,7 +195,7 @@ class MailerService
         );
 
         $this->sendEmail(
-            $this->translatorInterface->trans('mailer.subjects.password_reset'),
+            $this->translator->trans('mailer.subjects.password_reset'),
             [$this->mailerAddress => 'UserManager'],
             $user->getEmail(),
             $this->replyToAddress,
@@ -219,7 +219,7 @@ class MailerService
         );
 
         $this->sendEmail(
-            $this->translatorInterface->trans('mailer.subjects.registration_attempt'),
+            $this->translator->trans('mailer.subjects.registration_attempt'),
             [$this->mailerAddress => 'UserManager'],
             $user->getEmail(),
             $this->replyToAddress,
@@ -243,7 +243,7 @@ class MailerService
         );
 
         $this->sendEmail(
-            $this->translatorInterface->trans('mailer.subjects.registration_attempt'),
+            $this->translator->trans('mailer.subjects.registration_attempt'),
             [$this->mailerAddress => 'UserManager'],
             $user->getEmail(),
             $this->replyToAddress,
@@ -269,7 +269,7 @@ class MailerService
         );
 
         $this->sendEmail(
-            $this->translatorInterface->trans('mailer.subjects.welcome'),
+            $this->translator->trans('mailer.subjects.welcome'),
             [$this->mailerAddress => 'UserManager'],
             $user->getEmail(),
             $this->replyToAddress,

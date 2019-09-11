@@ -62,7 +62,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     /**
      * @var TranslatorInterface
      */
-    private $translatorInterface;
+    private $translator;
 
     /**
      * @var SessionInterface
@@ -80,7 +80,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @param RouterInterface $router
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @param CsrfTokenManagerInterface $csrfTokenManager
-     * @param TranslatorInterface $translatorInterface
+     * @param TranslatorInterface $translator
      * @param SessionInterface $sessionInterface
      * @param MailerService $mailer
      */
@@ -89,7 +89,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         RouterInterface $router,
         UserPasswordEncoderInterface $passwordEncoder,
         CsrfTokenManagerInterface $csrfTokenManager,
-        TranslatorInterface $translatorInterface,
+        TranslatorInterface $translator,
         SessionInterface $sessionInterface,
         MailerService $mailer
     )
@@ -98,7 +98,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $this->router = $router;
         $this->passwordEncoder = $passwordEncoder;
         $this->csrfTokenManager = $csrfTokenManager;
-        $this->translatorInterface = $translatorInterface;
+        $this->translator = $translator;
         $this->sessionInterface = $sessionInterface;
         $this->mailer = $mailer;
     }
@@ -214,7 +214,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             $this->mailer->loginAttemptOnNonActivatedAccount($user);
         }
 
-        $errorMessage = $this->translatorInterface->trans('flash.user.invalid_credentials');
+        $errorMessage = $this->translator->trans('flash.user.invalid_credentials');
 
         return new JsonResponse([
             'errorMessage' => $errorMessage
@@ -240,7 +240,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         $this->sessionInterface->getFlashBag()->add(
             'login-required-error',
-            $this->translatorInterface->trans('flash.user.login_required')
+            $this->translator->trans('flash.user.login_required')
         );
         $url = $this->router->generate('login');
 
