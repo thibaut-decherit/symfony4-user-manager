@@ -8,6 +8,7 @@ framework:
   session:
     handler_id: null
     cookie_secure: auto
+    name: __Host-sessionId
     cookie_samesite: lax
 
   #esi: true
