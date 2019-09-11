@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -49,7 +50,7 @@ class RemoveUnactivatedAccountsCommand extends Command
         $days = $input->getArgument('days');
 
         while ($hasResults) {
-            $users = $this->em->getRepository('App:User')->findUnactivatedAccountsOlderThan($days, $limit);
+            $users = $this->em->getRepository(User::class)->findUnactivatedAccountsOlderThan($days, $limit);
 
             foreach ($users as $user) {
                 $this->em->remove($user);

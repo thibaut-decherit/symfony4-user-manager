@@ -3,6 +3,7 @@
 namespace App\Controller\User;
 
 use App\Controller\DefaultController;
+use App\Entity\User;
 use App\Helper\StringHelper;
 use App\Service\MailerService;
 use DateTime;
@@ -48,9 +49,9 @@ class PasswordResetController extends DefaultController
             );
 
             if (preg_match('/^.+\@\S+\.\S+$/', $usernameOrEmail)) {
-                $user = $em->getRepository('App:User')->findOneBy(['email' => $usernameOrEmail]);
+                $user = $em->getRepository(User::class)->findOneBy(['email' => $usernameOrEmail]);
             } else {
-                $user = $em->getRepository('App:User')->findOneBy(['username' => $usernameOrEmail]);
+                $user = $em->getRepository(User::class)->findOneBy(['username' => $usernameOrEmail]);
             }
 
             $this->addFlash(
@@ -75,7 +76,7 @@ class PasswordResetController extends DefaultController
             while ($loop) {
                 $token = $user->generateSecureToken();
 
-                $duplicate = $em->getRepository('App:User')->findOneBy(['passwordResetToken' => $token]);
+                $duplicate = $em->getRepository(User::class)->findOneBy(['passwordResetToken' => $token]);
                 if (is_null($duplicate)) {
                     $loop = false;
                     $user->setPasswordResetToken($token);
@@ -119,7 +120,7 @@ class PasswordResetController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('App:User')->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'passwordResetToken' => StringHelper::truncateToMySQLVarcharMaxLength($passwordResetToken)
         ]);
 

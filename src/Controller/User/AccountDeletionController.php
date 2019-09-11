@@ -3,6 +3,7 @@
 namespace App\Controller\User;
 
 use App\Controller\DefaultController;
+use App\Entity\User;
 use App\Helper\StringHelper;
 use App\Service\MailerService;
 use DateTime;
@@ -56,7 +57,7 @@ class AccountDeletionController extends DefaultController
         while ($loop) {
             $accountDeletionToken = $user->generateSecureToken();
 
-            $duplicate = $em->getRepository('App:User')->findOneBy([
+            $duplicate = $em->getRepository(User::class)->findOneBy([
                 'accountDeletionToken' => $accountDeletionToken
             ]);
 
@@ -103,7 +104,7 @@ class AccountDeletionController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('App:User')->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'accountDeletionToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountDeletionToken)
         ]);
 
@@ -159,7 +160,7 @@ class AccountDeletionController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('App:User')->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'accountDeletionToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountDeletionToken)
         ]);
 
@@ -203,7 +204,7 @@ class AccountDeletionController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('App:User')->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'accountDeletionToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountDeletionToken)
         ]);
 

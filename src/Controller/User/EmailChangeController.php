@@ -3,6 +3,7 @@
 namespace App\Controller\User;
 
 use App\Controller\DefaultController;
+use App\Entity\User;
 use App\Helper\StringHelper;
 use App\Service\MailerService;
 use DateTime;
@@ -129,7 +130,7 @@ class EmailChangeController extends DefaultController
             while ($loop) {
                 $token = $user->generateSecureToken();
 
-                $duplicate = $em->getRepository('App:User')->findOneBy(['emailChangeToken' => $token]);
+                $duplicate = $em->getRepository(User::class)->findOneBy(['emailChangeToken' => $token]);
                 if (is_null($duplicate)) {
                     $loop = false;
                     $user->setEmailChangeToken($token);
@@ -139,7 +140,7 @@ class EmailChangeController extends DefaultController
             $user->setEmailChangeRequestedAt(new DateTime());
 
             // IF email address is not already registered to another account, sends verification email.
-            $duplicate = $em->getRepository('App:User')->findOneBy(['email' => $user->getEmailChangePending()]);
+            $duplicate = $em->getRepository(User::class)->findOneBy(['email' => $user->getEmailChangePending()]);
             if (is_null($duplicate)) {
                 $emailChangeTokenLifetimeInMinutes = ceil($this->getParameter('email_change_token_lifetime') / 60);
                 $mailerService->emailChange(
@@ -201,7 +202,7 @@ class EmailChangeController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('App:User')->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'emailChangeToken' => StringHelper::truncateToMySQLVarcharMaxLength($emailChangeToken)
         ]);
 
@@ -258,7 +259,7 @@ class EmailChangeController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('App:User')->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'emailChangeToken' => StringHelper::truncateToMySQLVarcharMaxLength($emailChangeToken)
         ]);
 
@@ -296,7 +297,7 @@ class EmailChangeController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('App:User')->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'emailChangeToken' => StringHelper::truncateToMySQLVarcharMaxLength($emailChangeToken)
         ]);
 
@@ -326,7 +327,7 @@ class EmailChangeController extends DefaultController
             return $this->redirectToRoute('home');
         }
 
-        $duplicate = $em->getRepository('App:User')->findOneBy([
+        $duplicate = $em->getRepository(User::class)->findOneBy([
             'email' => $user->getEmailChangePending()
         ]);
 

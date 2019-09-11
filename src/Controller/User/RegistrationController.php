@@ -63,7 +63,7 @@ class RegistrationController extends DefaultController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userRepository = $this->getDoctrine()->getManager()->getRepository('App:User');
+            $userRepository = $this->getDoctrine()->getManager()->getRepository(User::class);
 
             $duplicateUser = $userRepository->findOneBy(['email' => $user->getEmail()]);
 
@@ -157,7 +157,7 @@ class RegistrationController extends DefaultController
         while ($loop) {
             $token = $user->generateSecureToken();
 
-            $duplicate = $em->getRepository('App:User')->findOneBy(['accountActivationToken' => $token]);
+            $duplicate = $em->getRepository(User::class)->findOneBy(['accountActivationToken' => $token]);
             if (is_null($duplicate)) {
                 $loop = false;
                 $user->setAccountActivationToken($token);

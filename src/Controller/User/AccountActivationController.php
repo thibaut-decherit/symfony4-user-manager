@@ -3,6 +3,7 @@
 namespace App\Controller\User;
 
 use App\Controller\DefaultController;
+use App\Entity\User;
 use App\Helper\StringHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,7 +35,7 @@ class AccountActivationController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('App:User')->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'accountActivationToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountActivationToken)
         ]);
 
@@ -70,7 +71,7 @@ class AccountActivationController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('App:User')->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'accountActivationToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountActivationToken)
         ]);
 
