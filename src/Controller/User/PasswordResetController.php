@@ -28,7 +28,7 @@ class PasswordResetController extends DefaultController
      *
      * @param Request $request
      * @param TranslatorInterface $translator
-     * @param MailerService $mailerService
+     * @param MailerService $mailer
      * @Route("/request", name="password_reset_request", methods={"GET", "POST"})
      * @return Response
      * @throws Exception
@@ -36,7 +36,7 @@ class PasswordResetController extends DefaultController
     public function requestAction(
         Request $request,
         TranslatorInterface $translator,
-        MailerService $mailerService
+        MailerService $mailer
     ): Response
     {
         if ($request->isMethod('POST')) {
@@ -87,7 +87,7 @@ class PasswordResetController extends DefaultController
             $user->setPasswordResetRequestedAt(new DateTime());
 
             $passwordResetTokenLifetimeInMinutes = ceil($this->getParameter('password_reset_token_lifetime') / 60);
-            $mailerService->passwordResetRequest(
+            $mailer->passwordResetRequest(
                 $user, $passwordResetTokenLifetimeInMinutes,
                 $request->getLocale()
             );

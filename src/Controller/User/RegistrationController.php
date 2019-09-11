@@ -45,7 +45,7 @@ class RegistrationController extends DefaultController
      *
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param MailerService $mailerService
+     * @param MailerService $mailer
      * @param TranslatorInterface $translator
      * @Route("/register-ajax", name="registration_ajax", methods="POST")
      * @return JsonResponse
@@ -54,7 +54,7 @@ class RegistrationController extends DefaultController
     public function registerAction(
         Request $request,
         UserPasswordEncoderInterface $passwordEncoder,
-        MailerService $mailerService,
+        MailerService $mailer,
         TranslatorInterface $translator
     ): JsonResponse
     {
@@ -69,9 +69,9 @@ class RegistrationController extends DefaultController
             $duplicateUser = $userRepository->findOneBy(['email' => $user->getEmail()]);
 
             if (empty($duplicateUser)) {
-                $this->handleSuccessfulRegistration($user, $passwordEncoder, $mailerService, $request->getLocale());
+                $this->handleSuccessfulRegistration($user, $passwordEncoder, $mailer, $request->getLocale());
             } else {
-                $this->handleDuplicateUserRegistration($duplicateUser, $mailerService, $request->getLocale());
+                $this->handleDuplicateUserRegistration($duplicateUser, $mailer, $request->getLocale());
             }
 
             // Renders and json encode the original form (required to empty form fields)
@@ -109,7 +109,7 @@ class RegistrationController extends DefaultController
      * Sends an email to existing user if registration attempt with already registered email address.
      *
      * @param User $duplicateUser
-     * @param MailerService $mailerService
+     * @param MailerService $mailer
      * @param string $locale
      * @throws LoaderError
      * @throws RuntimeError
@@ -117,17 +117,17 @@ class RegistrationController extends DefaultController
      */
     private function handleDuplicateUserRegistration(
         User $duplicateUser,
-        MailerService $mailerService,
+        MailerService $mailer,
         string $locale
     ): void
     {
         if ($duplicateUser->isActivated()) {
-            $mailerService->registrationAttemptOnExistingVerifiedEmailAddress(
+            $mailer->registrationAttemptOnExistingVerifiedEmailAddress(
                 $duplicateUser,
                 $locale
             );
         } else {
-            $mailerService->registrationAttemptOnExistingUnverifiedEmailAddress(
+            $mailer->registrationAttemptOnExistingUnverifiedEmailAddress(
                 $duplicateUser,
                 $locale
             );
@@ -137,14 +137,14 @@ class RegistrationController extends DefaultController
     /**
      * @param User $user
      * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param MailerService $mailerService
+     * @param MailerService $mailer
      * @param string $locale
      * @throws Exception
      */
     private function handleSuccessfulRegistration(
         User $user,
         UserPasswordEncoderInterface $passwordEncoder,
-        MailerService $mailerService,
+        MailerService $mailer,
         string $locale
     ): void
     {
@@ -165,7 +165,7 @@ class RegistrationController extends DefaultController
             }
         }
 
-        $mailerService->registrationSuccess($user, $locale);
+        $mailer->registrationSuccess($user, $locale);
 
         $em->persist($user);
         $em->flush();

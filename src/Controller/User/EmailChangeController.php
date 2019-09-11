@@ -45,7 +45,7 @@ class EmailChangeController extends DefaultController
      *
      * @param Request $request
      * @param TranslatorInterface $translator
-     * @param MailerService $mailerService
+     * @param MailerService $mailer
      * @Route("account/email-change/request-ajax", name="email_change_request_ajax", methods="POST")
      * @return JsonResponse
      * @throws Exception
@@ -53,7 +53,7 @@ class EmailChangeController extends DefaultController
     public function changeRequestAction(
         Request $request,
         TranslatorInterface $translator,
-        MailerService $mailerService
+        MailerService $mailer
     ): JsonResponse
     {
         $user = $this->getUser();
@@ -136,7 +136,7 @@ class EmailChangeController extends DefaultController
             $duplicate = $em->getRepository(User::class)->findOneBy(['email' => $user->getEmailChangePending()]);
             if (is_null($duplicate)) {
                 $emailChangeTokenLifetimeInMinutes = ceil($this->getParameter('email_change_token_lifetime') / 60);
-                $mailerService->emailChange(
+                $mailer->emailChange(
                     $user,
                     $emailChangeTokenLifetimeInMinutes,
                     $request->getLocale()
