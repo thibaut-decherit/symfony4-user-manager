@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use App\Controller\DefaultController;
 use App\Entity\User;
+use App\Form\User\RegistrationType;
 use App\Service\MailerService;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,7 +32,7 @@ class RegistrationController extends DefaultController
     public function registerFormAction(): Response
     {
         $user = new User();
-        $form = $this->createForm('App\Form\User\RegistrationType', $user);
+        $form = $this->createForm(RegistrationType::class, $user);
 
         return $this->render('user/registration.html.twig', [
             'user' => $user,
@@ -58,7 +59,7 @@ class RegistrationController extends DefaultController
     ): JsonResponse
     {
         $user = new User();
-        $form = $this->createForm('App\Form\User\RegistrationType', $user);
+        $form = $this->createForm(RegistrationType::class, $user);
 
         $form->handleRequest($request);
 
@@ -75,7 +76,7 @@ class RegistrationController extends DefaultController
 
             // Renders and json encode the original form (required to empty form fields)
             $user = new User();
-            $form = $this->createForm('App\Form\User\RegistrationType', $user);
+            $form = $this->createForm(RegistrationType::class, $user);
 
             $this->addFlash(
                 'registration-success',

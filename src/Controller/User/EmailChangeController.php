@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use App\Controller\DefaultController;
 use App\Entity\User;
+use App\Form\User\EmailChangeType;
 use App\Helper\StringHelper;
 use App\Service\MailerService;
 use DateTime;
@@ -32,7 +33,7 @@ class EmailChangeController extends DefaultController
     {
         $user = $this->getUser();
 
-        $form = $this->createForm('App\Form\User\EmailChangeType', $user);
+        $form = $this->createForm(EmailChangeType::class, $user);
 
         return $this->render('form/user/email-change.html.twig', [
             'form' => $form->createView()
@@ -57,7 +58,7 @@ class EmailChangeController extends DefaultController
     {
         $user = $this->getUser();
 
-        $form = $this->createForm('App\Form\User\EmailChangeType', $user);
+        $form = $this->createForm(EmailChangeType::class, $user);
 
         $form->handleRequest($request);
 

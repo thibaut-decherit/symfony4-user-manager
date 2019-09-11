@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use App\Controller\DefaultController;
 use App\Entity\User;
+use App\Form\User\PasswordResetType;
 use App\Helper\StringHelper;
 use App\Service\MailerService;
 use DateTime;
@@ -149,7 +150,7 @@ class PasswordResetController extends DefaultController
             return $this->redirectToRoute('password_reset_request');
         }
 
-        $form = $this->createForm('App\Form\User\PasswordResetType', $user);
+        $form = $this->createForm(PasswordResetType::class, $user);
 
         $form->handleRequest($request);
 
