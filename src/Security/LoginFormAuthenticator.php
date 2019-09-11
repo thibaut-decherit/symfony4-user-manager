@@ -202,16 +202,22 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         // IF account is not yet activated, send a reminder email with an activation link
         if ($exception instanceof DisabledException) {
-            $usernameOrEmail = $request->request->get('_username');
+            $usernameOrEmail = $request->request->get('username');
             $user = null;
 
             if (preg_match('/^.+@\S+\.\S+$/', $usernameOrEmail)) {
-                $user = $this->em->getRepository(User::class)->findOneBy(['email' => $usernameOrEmail]);
+                $user = $this->em->getRepository(User::class)->findOneBy([
+                    'email' => $usernameOrEmail,
+                    'activated' => false
+                ]);
             } else {
-                $user = $this->em->getRepository(User::class)->findOneBy(['username' => $usernameOrEmail]);
+                $user = $this->em->getRepository(User::class)->findOneBy([
+                    'username' => $usernameOrEmail,
+                    'activated' => false
+                ]);
             }
 
-            $this->mailer->loginAttemptOnNonActivatedAccount($user);
+            $this->mailer->loginAttemptOnNonActivatedAccount($user, $request->getLocale());
         }
 
         $errorMessage = $this->translator->trans('flash.user.invalid_credentials');

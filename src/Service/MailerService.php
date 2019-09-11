@@ -160,6 +160,10 @@ class MailerService
      */
     public function loginAttemptOnNonActivatedAccount(AbstractUser $user, string $locale): void
     {
+        if (is_null($user)) {
+            return;
+        };
+
         $emailBody = $this->twig->render(
             "email/$locale/user/login-attempt-on-unactivated-account.html.twig", [
                 'user' => $user
