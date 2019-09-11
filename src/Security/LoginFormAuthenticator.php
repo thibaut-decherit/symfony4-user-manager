@@ -67,7 +67,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     /**
      * @var SessionInterface
      */
-    private $sessionInterface;
+    private $session;
 
     /**
      * @var MailerService
@@ -81,7 +81,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @param CsrfTokenManagerInterface $csrfTokenManager
      * @param TranslatorInterface $translator
-     * @param SessionInterface $sessionInterface
+     * @param SessionInterface $session
      * @param MailerService $mailer
      */
     public function __construct(
@@ -90,7 +90,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         UserPasswordEncoderInterface $passwordEncoder,
         CsrfTokenManagerInterface $csrfTokenManager,
         TranslatorInterface $translator,
-        SessionInterface $sessionInterface,
+        SessionInterface $session,
         MailerService $mailer
     )
     {
@@ -99,7 +99,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $this->passwordEncoder = $passwordEncoder;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->translator = $translator;
-        $this->sessionInterface = $sessionInterface;
+        $this->session = $session;
         $this->mailer = $mailer;
     }
 
@@ -238,7 +238,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function start(Request $request, AuthenticationException $exception = null): RedirectResponse
     {
-        $this->sessionInterface->getFlashBag()->add(
+        $this->session->getFlashBag()->add(
             'login-required-error',
             $this->translator->trans('flash.user.login_required')
         );
