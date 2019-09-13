@@ -34,9 +34,15 @@ class RegistrationController extends DefaultController
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
 
+        // Password blacklist to be used by zxcvbn.
+        $passwordBlacklist = [
+            $this->getParameter('website_name')
+        ];
+
         return $this->render('user/registration.html.twig', [
             'user' => $user,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'passwordBlacklist' => json_encode($passwordBlacklist)
         ]);
     }
 

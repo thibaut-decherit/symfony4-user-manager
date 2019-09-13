@@ -24,6 +24,7 @@ parameters:
   email_change_token_lifetime: 3600 # seconds
   password_reset_request_send_email_again_delay: 120 # seconds
   password_reset_token_lifetime: 3600 # seconds
+  website_name: '%env(WEBSITE_NAME)%'
 
 services:
   # default configuration for services in *this* file
