@@ -83,9 +83,9 @@ abstract class AbstractUser implements UserInterface
      * )
      * @Assert\Length(
      *     min=8,
-     *     max=50,
-     *     minMessage="form_errors.user.password_length",
-     *     maxMessage="form_errors.user.password_length",
+     *     max=4096,
+     *     minMessage="form_errors.user.password_min_length",
+     *     maxMessage="form_errors.user.password_max_length",
      *     groups={"Password_Change", "Registration"}
      * )
      * @CustomAssert\BreachedPassword(

@@ -32,6 +32,7 @@ class PasswordChangeController extends DefaultController
 
         // Password blacklist to be used by zxcvbn.
         $passwordBlacklist = [
+            $this->getParameter('website_name'),
             $user->getUsername(),
             $user->getEmail()
         ];

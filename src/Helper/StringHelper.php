@@ -35,7 +35,7 @@ class StringHelper
      */
     public static function truncateToPasswordEncoderMaxLength(
         string $string,
-        int $length = 100,
+        int $length = 4096,
         string $encoding = 'UTF-8'
     ): string
     {

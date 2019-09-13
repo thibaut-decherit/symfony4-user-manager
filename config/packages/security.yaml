@@ -7,8 +7,9 @@ security:
 
   encoders:
     App\Entity\User:
-      algorithm: bcrypt
-      cost: '%bcrypt_cost%'
+      algorithm: auto # Currently Argon2id
+      memory_cost: '%argon2id_memory_cost%'
+      time_cost: '%argon2id_time_cost%'
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/

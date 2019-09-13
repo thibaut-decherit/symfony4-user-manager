@@ -24,7 +24,13 @@ async function checkPasswordStrength(plainPassword) {
 
     const customBlacklist = getCustomBlacklist();
     const passwordBreached = await haveIBeenPwnedPasswordCheck(plainPassword);
-    const passwordStrengthEstimation = estimatePasswordStrength(plainPassword, customBlacklist).score;
+
+    /*
+     Note that zxcvbn performance seems to deteriorate if password is longer than ~150 characters. Password is truncated
+     before zxcvbn estimation to prevent this performance drop. A password this long is probably assured to be secure
+     anyway, so accurate testing is redundant and a waste of resources.
+     */
+    const passwordStrengthEstimation = estimatePasswordStrength(plainPassword.slice(0, 150), customBlacklist).score;
 
     let passwordStrength = '';
 
@@ -49,10 +55,12 @@ function getCustomBlacklist() {
         customBlacklistArrayFromBackEnd = JSON.parse(customBlacklistJsonFromBackEnd);
     }
 
-    // Retrieves value of current form inputs that should not be reused as a password.
+    // Retrieves value in current document that should not be reused as a password.
     const customBlacklistFromInputs = [
         $('#App_user_username').val(),
-        $('#App_user_email').val()
+        $('#App_user_email').val(),
+        window.location.href,
+        document.title
     ];
 
     return customBlacklistFromInputs.concat(customBlacklistArrayFromBackEnd);
