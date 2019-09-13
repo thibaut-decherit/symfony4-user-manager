@@ -25,6 +25,7 @@ security:
         invalidate_session: false
         handlers:
           - security.logout.handler.account_deletion
+        csrf_token_generator: security.csrf.token_manager
       remember_me:
         secret: '%kernel.secret%'
         name: __Host-rememberMe
