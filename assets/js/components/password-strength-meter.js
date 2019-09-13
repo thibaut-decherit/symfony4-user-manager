@@ -24,7 +24,13 @@ async function checkPasswordStrength(plainPassword) {
 
     const customBlacklist = getCustomBlacklist();
     const passwordBreached = await haveIBeenPwnedPasswordCheck(plainPassword);
-    const passwordStrengthEstimation = estimatePasswordStrength(plainPassword, customBlacklist).score;
+
+    /*
+     Note that zxcvbn performance seems to deteriorate if password is longer than ~150 characters. Password is truncated
+     before zxcvbn estimation to prevent this performance drop. A password this long is probably assured to be secure
+     anyway, so accurate testing is redundant and a waste of resources.
+     */
+    const passwordStrengthEstimation = estimatePasswordStrength(plainPassword.slice(0, 150), customBlacklist).score;
 
     let passwordStrength = '';
 

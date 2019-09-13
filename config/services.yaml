@@ -9,7 +9,17 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
   account_deletion_token_lifetime: 3600 # seconds
-  bcrypt_cost: 13
+
+  # Tweak these two values according to server hardware. It is recommended that server response doesn't take more than
+  # 1 second during "normal" login.
+  # Feel free to ignore the 1 second limit for important passwords (e.g. admin account), you would then have to create a
+  # dedicated encoder for admin users, with higher values for these two settings.
+  # See https://symfony.com/doc/current/security/named_encoders.html
+  # Bear in mind that login will take longer if OnAuthPasswordRehashIfCostChange is triggered and has to rehash the
+  # password. This situation should therefore not be considered as a "normal" login and could take more than 1 second.
+  argon2id_memory_cost: 128000 # Default is 65536
+  argon2id_time_cost: 10 # Default is 4
+
   email_change_request_send_email_again_delay: 120 # seconds
   email_change_token_lifetime: 3600 # seconds
   password_reset_request_send_email_again_delay: 120 # seconds
@@ -63,8 +73,10 @@ services:
 
   app.on_auth_password_rehash_if_cost_change:
     class: App\EventListener\OnAuthPasswordRehashIfCostChange
+    lazy: true
     arguments:
-      $cost: '%bcrypt_cost%'
+      $memoryCost: '%argon2id_memory_cost%'
+      $timeCost: '%argon2id_time_cost%'
     tags:
       - { name: kernel.event_listener, event: security.interactive_login, lazy: true }
 

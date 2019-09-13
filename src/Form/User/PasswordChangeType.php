@@ -31,7 +31,7 @@ class PasswordChangeType extends AbstractType
                 'required' => false,
                 'constraints' => [
                     new Length([
-                        'max' => 50,
+                        'max' => 4096,
                         'groups' => ['Password_Length']
                     ]),
                     new UserPassword([
