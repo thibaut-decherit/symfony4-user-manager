@@ -49,22 +49,18 @@ services:
 
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
-  mailer.service:
-    public: true
-    class: App\Service\MailerService
+
+  App\Service\MailerService:
     arguments:
       $mailerAddress: '%env(MAILER_SENDER)%'
       $replyToAddress: '%env(MAILER_REPLY_TO)%'
       $websiteName: '%app.website_name%'
-  App\Service\MailerService: '@mailer.service'
 
-  kernel.listener.redirect_if_authenticated:
-    class: App\EventListener\RedirectIfAuthenticated
+  App\EventListener\RedirectIfAuthenticated:
     tags:
       - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
-  kernel.listener.response_header_setter:
-    class: App\EventListener\ResponseHeaderSetter\ResponseHeaderSetter
+  App\EventListener\ResponseHeaderSetter\ResponseHeaderSetter:
     arguments:
       $kernelEnvironment: '%kernel.environment%'
       $simpleHeaders: '%app.response_headers%'
@@ -73,16 +69,13 @@ services:
     tags:
       - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
 
-  app.on_auth_password_rehash_if_cost_change:
-    class: App\EventListener\OnAuthPasswordRehashIfCostChange
-    lazy: true
+  App\EventListener\OnAuthPasswordRehashIfCostChange:
     arguments:
       $memoryCost: '%app.argon2id_memory_cost%'
       $timeCost: '%app.argon2id_time_cost%'
     tags:
-      - { name: kernel.event_listener, event: security.interactive_login, lazy: true }
+      - { name: kernel.event_listener, event: security.interactive_login }
 
-  security.logout.handler.account_deletion:
-    class: App\Security\AccountDeletionLogoutHandler
+  App\Security\AccountDeletionLogoutHandler:
     arguments:
       $sessionLogoutHandler: '@security.logout.handler.session'
