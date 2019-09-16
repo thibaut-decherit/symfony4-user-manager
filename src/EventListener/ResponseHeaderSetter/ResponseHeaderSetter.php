@@ -6,7 +6,7 @@ use App\EventListener\ResponseHeaderSetter\DynamicResponseHeaderSetter\CspHeader
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -68,15 +68,36 @@ class ResponseHeaderSetter
     }
 
     /**
-     * @param FilterResponseEvent $event
+     * @param ResponseEvent $event
      * @throws Exception
      */
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
+        if ($this->supports($event) === false) {
+            return;
+        }
+
         $responseHeaders = $event->getResponse()->headers;
 
         $this->setDynamicHeaders($responseHeaders);
         $this->setStaticHeaders($responseHeaders);
+    }
+
+    /**
+     * @param ResponseEvent $event
+     * @return bool
+     */
+    private function supports(ResponseEvent $event): bool
+    {
+        /*
+         * Required to avoid wasting resources by triggering the listener on sub-requests (e.g. when embedding
+         * controllers in templates).
+         */
+        if ($event->isMasterRequest() === false) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
