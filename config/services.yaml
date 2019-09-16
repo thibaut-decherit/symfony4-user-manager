@@ -55,6 +55,7 @@ services:
     arguments:
       $mailerAddress: '%env(MAILER_SENDER)%'
       $replyToAddress: '%env(MAILER_REPLY_TO)%'
+      $websiteName: '%website_name%'
   App\Service\MailerService: '@mailer.service'
 
   kernel.listener.redirect_if_authenticated:

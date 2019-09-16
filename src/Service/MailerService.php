@@ -28,6 +28,11 @@ class MailerService
     private $replyToAddress;
 
     /**
+     * @var string
+     */
+    private $websiteName;
+
+    /**
      * @var Twig
      */
     private $twig;
@@ -46,6 +51,7 @@ class MailerService
      * MailerService constructor.
      * @param string $mailerAddress
      * @param string $replyToAddress
+     * @param string $websiteName
      * @param Twig $twig
      * @param Swift_Mailer $swiftMailer
      * @param TranslatorInterface $translator
@@ -53,6 +59,7 @@ class MailerService
     public function __construct(
         string $mailerAddress,
         string $replyToAddress,
+        string $websiteName,
         Twig $twig,
         Swift_Mailer $swiftMailer,
         TranslatorInterface $translator
@@ -60,6 +67,7 @@ class MailerService
     {
         $this->mailerAddress = $mailerAddress;
         $this->replyToAddress = $replyToAddress;
+        $this->websiteName = $websiteName;
         $this->twig = $twig;
         $this->swiftMailer = $swiftMailer;
         $this->translator = $translator;
@@ -90,7 +98,7 @@ class MailerService
 
         $this->sendEmail(
             $this->translator->trans('mailer.subjects.account_deletion_request'),
-            [$this->mailerAddress => 'UserManager'],
+            [$this->mailerAddress => $this->websiteName],
             $user->getEmail(),
             $this->replyToAddress,
             $emailBody
@@ -116,7 +124,7 @@ class MailerService
 
         $this->sendEmail(
             $this->translator->trans('mailer.subjects.account_deletion_success'),
-            [$this->mailerAddress => 'UserManager'],
+            [$this->mailerAddress => $this->websiteName],
             $user->getEmail(),
             $this->replyToAddress,
             $emailBody
@@ -144,7 +152,7 @@ class MailerService
 
         $this->sendEmail(
             $this->translator->trans('mailer.subjects.email_address_change'),
-            [$this->mailerAddress => 'UserManager'],
+            [$this->mailerAddress => $this->websiteName],
             $user->getEmailChangePending(),
             $this->replyToAddress,
             $emailBody
@@ -172,7 +180,7 @@ class MailerService
 
         $this->sendEmail(
             $this->translator->trans('mailer.subjects.login_attempt'),
-            [$this->mailerAddress => 'UserManager'],
+            [$this->mailerAddress => $this->websiteName],
             $user->getEmail(),
             $this->replyToAddress,
             $emailBody
@@ -200,7 +208,7 @@ class MailerService
 
         $this->sendEmail(
             $this->translator->trans('mailer.subjects.password_reset'),
-            [$this->mailerAddress => 'UserManager'],
+            [$this->mailerAddress => $this->websiteName],
             $user->getEmail(),
             $this->replyToAddress,
             $emailBody
@@ -224,7 +232,7 @@ class MailerService
 
         $this->sendEmail(
             $this->translator->trans('mailer.subjects.registration_attempt'),
-            [$this->mailerAddress => 'UserManager'],
+            [$this->mailerAddress => $this->websiteName],
             $user->getEmail(),
             $this->replyToAddress,
             $emailBody
@@ -248,7 +256,7 @@ class MailerService
 
         $this->sendEmail(
             $this->translator->trans('mailer.subjects.registration_attempt'),
-            [$this->mailerAddress => 'UserManager'],
+            [$this->mailerAddress => $this->websiteName],
             $user->getEmail(),
             $this->replyToAddress,
             $emailBody
@@ -274,7 +282,7 @@ class MailerService
 
         $this->sendEmail(
             $this->translator->trans('mailer.subjects.welcome'),
-            [$this->mailerAddress => 'UserManager'],
+            [$this->mailerAddress => $this->websiteName],
             $user->getEmail(),
             $this->replyToAddress,
             $emailBody
