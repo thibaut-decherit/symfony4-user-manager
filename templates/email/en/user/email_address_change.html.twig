@@ -6,5 +6,5 @@
 <p>
     Click <a href="{{ url('email_change_confirm', {'token' : user.emailChangeToken}) }}">here</a> to confirm this
     change.
-    (This link will expire in {{ emailChangeTokenLifetimeInMinutes }} minutes)
+    (This link will expire in {{ email_change_token_lifetime_in_minutes }} minutes)
 </p>

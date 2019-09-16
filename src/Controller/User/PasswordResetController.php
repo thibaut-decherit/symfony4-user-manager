@@ -61,7 +61,7 @@ class PasswordResetController extends DefaultController
             );
 
             if ($user === null) {
-                return $this->render('user/password-reset-request.html.twig');
+                return $this->render('user/password_reset_request.html.twig');
             }
 
             $passwordResetRequestRetryDelay = $this->getParameter('app.password_reset_request_send_email_again_delay');
@@ -69,7 +69,7 @@ class PasswordResetController extends DefaultController
             // IF retry delay is not expired, only show success message without sending email and writing in database.
             if ($user->getPasswordResetRequestedAt() !== null
                 && $user->isPasswordResetRequestRetryDelayExpired($passwordResetRequestRetryDelay) === false) {
-                return $this->render('user/password-reset-request.html.twig');
+                return $this->render('user/password_reset_request.html.twig');
             }
 
             // Generates password reset token and retries if token already exists.
@@ -87,15 +87,12 @@ class PasswordResetController extends DefaultController
             $user->setPasswordResetRequestedAt(new DateTime());
 
             $passwordResetTokenLifetimeInMinutes = ceil($this->getParameter('app.password_reset_token_lifetime') / 60);
-            $mailer->passwordResetRequest(
-                $user, $passwordResetTokenLifetimeInMinutes,
-                $request->getLocale()
-            );
+            $mailer->passwordResetRequest($user, $passwordResetTokenLifetimeInMinutes, $request->getLocale());
 
             $em->flush();
         }
 
-        return $this->render('user/password-reset-request.html.twig');
+        return $this->render('user/password_reset_request.html.twig');
     }
 
     /**
@@ -188,9 +185,9 @@ class PasswordResetController extends DefaultController
             $user->getPasswordResetToken()
         ];
 
-        return $this->render('user/password-reset-reset.html.twig', [
+        return $this->render('user/password_reset_reset.html.twig', [
             'form' => $form->createView(),
-            'passwordBlacklist' => json_encode($passwordBlacklist)
+            'password_blacklist' => json_encode($passwordBlacklist)
         ]);
     }
 }

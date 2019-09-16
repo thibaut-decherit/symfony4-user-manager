@@ -37,9 +37,9 @@ class PasswordChangeController extends DefaultController
             $user->getEmail()
         ];
 
-        return $this->render('form/user/password-change.html.twig', [
+        return $this->render('form/user/_password_change.html.twig', [
             'form' => $form->createView(),
-            'passwordBlacklist' => json_encode($passwordBlacklist)
+            'password_blacklist' => json_encode($passwordBlacklist)
         ]);
     }
 
@@ -75,7 +75,7 @@ class PasswordChangeController extends DefaultController
                 $translator->trans('flash.user.password_updated')
             );
 
-            $template = $this->render('form/user/password-change.html.twig', [
+            $template = $this->render('form/user/_password_change.html.twig', [
                 'form' => $form->createView()
             ]);
             $jsonTemplate = json_encode($template->getContent());
@@ -86,7 +86,7 @@ class PasswordChangeController extends DefaultController
         }
 
         // Renders and json encode the updated form (with errors)
-        $template = $this->render('form/user/password-change.html.twig', [
+        $template = $this->render('form/user/_password_change.html.twig', [
             'form' => $form->createView()
         ]);
         $jsonTemplate = json_encode($template->getContent());

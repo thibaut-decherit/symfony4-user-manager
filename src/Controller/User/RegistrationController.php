@@ -42,7 +42,7 @@ class RegistrationController extends DefaultController
         return $this->render('user/registration.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
-            'passwordBlacklist' => json_encode($passwordBlacklist)
+            'password_blacklist' => json_encode($passwordBlacklist)
         ]);
     }
 
@@ -89,7 +89,7 @@ class RegistrationController extends DefaultController
                 $translator->trans('flash.user.registration_success')
             );
 
-            $template = $this->render('form/user/registration.html.twig', [
+            $template = $this->render('form/user/_registration.html.twig', [
                 'form' => $form->createView()
             ]);
             $jsonTemplate = json_encode($template->getContent());
@@ -100,7 +100,7 @@ class RegistrationController extends DefaultController
         }
 
         // Renders and json encode the updated form (with errors and input values)
-        $template = $this->render('form/user/registration.html.twig', [
+        $template = $this->render('form/user/_registration.html.twig', [
             'form' => $form->createView(),
         ]);
         $jsonTemplate = json_encode($template->getContent());
@@ -128,15 +128,9 @@ class RegistrationController extends DefaultController
     ): void
     {
         if ($duplicateUser->isActivated()) {
-            $mailer->registrationAttemptOnExistingVerifiedEmailAddress(
-                $duplicateUser,
-                $locale
-            );
+            $mailer->registrationAttemptOnExistingVerifiedEmailAddress($duplicateUser, $locale);
         } else {
-            $mailer->registrationAttemptOnExistingUnverifiedEmailAddress(
-                $duplicateUser,
-                $locale
-            );
+            $mailer->registrationAttemptOnExistingUnverifiedEmailAddress($duplicateUser, $locale);
         }
     }
 

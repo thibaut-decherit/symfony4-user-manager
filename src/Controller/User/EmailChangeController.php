@@ -35,7 +35,7 @@ class EmailChangeController extends DefaultController
 
         $form = $this->createForm(EmailChangeType::class, $user);
 
-        return $this->render('form/user/email-change.html.twig', [
+        return $this->render('form/user/_email_change.html.twig', [
             'form' => $form->createView()
         ]);
     }
@@ -69,7 +69,7 @@ class EmailChangeController extends DefaultController
                     $translator->trans('flash.user.already_current_email_address')
                 );
 
-                $template = $this->render('form/user/email-change.html.twig', [
+                $template = $this->render('form/user/_email_change.html.twig', [
                     'form' => $form->createView()
                 ]);
                 $jsonTemplate = json_encode($template->getContent());
@@ -106,7 +106,7 @@ class EmailChangeController extends DefaultController
                     $errorMessage
                 );
 
-                $template = $this->render('form/user/email-change.html.twig', [
+                $template = $this->render('form/user/_email_change.html.twig', [
                     'form' => $form->createView()
                 ]);
                 $jsonTemplate = json_encode($template->getContent());
@@ -136,16 +136,12 @@ class EmailChangeController extends DefaultController
             $duplicate = $em->getRepository(User::class)->findOneBy(['email' => $user->getEmailChangePending()]);
             if (is_null($duplicate)) {
                 $emailChangeTokenLifetimeInMinutes = ceil($this->getParameter('app.email_change_token_lifetime') / 60);
-                $mailer->emailChange(
-                    $user,
-                    $emailChangeTokenLifetimeInMinutes,
-                    $request->getLocale()
-                );
+                $mailer->emailChange($user, $emailChangeTokenLifetimeInMinutes, $request->getLocale());
             }
 
             $em->flush();
 
-            $successMessage = $this->render('flashAlert/message/user/email-change-request-success.html.twig', [
+            $successMessage = $this->render('flash_alert/message/user/_email_change_request_success.html.twig', [
                 'user' => $user
             ]);
             $this->addFlash(
@@ -153,7 +149,7 @@ class EmailChangeController extends DefaultController
                 $successMessage->getContent()
             );
 
-            $template = $this->render('form/user/email-change.html.twig', [
+            $template = $this->render('form/user/_email_change.html.twig', [
                 'form' => $form->createView()
             ]);
             $jsonTemplate = json_encode($template->getContent());
@@ -164,7 +160,7 @@ class EmailChangeController extends DefaultController
         }
 
         // Renders and json encode the updated form (with errors)
-        $template = $this->render('form/user/email-change.html.twig', [
+        $template = $this->render('form/user/_email_change.html.twig', [
             'form' => $form->createView(),
         ]);
         $jsonTemplate = json_encode($template->getContent());
@@ -223,7 +219,7 @@ class EmailChangeController extends DefaultController
             return $this->redirectToRoute('home');
         }
 
-        return $this->render('user/email-change-confirm.html.twig', [
+        return $this->render('user/email_change_confirm.html.twig', [
             'user' => $user
         ]);
     }
@@ -331,7 +327,7 @@ class EmailChangeController extends DefaultController
         $user->setEmailChangePending(null);
         $em->flush();
 
-        $successMessage = $this->render('flashAlert/message/user/email-change-success.html.twig', [
+        $successMessage = $this->render('flash_alert/message/user/_email_change_success.html.twig', [
             'user' => $user
         ]);
         $this->addFlash(

@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends '_base.html.twig' %}
 
 {% set page_title = 'page_title.account_deletion'|trans %}
 
@@ -14,8 +14,8 @@
     </div>
     <div class="row">
         <div class="col d-flex justify-content-center">
-            {{ include('form/user/button/account-deletion-cancel.html.twig') }}
-            {{ include('form/user/button/account-deletion-confirm.html.twig') }}
+            {{ include('form/user/button/_account_deletion_cancel.html.twig') }}
+            {{ include('form/user/button/_account_deletion_confirm.html.twig') }}
         </div>
     </div>
 

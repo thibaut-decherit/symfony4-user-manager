@@ -149,7 +149,7 @@ class AccountDeletionLogoutHandler implements LogoutHandlerInterface
         $user = $token->getUser();
 
         $successMessage = $this->twig->render(
-            'flashAlert/message/user/account-deletion-request-success.html.twig', [
+            'flash_alert/message/user/_account_deletion_request_success.html.twig', [
                 'user' => $user
             ]
         );

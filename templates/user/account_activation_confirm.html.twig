@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends '_base.html.twig' %}
 
 {% set page_title = 'page_title.account_activation'|trans %}
 
@@ -14,5 +14,5 @@
             </p>
         </div>
     </div>
-    {{ include('form/user/button/account-activation-confirm.html.twig') }}
+    {{ include('form/user/button/_account_activation_confirm.html.twig') }}
 {% endblock %}

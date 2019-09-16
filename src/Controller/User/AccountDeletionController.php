@@ -32,7 +32,7 @@ class AccountDeletionController extends DefaultController
      */
     public function show(): Response
     {
-        return $this->render('user/account-deletion.html.twig');
+        return $this->render('user/account_deletion.html.twig');
     }
 
     /**
@@ -76,10 +76,7 @@ class AccountDeletionController extends DefaultController
         $user->setAccountDeletionRequestedAt(new DateTime());
 
         $accountDeletionTokenLifetimeInMinutes = ceil($this->getParameter('app.account_deletion_token_lifetime') / 60);
-        $mailer->accountDeletionRequest(
-            $user, $accountDeletionTokenLifetimeInMinutes,
-            $request->getLocale()
-        );
+        $mailer->accountDeletionRequest($user, $accountDeletionTokenLifetimeInMinutes, $request->getLocale());
 
         $em->flush();
 
@@ -145,7 +142,7 @@ class AccountDeletionController extends DefaultController
             return $this->redirectToRoute('home');
         }
 
-        return $this->render('user/account-deletion-confirm.html.twig', [
+        return $this->render('user/account_deletion_confirm.html.twig', [
             'user' => $user
         ]);
     }

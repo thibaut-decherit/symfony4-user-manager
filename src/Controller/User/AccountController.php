@@ -40,7 +40,7 @@ class AccountController extends DefaultController
 
         $form = $this->createForm(UserInformationType::class, $user);
 
-        return $this->render('form/user/account-information.html.twig', [
+        return $this->render('form/user/_account_information.html.twig', [
             'form' => $form->createView()
         ]);
     }
@@ -69,7 +69,7 @@ class AccountController extends DefaultController
                 $translator->trans('flash.user.information_updated')
             );
 
-            $template = $this->render('form/user/account-information.html.twig', [
+            $template = $this->render('form/user/_account_information.html.twig', [
                 'form' => $form->createView()
             ]);
             $jsonTemplate = json_encode($template->getContent());
@@ -87,7 +87,7 @@ class AccountController extends DefaultController
         $this->getDoctrine()->getManager()->refresh($user);
 
         // Renders and json encode the updated form (with errors and input values)
-        $template = $this->render('form/user/account-information.html.twig', [
+        $template = $this->render('form/user/_account_information.html.twig', [
             'form' => $form->createView()
         ]);
         $jsonTemplate = json_encode($template->getContent());

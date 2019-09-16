@@ -6,17 +6,17 @@
     }
 }) }}
 
-{% include 'flashAlert/flash-alert.html.twig' with {
-    'rawMessage': true,
-    'alertType': 'email-change-request-success-raw',
-    'alertStyle': 'success',
-    'textAlign': 'center'
+{% include 'flash_alert/_alert.html.twig' with {
+    'raw_message': true,
+    'alert_type': 'email-change-request-success-raw',
+    'alert_style': 'success',
+    'text_align': 'center'
 } %}
 
-{% include 'flashAlert/flash-alert.html.twig' with {
-    'alertType': 'email-change-request-error',
-    'alertStyle': 'danger',
-    'textAlign': 'center'
+{% include 'flash_alert/_alert.html.twig' with {
+    'alert_type': 'email-change-request-error',
+    'alert_style': 'danger',
+    'text_align': 'center'
 } %}
 
 <div class="form-group">
