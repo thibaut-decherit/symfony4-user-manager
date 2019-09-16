@@ -64,7 +64,7 @@ class PasswordResetController extends DefaultController
                 return $this->render('user/password-reset-request.html.twig');
             }
 
-            $passwordResetRequestRetryDelay = $this->getParameter('password_reset_request_send_email_again_delay');
+            $passwordResetRequestRetryDelay = $this->getParameter('app.password_reset_request_send_email_again_delay');
 
             // IF retry delay is not expired, only show success message without sending email and writing in database.
             if ($user->getPasswordResetRequestedAt() !== null
@@ -86,7 +86,7 @@ class PasswordResetController extends DefaultController
 
             $user->setPasswordResetRequestedAt(new DateTime());
 
-            $passwordResetTokenLifetimeInMinutes = ceil($this->getParameter('password_reset_token_lifetime') / 60);
+            $passwordResetTokenLifetimeInMinutes = ceil($this->getParameter('app.password_reset_token_lifetime') / 60);
             $mailer->passwordResetRequest(
                 $user, $passwordResetTokenLifetimeInMinutes,
                 $request->getLocale()
@@ -134,7 +134,7 @@ class PasswordResetController extends DefaultController
             return $this->redirectToRoute('password_reset_request');
         }
 
-        $passwordResetTokenLifetime = $this->getParameter('password_reset_token_lifetime');
+        $passwordResetTokenLifetime = $this->getParameter('app.password_reset_token_lifetime');
 
         if ($user->isPasswordResetTokenExpired($passwordResetTokenLifetime)) {
             $user->setPasswordResetRequestedAt(null);
@@ -182,7 +182,7 @@ class PasswordResetController extends DefaultController
 
         // Password blacklist to be used by zxcvbn.
         $passwordBlacklist = [
-            $this->getParameter('website_name'),
+            $this->getParameter('app.website_name'),
             $user->getUsername(),
             $user->getEmail(),
             $user->getPasswordResetToken()

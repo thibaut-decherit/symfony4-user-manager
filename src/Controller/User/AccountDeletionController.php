@@ -75,7 +75,7 @@ class AccountDeletionController extends DefaultController
 
         $user->setAccountDeletionRequestedAt(new DateTime());
 
-        $accountDeletionTokenLifetimeInMinutes = ceil($this->getParameter('account_deletion_token_lifetime') / 60);
+        $accountDeletionTokenLifetimeInMinutes = ceil($this->getParameter('app.account_deletion_token_lifetime') / 60);
         $mailer->accountDeletionRequest(
             $user, $accountDeletionTokenLifetimeInMinutes,
             $request->getLocale()
@@ -129,7 +129,7 @@ class AccountDeletionController extends DefaultController
             return $this->redirectToRoute('home');
         }
 
-        $accountDeletionTokenLifetime = $this->getParameter('account_deletion_token_lifetime');
+        $accountDeletionTokenLifetime = $this->getParameter('app.account_deletion_token_lifetime');
 
         if ($user->isAccountDeletionTokenExpired($accountDeletionTokenLifetime)) {
             $user->setAccountDeletionToken(null);
@@ -231,7 +231,7 @@ class AccountDeletionController extends DefaultController
             return $this->redirectToRoute('home');
         }
 
-        $accountDeletionTokenLifetime = $this->getParameter('account_deletion_token_lifetime');
+        $accountDeletionTokenLifetime = $this->getParameter('app.account_deletion_token_lifetime');
 
         if ($user->isAccountDeletionTokenExpired($accountDeletionTokenLifetime)) {
             $user->setAccountDeletionToken(null);
@@ -268,7 +268,7 @@ class AccountDeletionController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $accountDeletionTokenLifetime = $this->getParameter('account_deletion_token_lifetime');
+        $accountDeletionTokenLifetime = $this->getParameter('app.account_deletion_token_lifetime');
 
         if ($user->isAccountDeletionTokenExpired($accountDeletionTokenLifetime)) {
             $user->setAccountDeletionRequestedAt(null);

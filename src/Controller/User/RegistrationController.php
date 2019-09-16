@@ -36,7 +36,7 @@ class RegistrationController extends DefaultController
 
         // Password blacklist to be used by zxcvbn.
         $passwordBlacklist = [
-            $this->getParameter('website_name')
+            $this->getParameter('app.website_name')
         ];
 
         return $this->render('user/registration.html.twig', [

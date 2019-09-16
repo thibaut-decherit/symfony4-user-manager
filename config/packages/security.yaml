@@ -8,8 +8,8 @@ security:
   encoders:
     App\Entity\User:
       algorithm: auto # Currently Argon2id
-      memory_cost: '%argon2id_memory_cost%'
-      time_cost: '%argon2id_time_cost%'
+      memory_cost: '%app.argon2id_memory_cost%'
+      time_cost: '%app.argon2id_time_cost%'
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/

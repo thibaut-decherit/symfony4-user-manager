@@ -4,4 +4,4 @@ twig:
   strict_variables: '%kernel.debug%'
   form_themes: ['bootstrap_4_layout.html.twig']
   globals:
-    website_name: '%website_name%'
+    website_name: '%app.website_name%'

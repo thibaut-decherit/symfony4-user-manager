@@ -79,7 +79,7 @@ class EmailChangeController extends DefaultController
                 ], 400);
             }
 
-            $emailChangeRequestRetryDelay = $this->getParameter('email_change_request_send_email_again_delay');
+            $emailChangeRequestRetryDelay = $this->getParameter('app.email_change_request_send_email_again_delay');
 
             // IF retry delay is not expired, displays error message.
             if ($user->getEmailChangeRequestedAt() !== null
@@ -135,7 +135,7 @@ class EmailChangeController extends DefaultController
             // IF email address is not already registered to another account, sends verification email.
             $duplicate = $em->getRepository(User::class)->findOneBy(['email' => $user->getEmailChangePending()]);
             if (is_null($duplicate)) {
-                $emailChangeTokenLifetimeInMinutes = ceil($this->getParameter('email_change_token_lifetime') / 60);
+                $emailChangeTokenLifetimeInMinutes = ceil($this->getParameter('app.email_change_token_lifetime') / 60);
                 $mailer->emailChange(
                     $user,
                     $emailChangeTokenLifetimeInMinutes,
@@ -206,7 +206,7 @@ class EmailChangeController extends DefaultController
             return $this->redirectToRoute('home');
         }
 
-        $emailChangeTokenLifetime = $this->getParameter('email_change_token_lifetime');
+        $emailChangeTokenLifetime = $this->getParameter('app.email_change_token_lifetime');
 
         if ($user->isEmailChangeTokenExpired($emailChangeTokenLifetime)) {
             $user->setEmailChangePending(null);
@@ -301,7 +301,7 @@ class EmailChangeController extends DefaultController
             return $this->redirectToRoute('home');
         }
 
-        $emailChangeTokenLifetime = $this->getParameter('email_change_token_lifetime');
+        $emailChangeTokenLifetime = $this->getParameter('app.email_change_token_lifetime');
 
         if ($user->isEmailChangeTokenExpired($emailChangeTokenLifetime)) {
             $user->setEmailChangePending(null);
