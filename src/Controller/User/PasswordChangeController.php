@@ -24,7 +24,7 @@ class PasswordChangeController extends DefaultController
      *
      * @return Response
      */
-    public function changeFormAction(): Response
+    public function changeForm(): Response
     {
         $user = $this->getUser();
 
@@ -52,7 +52,7 @@ class PasswordChangeController extends DefaultController
      * @Route("/ajax", name="password_change_ajax", methods="POST")
      * @return JsonResponse
      */
-    public function changeAction(
+    public function change(
         Request $request,
         UserPasswordEncoderInterface $passwordEncoder,
         TranslatorInterface $translator

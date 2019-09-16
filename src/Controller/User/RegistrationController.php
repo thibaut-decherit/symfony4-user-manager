@@ -29,7 +29,7 @@ class RegistrationController extends DefaultController
      * @Route("/register", name="registration", methods="GET")
      * @return Response
      */
-    public function registerFormAction(): Response
+    public function registerForm(): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
@@ -57,7 +57,7 @@ class RegistrationController extends DefaultController
      * @return JsonResponse
      * @throws Exception
      */
-    public function registerAction(
+    public function register(
         Request $request,
         UserPasswordEncoderInterface $passwordEncoder,
         MailerService $mailer,

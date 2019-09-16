@@ -30,7 +30,7 @@ class AccountDeletionController extends DefaultController
      *
      * @return Response
      */
-    public function showAction(): Response
+    public function show(): Response
     {
         return $this->render('user/account-deletion.html.twig');
     }
@@ -45,7 +45,7 @@ class AccountDeletionController extends DefaultController
      * @return RedirectResponse
      * @throws AccessDeniedException|Exception
      */
-    public function requestAction(
+    public function request(
         Request $request,
         MailerService $mailer,
         CsrfTokenManagerInterface $csrfTokenManager
@@ -106,7 +106,7 @@ class AccountDeletionController extends DefaultController
      * @Route("/delete-account/confirm", name="account_deletion_confirm", methods="GET")
      * @return RedirectResponse
      */
-    public function confirmAction(Request $request, TranslatorInterface $translator): Response
+    public function confirm(Request $request, TranslatorInterface $translator): Response
     {
         $accountDeletionToken = $request->get('token');
 
@@ -158,7 +158,7 @@ class AccountDeletionController extends DefaultController
      * @return RedirectResponse
      * @throws AccessDeniedException
      */
-    public function cancelAction(Request $request): RedirectResponse
+    public function cancel(Request $request): RedirectResponse
     {
         if ($this->isCsrfTokenValid('account_deletion_cancel', $request->get('_csrf_token')) === false) {
             throw new AccessDeniedException('Invalid CSRF token.');
@@ -199,7 +199,7 @@ class AccountDeletionController extends DefaultController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function deleteAction(
+    public function delete(
         Request $request,
         TranslatorInterface $translator,
         MailerService $mailer,

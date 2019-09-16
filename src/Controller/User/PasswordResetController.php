@@ -33,7 +33,7 @@ class PasswordResetController extends DefaultController
      * @return Response
      * @throws Exception
      */
-    public function requestAction(
+    public function request(
         Request $request,
         TranslatorInterface $translator,
         MailerService $mailer
@@ -107,7 +107,7 @@ class PasswordResetController extends DefaultController
      * @Route("/reset", name="password_reset", methods={"GET", "POST"})
      * @return Response
      */
-    public function resetAction(
+    public function reset(
         Request $request,
         UserPasswordEncoderInterface $passwordEncoder,
         TranslatorInterface $translator

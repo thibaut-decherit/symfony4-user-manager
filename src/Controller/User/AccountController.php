@@ -24,7 +24,7 @@ class AccountController extends DefaultController
      * @Route(name="account", methods="GET")
      * @return Response
      */
-    public function manageAction(): Response
+    public function manage(): Response
     {
         return $this->render('user/account.html.twig');
     }
@@ -34,7 +34,7 @@ class AccountController extends DefaultController
      *
      * @return Response
      */
-    public function accountInformationFormAction(): Response
+    public function accountInformationForm(): Response
     {
         $user = $this->getUser();
 
@@ -53,7 +53,7 @@ class AccountController extends DefaultController
      * @Route("/account-information-edit-ajax", name="account_information_edit_ajax", methods="POST")
      * @return JsonResponse
      */
-    public function accountInformationEditAction(Request $request, TranslatorInterface $translator): JsonResponse
+    public function accountInformationEdit(Request $request, TranslatorInterface $translator): JsonResponse
     {
         $user = $this->getUser();
 

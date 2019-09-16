@@ -29,7 +29,7 @@ class EmailChangeController extends DefaultController
      *
      * @return Response
      */
-    public function changeFormAction(): Response
+    public function changeForm(): Response
     {
         $user = $this->getUser();
 
@@ -50,7 +50,7 @@ class EmailChangeController extends DefaultController
      * @return JsonResponse
      * @throws Exception
      */
-    public function changeRequestAction(
+    public function changeRequest(
         Request $request,
         TranslatorInterface $translator,
         MailerService $mailer
@@ -183,7 +183,7 @@ class EmailChangeController extends DefaultController
      * @Route("email-change/confirm", name="email_change_confirm", methods="GET")
      * @return RedirectResponse
      */
-    public function confirmAction(Request $request, TranslatorInterface $translator): Response
+    public function confirm(Request $request, TranslatorInterface $translator): Response
     {
         $emailChangeToken = $request->get('token');
 
@@ -236,7 +236,7 @@ class EmailChangeController extends DefaultController
      * @return RedirectResponse
      * @throws AccessDeniedException
      */
-    public function cancelAction(Request $request): RedirectResponse
+    public function cancel(Request $request): RedirectResponse
     {
         if ($this->isCsrfTokenValid('email_change_cancel', $request->get('_csrf_token')) === false) {
             throw new AccessDeniedException('Invalid CSRF token.');
@@ -274,7 +274,7 @@ class EmailChangeController extends DefaultController
      * @return RedirectResponse
      * @throws AccessDeniedException
      */
-    public function changeAction(Request $request, TranslatorInterface $translator): RedirectResponse
+    public function change(Request $request, TranslatorInterface $translator): RedirectResponse
     {
         if ($this->isCsrfTokenValid('email_change', $request->get('_csrf_token')) === false) {
             throw new AccessDeniedException('Invalid CSRF token.');
