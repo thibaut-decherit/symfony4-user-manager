@@ -43,11 +43,6 @@ class PasswordChangeType extends AbstractType
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'form_errors.user.repeat_password',
-                'options' => [
-                    'attr' => [
-                        'class' => 'password-field'
-                    ]
-                ],
                 'required' => false,
                 'first_options' => [
                     'label' => 'user.new_password'
