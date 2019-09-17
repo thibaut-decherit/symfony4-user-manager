@@ -49,7 +49,7 @@ class PasswordResetController extends DefaultController
                 $request->request->get('usernameOrEmail')
             );
 
-            if (preg_match('/^.+\@\S+\.\S+$/', $usernameOrEmail)) {
+            if (preg_match('/^.+@\S+\.\S+$/', $usernameOrEmail)) {
                 $user = $em->getRepository(User::class)->findOneBy(['email' => $usernameOrEmail]);
             } else {
                 $user = $em->getRepository(User::class)->findOneBy(['username' => $usernameOrEmail]);
