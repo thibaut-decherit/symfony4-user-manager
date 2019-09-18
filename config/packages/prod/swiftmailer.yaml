@@ -1,4 +1,4 @@
 swiftmailer:
-  url: '%env(MAILER_URL)%'
   spool: # See https://symfony.com/doc/current/email.html#spool-using-files
-    type: 'memory'
+    type: 'file'
+    path: '%kernel.project_dir%/var/spool'
