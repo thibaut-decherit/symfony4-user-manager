@@ -24,7 +24,7 @@ class AccountController extends DefaultController
      * @Route(name="account", methods="GET")
      * @return Response
      */
-    public function manageAction(): Response
+    public function manage(): Response
     {
         return $this->render('user/account.html.twig');
     }
@@ -34,13 +34,13 @@ class AccountController extends DefaultController
      *
      * @return Response
      */
-    public function accountInformationFormAction(): Response
+    public function accountInformationForm(): Response
     {
         $user = $this->getUser();
 
         $form = $this->createForm(UserInformationType::class, $user);
 
-        return $this->render('form/user/account-information.html.twig', [
+        return $this->render('form/user/_account_information.html.twig', [
             'form' => $form->createView()
         ]);
     }
@@ -53,7 +53,7 @@ class AccountController extends DefaultController
      * @Route("/account-information-edit-ajax", name="account_information_edit_ajax", methods="POST")
      * @return JsonResponse
      */
-    public function accountInformationEditAction(Request $request, TranslatorInterface $translator): JsonResponse
+    public function accountInformationEdit(Request $request, TranslatorInterface $translator): JsonResponse
     {
         $user = $this->getUser();
 
@@ -69,7 +69,7 @@ class AccountController extends DefaultController
                 $translator->trans('flash.user.information_updated')
             );
 
-            $template = $this->render('form/user/account-information.html.twig', [
+            $template = $this->render('form/user/_account_information.html.twig', [
                 'form' => $form->createView()
             ]);
             $jsonTemplate = json_encode($template->getContent());
@@ -87,7 +87,7 @@ class AccountController extends DefaultController
         $this->getDoctrine()->getManager()->refresh($user);
 
         // Renders and json encode the updated form (with errors and input values)
-        $template = $this->render('form/user/account-information.html.twig', [
+        $template = $this->render('form/user/_account_information.html.twig', [
             'form' => $form->createView()
         ]);
         $jsonTemplate = json_encode($template->getContent());

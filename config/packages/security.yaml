@@ -8,8 +8,8 @@ security:
   encoders:
     App\Entity\User:
       algorithm: auto # Currently Argon2id
-      memory_cost: '%argon2id_memory_cost%'
-      time_cost: '%argon2id_time_cost%'
+      memory_cost: '%app.argon2id_memory_cost%'
+      time_cost: '%app.argon2id_time_cost%'
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -25,7 +25,7 @@ security:
         target: /
         invalidate_session: false
         handlers:
-          - security.logout.handler.account_deletion
+          - App\Security\AccountDeletionLogoutHandler
         csrf_token_generator: security.csrf.token_manager
       remember_me:
         secret: '%kernel.secret%'

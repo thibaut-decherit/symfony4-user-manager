@@ -71,7 +71,7 @@ function haveIBeenPwnedPasswordCheck(plainPassword) {
     const plainPasswordSHA1Prefix = plainPasswordSHA1.slice(0, 5);
     const plainPasswordSHA1Suffix = plainPasswordSHA1.slice(5);
 
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
         let didTimeout = false;
 
         // Defaults to NOT breached in case of high latency.

@@ -25,11 +25,6 @@ class PasswordResetType extends AbstractType
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'form_errors.user.repeat_password',
-                'options' => [
-                    'attr' => [
-                        'class' => 'password-field'
-                    ]
-                ],
                 'required' => true,
                 'first_options' => [
                     'label' => 'user.password'

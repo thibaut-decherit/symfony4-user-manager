@@ -1,41 +1,41 @@
-{% extends 'base.html.twig' %}
+{% extends '_base.html.twig' %}
 
 {% block body %}
     <h1>{{ website_name }}</h1>
 
-    {% include 'flashAlert/flash-alert.html.twig' with {
-        'alertType': 'email-change-error',
-        'alertStyle': 'danger',
-        'textAlign': 'center'
+    {% include 'flash_alert/_alert.html.twig' with {
+        'alert_type': 'email-change-error',
+        'alert_style': 'danger',
+        'text_align': 'center'
     } %}
-    {% include 'flashAlert/flash-alert.html.twig' with {
-        'rawMessage': true,
-        'alertType': 'email-change-success-raw',
-        'alertStyle': 'success',
-        'textAlign': 'center'
+    {% include 'flash_alert/_alert.html.twig' with {
+        'raw_message': true,
+        'alert_type': 'email-change-success-raw',
+        'alert_style': 'success',
+        'text_align': 'center'
     } %}
-    {% include 'flashAlert/flash-alert.html.twig' with {
-        'rawMessage': true,
-        'alertType': 'account-deletion-request-success-raw',
-        'alertStyle': 'success',
-        'textAlign': 'center'
+    {% include 'flash_alert/_alert.html.twig' with {
+        'raw_message': true,
+        'alert_type': 'account-deletion-request-success-raw',
+        'alert_style': 'success',
+        'text_align': 'center'
     } %}
-    {% include 'flashAlert/flash-alert.html.twig' with {
-        'alertType': 'account-deletion-success',
-        'alertStyle': 'success',
-        'textAlign': 'center'
+    {% include 'flash_alert/_alert.html.twig' with {
+        'alert_type': 'account-deletion-success',
+        'alert_style': 'success',
+        'text_align': 'center'
     } %}
-    {% include 'flashAlert/flash-alert.html.twig' with {
-        'alertType': 'account-deletion-error',
-        'alertStyle': 'danger',
-        'textAlign': 'center'
+    {% include 'flash_alert/_alert.html.twig' with {
+        'alert_type': 'account-deletion-error',
+        'alert_style': 'danger',
+        'text_align': 'center'
     } %}
 
     {% if is_granted("ROLE_USER") %}
         <div class="d-flex">
             <p class="my-2 mr-2">{{ 'flash.user.greeting_authenticated'|trans }} {{ app.user.username }}</p>
             <a href="{{ path('account') }}" class="my-2 mr-2">{{ 'page_title.my_account'|trans }}</a>
-            {% include 'form/user/button/logout.html.twig' %}
+            {% include 'form/user/button/_logout.html.twig' %}
         </div>
     {% else %}
         <p class="my-2">{{ 'flash.user.greeting_anonymous'|trans }}</p>

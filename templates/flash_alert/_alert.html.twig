@@ -1,0 +1,29 @@
+{% set raw_message = raw_message is defined ? raw_message : false %}
+
+{% set alert_dismissible = alert_dismissible is defined ? alert_dismissible : false %}
+
+{% set alert_style = alert_style is defined ? 'alert-' ~ alert_style : 'alert-primary' %}
+
+{% set text_align = text_align is defined ? 'text-' ~ text_align : '' %}
+
+{% for message in app.flashes(alert_type) %}
+    <div class="alert {{ alert_dismissible ? 'alert-dismissible' }} {{ alert_style }} rounded-0"
+         role="alert"
+         {% if alert_id is defined %}id="{{ alert_id }}"{% endif %}
+    >
+        {% if alert_dismissible %}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        {% endif %}
+
+        <p class="{{ text_align }} m-0">
+            {# IF message is a twig template from templates/flash_alert/message instead of a plaintext string #}
+            {% if raw_message %}
+                {{ message|raw }}
+            {% else %}
+                {{ message }}
+            {% endif %}
+        </p>
+    </div>
+{% endfor %}

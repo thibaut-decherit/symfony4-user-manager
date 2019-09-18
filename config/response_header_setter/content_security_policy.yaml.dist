@@ -1,5 +1,5 @@
 parameters:
-  content_security_policy:
+  app.content_security_policy:
     report_uri:
       # Either match (data must contain route name, use that if your logger is included in the app)
       # or plain (data must contain URL)

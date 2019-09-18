@@ -25,7 +25,7 @@ class AccountActivationController extends DefaultController
      * @Route("/activate-account/confirm", name="account_activation_confirm", methods="GET")
      * @return RedirectResponse
      */
-    public function confirmAction(Request $request): Response
+    public function confirm(Request $request): Response
     {
         $accountActivationToken = $request->get('token');
 
@@ -43,7 +43,7 @@ class AccountActivationController extends DefaultController
             return $this->redirectToRoute('home');
         }
 
-        return $this->render('user/account-activation-confirm.html.twig', [
+        return $this->render('user/account_activation_confirm.html.twig', [
             'user' => $user
         ]);
     }
@@ -57,7 +57,7 @@ class AccountActivationController extends DefaultController
      * @return RedirectResponse
      * @throws AccessDeniedException
      */
-    public function activateAction(Request $request, TranslatorInterface $translator): RedirectResponse
+    public function activate(Request $request, TranslatorInterface $translator): RedirectResponse
     {
         if ($this->isCsrfTokenValid('account_activation_activate', $request->get('_csrf_token')) === false) {
             throw new AccessDeniedException('Invalid CSRF token.');

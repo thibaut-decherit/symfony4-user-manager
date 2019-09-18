@@ -33,7 +33,7 @@ class PasswordResetController extends DefaultController
      * @return Response
      * @throws Exception
      */
-    public function requestAction(
+    public function request(
         Request $request,
         TranslatorInterface $translator,
         MailerService $mailer
@@ -49,7 +49,7 @@ class PasswordResetController extends DefaultController
                 $request->request->get('usernameOrEmail')
             );
 
-            if (preg_match('/^.+\@\S+\.\S+$/', $usernameOrEmail)) {
+            if (preg_match('/^.+@\S+\.\S+$/', $usernameOrEmail)) {
                 $user = $em->getRepository(User::class)->findOneBy(['email' => $usernameOrEmail]);
             } else {
                 $user = $em->getRepository(User::class)->findOneBy(['username' => $usernameOrEmail]);
@@ -61,15 +61,15 @@ class PasswordResetController extends DefaultController
             );
 
             if ($user === null) {
-                return $this->render('user/password-reset-request.html.twig');
+                return $this->render('user/password_reset_request.html.twig');
             }
 
-            $passwordResetRequestRetryDelay = $this->getParameter('password_reset_request_send_email_again_delay');
+            $passwordResetRequestRetryDelay = $this->getParameter('app.password_reset_request_send_email_again_delay');
 
             // IF retry delay is not expired, only show success message without sending email and writing in database.
             if ($user->getPasswordResetRequestedAt() !== null
                 && $user->isPasswordResetRequestRetryDelayExpired($passwordResetRequestRetryDelay) === false) {
-                return $this->render('user/password-reset-request.html.twig');
+                return $this->render('user/password_reset_request.html.twig');
             }
 
             // Generates password reset token and retries if token already exists.
@@ -86,16 +86,13 @@ class PasswordResetController extends DefaultController
 
             $user->setPasswordResetRequestedAt(new DateTime());
 
-            $passwordResetTokenLifetimeInMinutes = ceil($this->getParameter('password_reset_token_lifetime') / 60);
-            $mailer->passwordResetRequest(
-                $user, $passwordResetTokenLifetimeInMinutes,
-                $request->getLocale()
-            );
+            $passwordResetTokenLifetimeInMinutes = ceil($this->getParameter('app.password_reset_token_lifetime') / 60);
+            $mailer->passwordResetRequest($user, $passwordResetTokenLifetimeInMinutes, $request->getLocale());
 
             $em->flush();
         }
 
-        return $this->render('user/password-reset-request.html.twig');
+        return $this->render('user/password_reset_request.html.twig');
     }
 
     /**
@@ -107,7 +104,7 @@ class PasswordResetController extends DefaultController
      * @Route("/reset", name="password_reset", methods={"GET", "POST"})
      * @return Response
      */
-    public function resetAction(
+    public function reset(
         Request $request,
         UserPasswordEncoderInterface $passwordEncoder,
         TranslatorInterface $translator
@@ -134,7 +131,7 @@ class PasswordResetController extends DefaultController
             return $this->redirectToRoute('password_reset_request');
         }
 
-        $passwordResetTokenLifetime = $this->getParameter('password_reset_token_lifetime');
+        $passwordResetTokenLifetime = $this->getParameter('app.password_reset_token_lifetime');
 
         if ($user->isPasswordResetTokenExpired($passwordResetTokenLifetime)) {
             $user->setPasswordResetRequestedAt(null);
@@ -182,15 +179,15 @@ class PasswordResetController extends DefaultController
 
         // Password blacklist to be used by zxcvbn.
         $passwordBlacklist = [
-            $this->getParameter('website_name'),
+            $this->getParameter('app.website_name'),
             $user->getUsername(),
             $user->getEmail(),
             $user->getPasswordResetToken()
         ];
 
-        return $this->render('user/password-reset-reset.html.twig', [
+        return $this->render('user/password_reset_reset.html.twig', [
             'form' => $form->createView(),
-            'passwordBlacklist' => json_encode($passwordBlacklist)
+            'password_blacklist' => json_encode($passwordBlacklist)
         ]);
     }
 }

@@ -8,7 +8,7 @@ imports:
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-  account_deletion_token_lifetime: 3600 # seconds
+  app.account_deletion_token_lifetime: 3600 # seconds
 
   # Tweak these two values according to server hardware. It is recommended that server response doesn't take more than
   # 1 second during "normal" login.
@@ -17,14 +17,14 @@ parameters:
   # See https://symfony.com/doc/current/security/named_encoders.html
   # Bear in mind that login will take longer if OnAuthPasswordRehashIfCostChange is triggered and has to rehash the
   # password. This situation should therefore not be considered as a "normal" login and could take more than 1 second.
-  argon2id_memory_cost: 128000 # Default is 65536
-  argon2id_time_cost: 10 # Default is 4
+  app.argon2id_memory_cost: 128000 # Default is 65536
+  app.argon2id_time_cost: 10 # Default is 4
 
-  email_change_request_send_email_again_delay: 120 # seconds
-  email_change_token_lifetime: 3600 # seconds
-  password_reset_request_send_email_again_delay: 120 # seconds
-  password_reset_token_lifetime: 3600 # seconds
-  website_name: '%env(WEBSITE_NAME)%'
+  app.email_change_request_send_email_again_delay: 120 # seconds
+  app.email_change_token_lifetime: 3600 # seconds
+  app.password_reset_request_send_email_again_delay: 120 # seconds
+  app.password_reset_token_lifetime: 3600 # seconds
+  app.website_name: '%env(WEBSITE_NAME)%'
 
 services:
   # default configuration for services in *this* file
@@ -49,39 +49,33 @@ services:
 
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
-  mailer.service:
-    public: true
-    class: App\Service\MailerService
+
+  App\Service\MailerService:
     arguments:
       $mailerAddress: '%env(MAILER_SENDER)%'
       $replyToAddress: '%env(MAILER_REPLY_TO)%'
-  App\Service\MailerService: '@mailer.service'
+      $websiteName: '%app.website_name%'
 
-  kernel.listener.redirect_if_authenticated:
-    class: App\EventListener\RedirectIfAuthenticated
+  App\EventListener\RedirectIfAuthenticated:
     tags:
       - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
-  kernel.listener.response_header_setter:
-    class: App\EventListener\ResponseHeaderSetter\ResponseHeaderSetter
+  App\EventListener\ResponseHeaderSetter\ResponseHeaderSetter:
     arguments:
       $kernelEnvironment: '%kernel.environment%'
-      $simpleHeaders: '%response_headers%'
+      $simpleHeaders: '%app.response_headers%'
       $requestStack: '@request_stack'
-      $cspConfig: '%content_security_policy%'
+      $cspConfig: '%app.content_security_policy%'
     tags:
       - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
 
-  app.on_auth_password_rehash_if_cost_change:
-    class: App\EventListener\OnAuthPasswordRehashIfCostChange
-    lazy: true
+  App\EventListener\OnAuthPasswordRehashIfCostChange:
     arguments:
-      $memoryCost: '%argon2id_memory_cost%'
-      $timeCost: '%argon2id_time_cost%'
+      $memoryCost: '%app.argon2id_memory_cost%'
+      $timeCost: '%app.argon2id_time_cost%'
     tags:
-      - { name: kernel.event_listener, event: security.interactive_login, lazy: true }
+      - { name: kernel.event_listener, event: security.interactive_login }
 
-  security.logout.handler.account_deletion:
-    class: App\Security\AccountDeletionLogoutHandler
+  App\Security\AccountDeletionLogoutHandler:
     arguments:
       $sessionLogoutHandler: '@security.logout.handler.session'

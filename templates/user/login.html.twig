@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends '_base.html.twig' %}
 
 {% set page_title = 'page_title.login'|trans %}
 
@@ -15,28 +15,28 @@
 
     <div class="alert alert-danger mb-3 text-center d-none" id="login-error-alert"></div>
 
-    {% include 'flashAlert/flash-alert.html.twig' with {
-        'alertType': 'account-activation-success',
-        'alertId': 'login-flash-alert',
-        'alertStyle': 'success',
-        'textAlign': 'center'
+    {% include 'flash_alert/_alert.html.twig' with {
+        'alert_type': 'account-activation-success',
+        'alert_id': 'login-flash-alert',
+        'alert_style': 'success',
+        'text_align': 'center'
     } %}
 
-    {% include 'flashAlert/flash-alert.html.twig' with {
-        'alertType': 'password-reset-success',
-        'alertId': 'login-flash-alert',
-        'alertStyle': 'success',
-        'textAlign': 'center'
+    {% include 'flash_alert/_alert.html.twig' with {
+        'alert_type': 'password-reset-success',
+        'alert_id': 'login-flash-alert',
+        'alert_style': 'success',
+        'text_align': 'center'
     } %}
 
-    {% include 'flashAlert/flash-alert.html.twig' with {
-        'alertType': 'login-required-error',
-        'alertId': 'login-flash-alert',
-        'alertStyle': 'danger',
-        'textAlign': 'center'
+    {% include 'flash_alert/_alert.html.twig' with {
+        'alert_type': 'login-required-error',
+        'alert_id': 'login-flash-alert',
+        'alert_style': 'danger',
+        'text_align': 'center'
     } %}
 
-    {% include 'form/user/login.html.twig' %}
+    {% include 'form/user/_login.html.twig' %}
 {% endblock %}
 
 {% block javascripts %}

@@ -24,7 +24,7 @@ class PasswordChangeController extends DefaultController
      *
      * @return Response
      */
-    public function changeFormAction(): Response
+    public function changeForm(): Response
     {
         $user = $this->getUser();
 
@@ -32,14 +32,14 @@ class PasswordChangeController extends DefaultController
 
         // Password blacklist to be used by zxcvbn.
         $passwordBlacklist = [
-            $this->getParameter('website_name'),
+            $this->getParameter('app.website_name'),
             $user->getUsername(),
             $user->getEmail()
         ];
 
-        return $this->render('form/user/password-change.html.twig', [
+        return $this->render('form/user/_password_change.html.twig', [
             'form' => $form->createView(),
-            'passwordBlacklist' => json_encode($passwordBlacklist)
+            'password_blacklist' => json_encode($passwordBlacklist)
         ]);
     }
 
@@ -52,7 +52,7 @@ class PasswordChangeController extends DefaultController
      * @Route("/ajax", name="password_change_ajax", methods="POST")
      * @return JsonResponse
      */
-    public function changeAction(
+    public function change(
         Request $request,
         UserPasswordEncoderInterface $passwordEncoder,
         TranslatorInterface $translator
@@ -75,7 +75,7 @@ class PasswordChangeController extends DefaultController
                 $translator->trans('flash.user.password_updated')
             );
 
-            $template = $this->render('form/user/password-change.html.twig', [
+            $template = $this->render('form/user/_password_change.html.twig', [
                 'form' => $form->createView()
             ]);
             $jsonTemplate = json_encode($template->getContent());
@@ -86,7 +86,7 @@ class PasswordChangeController extends DefaultController
         }
 
         // Renders and json encode the updated form (with errors)
-        $template = $this->render('form/user/password-change.html.twig', [
+        $template = $this->render('form/user/_password_change.html.twig', [
             'form' => $form->createView()
         ]);
         $jsonTemplate = json_encode($template->getContent());

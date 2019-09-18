@@ -28,6 +28,11 @@ class MailerService
     private $replyToAddress;
 
     /**
+     * @var string
+     */
+    private $websiteName;
+
+    /**
      * @var Twig
      */
     private $twig;
@@ -46,6 +51,7 @@ class MailerService
      * MailerService constructor.
      * @param string $mailerAddress
      * @param string $replyToAddress
+     * @param string $websiteName
      * @param Twig $twig
      * @param Swift_Mailer $swiftMailer
      * @param TranslatorInterface $translator
@@ -53,6 +59,7 @@ class MailerService
     public function __construct(
         string $mailerAddress,
         string $replyToAddress,
+        string $websiteName,
         Twig $twig,
         Swift_Mailer $swiftMailer,
         TranslatorInterface $translator
@@ -60,6 +67,7 @@ class MailerService
     {
         $this->mailerAddress = $mailerAddress;
         $this->replyToAddress = $replyToAddress;
+        $this->websiteName = $websiteName;
         $this->twig = $twig;
         $this->swiftMailer = $swiftMailer;
         $this->translator = $translator;
@@ -82,15 +90,15 @@ class MailerService
     ): void
     {
         $emailBody = $this->twig->render(
-            "email/$locale/user/account-deletion-request.html.twig", [
+            "email/$locale/user/account_deletion_request.html.twig", [
                 'user' => $user,
-                'accountDeletionTokenLifetimeInMinutes' => $accountDeletionTokenLifetimeInMinutes
+                'account_deletion_token_lifetime_in_minutes' => $accountDeletionTokenLifetimeInMinutes
             ]
         );
 
         $this->sendEmail(
             $this->translator->trans('mailer.subjects.account_deletion_request'),
-            [$this->mailerAddress => 'UserManager'],
+            [$this->mailerAddress => $this->websiteName],
             $user->getEmail(),
             $this->replyToAddress,
             $emailBody
@@ -109,14 +117,14 @@ class MailerService
     public function accountDeletionSuccess(AbstractUser $user, string $locale): void
     {
         $emailBody = $this->twig->render(
-            "email/$locale/user/account-deletion-success.html.twig", [
+            "email/$locale/user/account_deletion_success.html.twig", [
                 'user' => $user,
             ]
         );
 
         $this->sendEmail(
             $this->translator->trans('mailer.subjects.account_deletion_success'),
-            [$this->mailerAddress => 'UserManager'],
+            [$this->mailerAddress => $this->websiteName],
             $user->getEmail(),
             $this->replyToAddress,
             $emailBody
@@ -136,15 +144,15 @@ class MailerService
     public function emailChange(AbstractUser $user, int $emailChangeTokenLifetimeInMinutes, string $locale): void
     {
         $emailBody = $this->twig->render(
-            "email/$locale/user/email-address-change.html.twig", [
+            "email/$locale/user/email_address_change.html.twig", [
                 'user' => $user,
-                'emailChangeTokenLifetimeInMinutes' => $emailChangeTokenLifetimeInMinutes
+                'email_change_token_lifetime_in_minutes' => $emailChangeTokenLifetimeInMinutes
             ]
         );
 
         $this->sendEmail(
             $this->translator->trans('mailer.subjects.email_address_change'),
-            [$this->mailerAddress => 'UserManager'],
+            [$this->mailerAddress => $this->websiteName],
             $user->getEmailChangePending(),
             $this->replyToAddress,
             $emailBody
@@ -165,14 +173,14 @@ class MailerService
         };
 
         $emailBody = $this->twig->render(
-            "email/$locale/user/login-attempt-on-unactivated-account.html.twig", [
+            "email/$locale/user/login_attempt_on_unactivated_account.html.twig", [
                 'user' => $user
             ]
         );
 
         $this->sendEmail(
             $this->translator->trans('mailer.subjects.login_attempt'),
-            [$this->mailerAddress => 'UserManager'],
+            [$this->mailerAddress => $this->websiteName],
             $user->getEmail(),
             $this->replyToAddress,
             $emailBody
@@ -192,15 +200,15 @@ class MailerService
     public function passwordResetRequest(AbstractUser $user, int $passwordResetTokenLifetimeInMinutes, string $locale): void
     {
         $emailBody = $this->twig->render(
-            "email/$locale/user/password-reset-request.html.twig", [
+            "email/$locale/user/password_reset_request.html.twig", [
                 'user' => $user,
-                'passwordResetTokenLifetimeInMinutes' => $passwordResetTokenLifetimeInMinutes
+                'password_reset_token_lifetime_in_minutes' => $passwordResetTokenLifetimeInMinutes
             ]
         );
 
         $this->sendEmail(
             $this->translator->trans('mailer.subjects.password_reset'),
-            [$this->mailerAddress => 'UserManager'],
+            [$this->mailerAddress => $this->websiteName],
             $user->getEmail(),
             $this->replyToAddress,
             $emailBody
@@ -217,14 +225,14 @@ class MailerService
     public function registrationAttemptOnExistingVerifiedEmailAddress(AbstractUser $user, string $locale): void
     {
         $emailBody = $this->twig->render(
-            "email/$locale/user/registration-attempt-on-existing-verified-email-address.html.twig", [
+            "email/$locale/user/registration_attempt_on_existing_verified_email_address.html.twig", [
                 'user' => $user
             ]
         );
 
         $this->sendEmail(
             $this->translator->trans('mailer.subjects.registration_attempt'),
-            [$this->mailerAddress => 'UserManager'],
+            [$this->mailerAddress => $this->websiteName],
             $user->getEmail(),
             $this->replyToAddress,
             $emailBody
@@ -241,14 +249,14 @@ class MailerService
     public function registrationAttemptOnExistingUnverifiedEmailAddress(AbstractUser $user, string $locale): void
     {
         $emailBody = $this->twig->render(
-            "email/$locale/user/registration-attempt-on-existing-unverified-email-address.html.twig", [
+            "email/$locale/user/registration_attempt_on_existing_unverified_email_address.html.twig", [
                 'user' => $user
             ]
         );
 
         $this->sendEmail(
             $this->translator->trans('mailer.subjects.registration_attempt'),
-            [$this->mailerAddress => 'UserManager'],
+            [$this->mailerAddress => $this->websiteName],
             $user->getEmail(),
             $this->replyToAddress,
             $emailBody
@@ -267,14 +275,14 @@ class MailerService
     public function registrationSuccess(AbstractUser $user, string $locale): void
     {
         $emailBody = $this->twig->render(
-            "email/$locale/user/registration-success.html.twig", [
+            "email/$locale/user/registration_success.html.twig", [
                 'user' => $user
             ]
         );
 
         $this->sendEmail(
             $this->translator->trans('mailer.subjects.welcome'),
-            [$this->mailerAddress => 'UserManager'],
+            [$this->mailerAddress => $this->websiteName],
             $user->getEmail(),
             $this->replyToAddress,
             $emailBody

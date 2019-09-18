@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends '_base.html.twig' %}
 
 {% set page_title = 'page_title.registration'|trans %}
 
@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    {% include 'form/user/registration.html.twig' %}
+    {% include 'form/user/_registration.html.twig' %}
 {% endblock %}
 
 {% block javascripts %}

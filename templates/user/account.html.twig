@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends '_base.html.twig' %}
 
 {% set page_title = 'page_title.my_account'|trans %}
 
@@ -13,10 +13,10 @@
         </div>
     </div>
 
-    {{ render(controller('App\\Controller\\User\\EmailChangeController::changeFormAction')) }}
-    {{ render(controller('App\\Controller\\User\\AccountController::accountInformationFormAction')) }}
-    {{ render(controller('App\\Controller\\User\\PasswordChangeController::changeFormAction')) }}
-    {{ render(controller('App\\Controller\\User\\AccountDeletionController::showAction')) }}
+    {{ render(controller('App\\Controller\\User\\EmailChangeController::changeForm')) }}
+    {{ render(controller('App\\Controller\\User\\AccountController::accountInformationForm')) }}
+    {{ render(controller('App\\Controller\\User\\PasswordChangeController::changeForm')) }}
+    {{ render(controller('App\\Controller\\User\\AccountDeletionController::show')) }}
 {% endblock %}
 
 {% block javascripts %}

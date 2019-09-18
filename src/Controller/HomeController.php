@@ -17,7 +17,7 @@ class HomeController extends DefaultController
      * @Route(name="home", methods="GET")
      * @return Response
      */
-    public function homeAction(): Response
+    public function home(): Response
     {
         return $this->render('home.html.twig');
     }

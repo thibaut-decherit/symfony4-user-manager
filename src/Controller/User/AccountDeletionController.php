@@ -30,9 +30,9 @@ class AccountDeletionController extends DefaultController
      *
      * @return Response
      */
-    public function showAction(): Response
+    public function show(): Response
     {
-        return $this->render('user/account-deletion.html.twig');
+        return $this->render('user/account_deletion.html.twig');
     }
 
     /**
@@ -45,7 +45,7 @@ class AccountDeletionController extends DefaultController
      * @return RedirectResponse
      * @throws AccessDeniedException|Exception
      */
-    public function requestAction(
+    public function request(
         Request $request,
         MailerService $mailer,
         CsrfTokenManagerInterface $csrfTokenManager
@@ -75,11 +75,8 @@ class AccountDeletionController extends DefaultController
 
         $user->setAccountDeletionRequestedAt(new DateTime());
 
-        $accountDeletionTokenLifetimeInMinutes = ceil($this->getParameter('account_deletion_token_lifetime') / 60);
-        $mailer->accountDeletionRequest(
-            $user, $accountDeletionTokenLifetimeInMinutes,
-            $request->getLocale()
-        );
+        $accountDeletionTokenLifetimeInMinutes = ceil($this->getParameter('app.account_deletion_token_lifetime') / 60);
+        $mailer->accountDeletionRequest($user, $accountDeletionTokenLifetimeInMinutes, $request->getLocale());
 
         $em->flush();
 
@@ -106,7 +103,7 @@ class AccountDeletionController extends DefaultController
      * @Route("/delete-account/confirm", name="account_deletion_confirm", methods="GET")
      * @return RedirectResponse
      */
-    public function confirmAction(Request $request, TranslatorInterface $translator): Response
+    public function confirm(Request $request, TranslatorInterface $translator): Response
     {
         $accountDeletionToken = $request->get('token');
 
@@ -129,7 +126,7 @@ class AccountDeletionController extends DefaultController
             return $this->redirectToRoute('home');
         }
 
-        $accountDeletionTokenLifetime = $this->getParameter('account_deletion_token_lifetime');
+        $accountDeletionTokenLifetime = $this->getParameter('app.account_deletion_token_lifetime');
 
         if ($user->isAccountDeletionTokenExpired($accountDeletionTokenLifetime)) {
             $user->setAccountDeletionToken(null);
@@ -145,7 +142,7 @@ class AccountDeletionController extends DefaultController
             return $this->redirectToRoute('home');
         }
 
-        return $this->render('user/account-deletion-confirm.html.twig', [
+        return $this->render('user/account_deletion_confirm.html.twig', [
             'user' => $user
         ]);
     }
@@ -158,7 +155,7 @@ class AccountDeletionController extends DefaultController
      * @return RedirectResponse
      * @throws AccessDeniedException
      */
-    public function cancelAction(Request $request): RedirectResponse
+    public function cancel(Request $request): RedirectResponse
     {
         if ($this->isCsrfTokenValid('account_deletion_cancel', $request->get('_csrf_token')) === false) {
             throw new AccessDeniedException('Invalid CSRF token.');
@@ -199,7 +196,7 @@ class AccountDeletionController extends DefaultController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function deleteAction(
+    public function delete(
         Request $request,
         TranslatorInterface $translator,
         MailerService $mailer,
@@ -231,7 +228,7 @@ class AccountDeletionController extends DefaultController
             return $this->redirectToRoute('home');
         }
 
-        $accountDeletionTokenLifetime = $this->getParameter('account_deletion_token_lifetime');
+        $accountDeletionTokenLifetime = $this->getParameter('app.account_deletion_token_lifetime');
 
         if ($user->isAccountDeletionTokenExpired($accountDeletionTokenLifetime)) {
             $user->setAccountDeletionToken(null);
@@ -268,7 +265,7 @@ class AccountDeletionController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
-        $accountDeletionTokenLifetime = $this->getParameter('account_deletion_token_lifetime');
+        $accountDeletionTokenLifetime = $this->getParameter('app.account_deletion_token_lifetime');
 
         if ($user->isAccountDeletionTokenExpired($accountDeletionTokenLifetime)) {
             $user->setAccountDeletionRequestedAt(null);
