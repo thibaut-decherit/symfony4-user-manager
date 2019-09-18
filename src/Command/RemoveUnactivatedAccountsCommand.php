@@ -41,18 +41,21 @@ class RemoveUnactivatedAccountsCommand extends Command
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int|void|null
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $limit = 100;
+        $removedCount = 0;
         $hasResults = true;
         $days = $input->getArgument('days');
+
+        $this->startOutput($output, $days);
 
         while ($hasResults) {
             $users = $this->em->getRepository(User::class)->findUnactivatedAccountsOlderThan($days, $limit);
 
             foreach ($users as $user) {
+                $removedCount++;
                 $this->em->remove($user);
                 $this->em->flush();
             }
@@ -61,5 +64,37 @@ class RemoveUnactivatedAccountsCommand extends Command
                 $hasResults = false;
             }
         }
+
+        $this->endOutput($output, $removedCount);
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @param int $days
+     */
+    private function startOutput(OutputInterface $output, int $days): void
+    {
+        $message = "Removing unactivated user accounts older than $days day";
+
+        if ($days > 1) {
+            $message = "Removing unactivated user accounts older than $days days";
+        }
+
+        $output->writeln($message);
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @param int $removedCount
+     */
+    private function endOutput(OutputInterface $output, int $removedCount): void
+    {
+        $message = "<bg=green;fg=black>[OK] $removedCount user has been removed</>";
+
+        if ($removedCount > 1) {
+            $message = "<bg=green;fg=black>[OK] $removedCount users have been removed</>";
+        }
+
+        $output->writeln($message);
     }
 }
