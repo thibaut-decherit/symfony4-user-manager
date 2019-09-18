@@ -15,7 +15,7 @@ parameters:
   # Feel free to ignore the 1 second limit for important passwords (e.g. admin account), you would then have to create a
   # dedicated encoder for admin users, with higher values for these two settings.
   # See https://symfony.com/doc/current/security/named_encoders.html
-  # Bear in mind that login will take longer if OnAuthPasswordRehashIfCostChange is triggered and has to rehash the
+  # Bear in mind that login will take longer if OnAuthPasswordRehashIfAutoEncoderSettingsChange is triggered and has to rehash the
   # password. This situation should therefore not be considered as a "normal" login and could take more than 1 second.
   app.argon2id_memory_cost: 128000 # Default is 65536
   app.argon2id_time_cost: 10 # Default is 4
@@ -69,7 +69,7 @@ services:
     tags:
       - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
 
-  App\EventListener\OnAuthPasswordRehashIfCostChange:
+  App\EventListener\OnAuthPasswordRehashIfAutoEncoderSettingsChange:
     arguments:
       $memoryCost: '%app.argon2id_memory_cost%'
       $timeCost: '%app.argon2id_time_cost%'
