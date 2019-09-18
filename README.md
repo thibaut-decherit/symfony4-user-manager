@@ -1,5 +1,6 @@
-# Symfony 4 User Manager (WIP)
-My take on user management with Symfony 4.3
+# Symfony 4 User Manager
+My take on user management with Symfony 4.3.
+Continuation of [symfony3-user-manager](https://github.com/thibaut-decherit/symfony3-user-manager)
 
 
 ## **Dependencies**
@@ -43,6 +44,7 @@ Feel free to tailor each feature to your needs.
 
 ### Logout
 - Logout route
+- CSRF token support to prevent malicious logout by third-parties
 
 ### User profile
 - Account information edit form with username field (add fields as needed)
@@ -98,20 +100,23 @@ Feel free to tailor each feature to your needs.
 
 ### Password rehash on user authentication if cost change
 - Event listener triggered on login through `onSecurityInteractiveLogin` method
-- Rehashes password on login if bcrypt cost has been modified in `config.yml`
-  - Without this listener, cost change would apply only to password persisted (registration) or updated (password change or reset) after the change
+- Rehashes password on login if algorithm or algorithm options have been modified in `config/packages/security.yaml` 
+  - Works automatically with any algorithm supported by the `algorithm: auto` setting (Bcrypt, Argon2i and Argon2id)
+    - User logs in with old algorithm/options
+    - Password is then automatically hashed and stored according to current preferred algorithm/options
+  - Without this listener, hash change would apply only to password persisted (registration) or updated (password change or reset) after the change
   - This could be an issue if your existing users don't update their password
   - A workaround would be to force your users to change password but it is bad practice for multiple reasons and you could have to deal with distrust ("Why are you asking me that? Have you been hacked? Is my data safe?")
   - This listener prevents all that by working seamlessly in the backgroup while your users log in
 - Password checked through `password_needs_rehash`  method
-- Bcrypt implementation
-- Modify listener and config files to implement another algorithm. If you need to switch algorithm on an existing database, see [here](https://gist.github.com/thibaut-decherit/fb041311b6e387132a8077062acd6ded#the-following-is-optional-needed-if-you-have-passwords-hashed-with-legacy-algorithms-eg-sha-1-you-have-two-options)
+- Argon2id implementation
+- Modify listener and config files to implement algorithms not supported by the `auto` [encoder](https://symfony.com/blog/new-in-symfony-4-3-native-password-encoder). If you need to switch algorithm on an existing database, see [here](https://gist.github.com/thibaut-decherit/fb041311b6e387132a8077062acd6ded#the-following-is-optional-needed-if-you-have-passwords-hashed-with-legacy-algorithms-eg-sha-1-you-have-two-options)
 
 ### Haveibeenpwned API password validator
 - Prevents your users from choosing a password compromised in known data breaches
 - Password validation through Troy Hunt [haveibeenpwned.com](https://haveibeenpwned.com/) API
 - Custom Symfony form error
-- Consider implementing this through something less strict than a validator if you think it could deter potential users (e.g. an informative message on user profile)
+- Consider implementing this through something less strict than a validator if you think it could deter potential users (e.g. an informative message on user profile or a password strength meter)
 
 ### Password strength meter
 - Usable separately or conjointly with the back-end HIBP password validator
@@ -142,12 +147,12 @@ Feel free to tailor each feature to your needs.
   - If new email address is not already registered to another account and retry delay is expired or inexistant (first try), sends a verification email
   - if new email address is already registered to another account, shows success message but doesn't send verification email
 
-**Important:** Spool emails should be enabled in production environment or the delay between form submission and server response could hint that an email has been sent.
+**Important:** Spool emails from file should be enabled in production environment or the delay between form submission and server response could hint that an email has been sent.
 
 ### Response header setter
 - Event listener triggered on each response through `onKernelResponse()` method
 - Adds custom headers to the response
-- Support for "static" headers specified in `config.yml`
+- Support for "static" headers specified in `config/response_header_setter/response_headers.yaml`
   - Currently includes security / privacy related headers:
     - Referrer-Policy
     - X-Content-Type-Options
@@ -157,7 +162,7 @@ Feel free to tailor each feature to your needs.
   - Currently includes a Content Security Policy header generator and setter:
     - Allows you to protect your users from malicious resources (e.g. malicious JavaScript code that could end up in your dependencies, like [this one](https://blog.npmjs.org/post/180565383195/details-about-the-event-stream-incident))
     - Two level policy, lax & strict, in case you want to make sure critical routes are better protected (e.g. your website consumes an API with Ajax/fetch or requires a CDN for specific features, but you want to make sure this API or CDN cannot compromise your most critical routes, like login or checkout, if they ever become compromised [themselves](https://www.troyhunt.com/the-javascript-supply-chain-paradox-sri-csp-and-trust-in-third-party-libraries/))
-    - Customizable directives for each policy level through a config file (modify existing ones, add your own)
+    - Customizable directives for each policy level through a config file in `config/response_header_setter/content_security_policy.yaml` (modify existing ones, add your own)
     - Supports `report-uri`, two modes:
       - `plain`: specify the URL of your report-uri logger endpoint
       - `match`: specify the route name, router will handle URL generation. Can only be used if your report-uri logger is part of the same application
