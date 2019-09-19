@@ -7,10 +7,15 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 /**
- * Class OnAuthPasswordRehashIfCostChange
+ * Class OnAuthPasswordRehashIfAutoEncoderSettingsChange
  * @package App\EventListener
+ *
+ * Automatically upgrades password hash on login to Argon2id as long as user is able to login (works with any algorithm
+ * supported by the "auto" encoder (Bcrypt, Argon2i and Argon2id).
+ * Automatically upgrades existing Argon2id hashes if options in config/packages/security.yaml are different from
+ * current hash.
  */
-class OnAuthPasswordRehashIfCostChange
+class OnAuthPasswordRehashIfAutoEncoderSettingsChange
 {
     /**
      * @var EntityManagerInterface
@@ -33,7 +38,7 @@ class OnAuthPasswordRehashIfCostChange
     private $timeCost;
 
     /**
-     * OnAuthPasswordRehashIfCostChange constructor.
+     * OnAuthPasswordRehashIfAutoEncoderSettingsChange constructor.
      * @param EntityManagerInterface $entityManager
      * @param int $memoryCost
      * @param UserPasswordEncoderInterface $passwordEncoder

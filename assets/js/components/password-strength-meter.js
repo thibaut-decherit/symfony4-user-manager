@@ -82,7 +82,6 @@ function haveIBeenPwnedPasswordCheck(plainPassword) {
 
         fetch('https://api.pwnedpasswords.com/range/' + plainPasswordSHA1Prefix)
             .then(async response => {
-
                 // Prevents a second resolve if latencyTimeout has been triggered.
                 if (didTimeout) {
                     return;
@@ -94,12 +93,13 @@ function haveIBeenPwnedPasswordCheck(plainPassword) {
 
                 if (breachedPasswordsSHA1Suffixes.includes(plainPasswordSHA1Suffix)) {
                     resolve(true);
+
+                    return;
                 }
 
                 resolve(false);
             })
             .catch(() => {
-
                 // Prevents a second resolve if latencyTimeout has been triggered.
                 if (didTimeout) {
                     return;
