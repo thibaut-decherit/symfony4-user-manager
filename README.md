@@ -1,6 +1,7 @@
 # Symfony 4 User Manager
 My take on user management with Symfony 4.3.
-Continuation of [symfony3-user-manager](https://github.com/thibaut-decherit/symfony3-user-manager)
+
+Continuation of [symfony3-user-manager](https://github.com/thibaut-decherit/symfony3-user-manager).
 
 
 ## **Dependencies**

@@ -549,6 +549,7 @@ abstract class AbstractUser implements UserInterface
      * encoded and make URLs unnecessarily longer.
      * With 512 bits of entropy this method will return a string of 86 characters, with 256 bits of entropy it will
      * return 43 characters, and so on.
+     * String length is ceil($entropy / 6).
      *
      * @param int $entropy
      * @return string
