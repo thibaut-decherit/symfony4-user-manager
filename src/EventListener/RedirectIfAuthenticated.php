@@ -5,12 +5,10 @@ namespace App\EventListener;
 use App\Helper\StringHelper;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Security;
-use Zend\EventManager\ListenerAggregateInterface;
 
 /**
  * Class RedirectIfAuthenticated
