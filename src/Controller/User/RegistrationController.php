@@ -5,6 +5,7 @@ namespace App\Controller\User;
 use App\Controller\DefaultController;
 use App\Entity\User;
 use App\Form\User\RegistrationType;
+use App\Helper\StringHelper;
 use App\Service\MailerService;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -156,7 +157,7 @@ class RegistrationController extends DefaultController
         // Generates activation token and retries if token already exists.
         $loop = true;
         while ($loop) {
-            $token = $user->generateSecureToken();
+            $token = StringHelper::generateRandomString();
 
             $duplicate = $em->getRepository(User::class)->findOneBy(['accountActivationToken' => $token]);
             if (is_null($duplicate)) {

@@ -5,7 +5,6 @@ namespace App\Model;
 use App\Validator\Constraints as CustomAssert;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -542,24 +541,6 @@ abstract class AbstractUser implements UserInterface
 
     public function eraseCredentials()
     {
-    }
-
-    /**
-     * Generates an URI safe base64 encoded string that does not contain "+", "/" or "=" which need to be URL
-     * encoded and make URLs unnecessarily longer.
-     * With 512 bits of entropy this method will return a string of 86 characters, with 256 bits of entropy it will
-     * return 43 characters, and so on.
-     * String length is ceil($entropy / 6).
-     *
-     * @param int $entropy
-     * @return string
-     * @throws Exception
-     */
-    public function generateSecureToken(int $entropy = 512): string
-    {
-        $bytes = random_bytes($entropy / 8);
-
-        return rtrim(strtr(base64_encode($bytes), '+/', '-_'), '=');
     }
 
     /**

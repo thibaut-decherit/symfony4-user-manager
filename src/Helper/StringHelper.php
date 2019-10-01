@@ -2,14 +2,34 @@
 
 namespace App\Helper;
 
+use Exception;
+
 /**
- * Class StringHelper.
- * Utility class for string formatting.
+ * Class StringHelper
+ * Utility class for string formatting and manipulation.
  *
  * @package App\Helper
  */
 class StringHelper
 {
+    /**
+     * Returns an URI safe base64 encoded cryptographically secure pseudo-random string that does not contain
+     * "+", "/" or "=" which need to be URL encoded and make URLs unnecessarily longer.
+     * With 512 bits of entropy this method will return a string of 86 characters, with 256 bits of entropy it will
+     * return 43 characters, and so on.
+     * String length is ceil($entropy / 6).
+     *
+     * @param int $entropy
+     * @return string
+     * @throws Exception
+     */
+    public static function generateRandomString(int $entropy = 512): string
+    {
+        $bytes = random_bytes($entropy / 8);
+
+        return rtrim(strtr(base64_encode($bytes), '+/', '-_'), '=');
+    }
+
     /**
      * Returns true if $string starts with $query, otherwise it returns false.
      * Supports extended charsets.

@@ -121,7 +121,7 @@ class EmailChangeController extends DefaultController
             // Generates email change token and retries if token already exists.
             $loop = true;
             while ($loop) {
-                $token = $user->generateSecureToken();
+                $token = StringHelper::generateRandomString();
 
                 $duplicate = $em->getRepository(User::class)->findOneBy(['emailChangeToken' => $token]);
                 if (is_null($duplicate)) {
