@@ -61,7 +61,7 @@ class AccountDeletionController extends DefaultController
         // Generates account deletion token and retries if token already exists.
         $loop = true;
         while ($loop) {
-            $accountDeletionToken = $user->generateSecureToken();
+            $accountDeletionToken = StringHelper::generateRandomString();
 
             $duplicate = $em->getRepository(User::class)->findOneBy([
                 'accountDeletionToken' => $accountDeletionToken

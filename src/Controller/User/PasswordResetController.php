@@ -75,7 +75,7 @@ class PasswordResetController extends DefaultController
             // Generates password reset token and retries if token already exists.
             $loop = true;
             while ($loop) {
-                $token = $user->generateSecureToken();
+                $token = StringHelper::generateRandomString();
 
                 $duplicate = $em->getRepository(User::class)->findOneBy(['passwordResetToken' => $token]);
                 if (is_null($duplicate)) {
