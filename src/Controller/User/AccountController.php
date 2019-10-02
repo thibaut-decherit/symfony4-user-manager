@@ -79,13 +79,6 @@ class AccountController extends DefaultController
             ], 200);
         }
 
-        /*
-         * $user must be refreshed or invalid POST data (username) will conflict with logged-in user and Symfony will
-         * logout the user.
-         * See https://symfony.com/doc/current/security/user_provider.html#understanding-how-users-are-refreshed-from-the-session
-         */
-        $this->getDoctrine()->getManager()->refresh($user);
-
         // Renders and json encode the updated form (with errors and input values)
         $template = $this->render('form/user/_account_information.html.twig', [
             'form' => $form->createView()

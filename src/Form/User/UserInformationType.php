@@ -21,7 +21,7 @@ class UserInformationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username', TextType::class, [
+            ->add('businessUsername', TextType::class, [
                 'label' => 'user.username'
             ]);
     }

@@ -29,6 +29,7 @@ class RegistrationController extends DefaultController
      *
      * @Route("/register", name="registration", methods="GET")
      * @return Response
+     * @throws Exception
      */
     public function registerForm(): Response
     {
@@ -153,6 +154,18 @@ class RegistrationController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
         $user->setPassword($hashedPassword);
+
+        // Generates username and retries if username already exists.
+        $loop = true;
+        while ($loop) {
+            $username = StringHelper::generateRandomString();
+
+            $duplicate = $em->getRepository(User::class)->findOneBy(['username' => $username]);
+            if (is_null($duplicate)) {
+                $loop = false;
+                $user->setUsername($username);
+            }
+        }
 
         // Generates activation token and retries if token already exists.
         $loop = true;

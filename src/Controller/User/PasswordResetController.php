@@ -45,14 +45,14 @@ class PasswordResetController extends DefaultController
             }
 
             $em = $this->getDoctrine()->getManager();
-            $usernameOrEmail = StringHelper::truncateToMySQLVarcharMaxLength(
-                $request->request->get('usernameOrEmail')
+            $businessUsernameOrEmail = StringHelper::truncateToMySQLVarcharMaxLength(
+                $request->request->get('businessUsernameOrEmail')
             );
 
-            if (preg_match('/^.+@\S+\.\S+$/', $usernameOrEmail)) {
-                $user = $em->getRepository(User::class)->findOneBy(['email' => $usernameOrEmail]);
+            if (preg_match('/^.+@\S+\.\S+$/', $businessUsernameOrEmail)) {
+                $user = $em->getRepository(User::class)->findOneBy(['email' => $businessUsernameOrEmail]);
             } else {
-                $user = $em->getRepository(User::class)->findOneBy(['username' => $usernameOrEmail]);
+                $user = $em->getRepository(User::class)->findOneBy(['businessUsername' => $businessUsernameOrEmail]);
             }
 
             $this->addFlash(
@@ -180,7 +180,7 @@ class PasswordResetController extends DefaultController
         // Password blacklist to be used by zxcvbn.
         $passwordBlacklist = [
             $this->getParameter('app.website_name'),
-            $user->getUsername(),
+            $user->getBusinessUsername(),
             $user->getEmail(),
             $user->getPasswordResetToken()
         ];

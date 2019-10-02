@@ -5,6 +5,7 @@ namespace App\Model;
 use App\Validator\Constraints as CustomAssert;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -23,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *  - account deletion with verification link sent by email
  *
  * @UniqueEntity(
- *     fields={"username"},
+ *     fields="businessUsername",
  *     message="form_errors.user.unique_username",
  *     groups={"Account_Information", "Registration"}
  * )
@@ -40,6 +41,25 @@ abstract class AbstractUser implements UserInterface
     protected $id;
 
     /**
+     * The string interpreted has username by Symfony. It is used by features like user impersonation and remember me.
+     *
+     * This property should be considered as an user identifier, NOT as the user's username displayed on the application
+     * and used to log-in.
+     * Indeed, this username is stored in base64 format in the remember me cookie (which could potentially lead to
+     * private data leakage if the cookie is accessed by a third-party and/or malicious individual.
+     * Furthermore, if you choose to use it as 'business' username, when an username is changed (e.g. edited by the user
+     * himself on the account page) all remember me tokens for this user will be invalidated (because Symfony tries to
+     * load the user by reading the base64 encoded username)
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", length=86, unique=true)
+     */
+    protected $username;
+
+    /**
+     * The 'business' username of the user, displayed on the application and used to log-in.
+     *
      * @var string
      *
      * @ORM\Column(type="string", length=255, unique=true)
@@ -61,7 +81,7 @@ abstract class AbstractUser implements UserInterface
      *     groups={"Account_Information", "Registration"}
      * )
      */
-    protected $username;
+    protected $businessUsername;
 
     /**
      * @var string
@@ -218,6 +238,10 @@ abstract class AbstractUser implements UserInterface
      */
     protected $passwordResetRequestedAt;
 
+    /**
+     * AbstractUser constructor.
+     * @throws Exception
+     */
     public function __construct()
     {
         $this->roles = [
@@ -250,6 +274,25 @@ abstract class AbstractUser implements UserInterface
     public function setUsername(string $username)
     {
         $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBusinessUsername(): ?string
+    {
+        return $this->businessUsername;
+    }
+
+    /**
+     * @param string $businessUsername
+     * @return AbstractUser
+     */
+    public function setBusinessUsername(string $businessUsername): AbstractUser
+    {
+        $this->businessUsername = $businessUsername;
 
         return $this;
     }

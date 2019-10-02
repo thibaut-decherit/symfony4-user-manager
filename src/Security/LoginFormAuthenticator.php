@@ -114,7 +114,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function getCredentials(Request $request): array
     {
-        $username = StringHelper::truncateToMySQLVarcharMaxLength($request->get('username'));
+        $businessUsername = StringHelper::truncateToMySQLVarcharMaxLength($request->get('businessUsername'));
         $password = StringHelper::truncateToPasswordEncoderMaxLength($request->get('password'));
         $csrfToken = $request->get('_csrf_token');
 
@@ -124,11 +124,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
         $request->getSession()->set(
             Security::LAST_USERNAME,
-            $username
+            $businessUsername
         );
 
         return [
-            'username' => $username,
+            'businessUsername' => $businessUsername,
             'password' => $password
         ];
     }
@@ -143,13 +143,15 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider): ?User
     {
-        $usernameOrEmail = $credentials['username'];
+        $businessUsernameOrEmail = $credentials['businessUsername'];
 
-        if (preg_match('/^.+@\S+\.\S+$/', $usernameOrEmail)) {
-            return $this->em->getRepository(User::class)->findOneBy(['email' => $usernameOrEmail]);
+        if (preg_match('/^.+@\S+\.\S+$/', $businessUsernameOrEmail)) {
+            return $this->em->getRepository(User::class)->findOneBy(['email' => $businessUsernameOrEmail]);
         }
 
-        return $this->em->getRepository(User::class)->findOneBy(['username' => $usernameOrEmail]);
+        return $this->em->getRepository(User::class)->findOneBy([
+            'businessUsername' => $businessUsernameOrEmail
+        ]);
     }
 
     /**
@@ -202,17 +204,17 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         // IF account is not yet activated, send a reminder email with an activation link
         if ($exception instanceof DisabledException) {
-            $usernameOrEmail = $request->request->get('username');
+            $businessUsernameOrEmail = $request->request->get('businessUsername');
             $user = null;
 
-            if (preg_match('/^.+@\S+\.\S+$/', $usernameOrEmail)) {
+            if (preg_match('/^.+@\S+\.\S+$/', $businessUsernameOrEmail)) {
                 $user = $this->em->getRepository(User::class)->findOneBy([
-                    'email' => $usernameOrEmail,
+                    'email' => $businessUsernameOrEmail,
                     'activated' => false
                 ]);
             } else {
                 $user = $this->em->getRepository(User::class)->findOneBy([
-                    'username' => $usernameOrEmail,
+                    'businessUsername' => $businessUsernameOrEmail,
                     'activated' => false
                 ]);
             }
