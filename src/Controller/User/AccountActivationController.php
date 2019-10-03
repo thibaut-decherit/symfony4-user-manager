@@ -36,7 +36,8 @@ class AccountActivationController extends DefaultController
         $em = $this->getDoctrine()->getManager();
 
         $user = $em->getRepository(User::class)->findOneBy([
-            'accountActivationToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountActivationToken)
+            'accountActivationToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountActivationToken),
+            'activated' => false
         ]);
 
         if ($user === null) {
@@ -72,7 +73,8 @@ class AccountActivationController extends DefaultController
         $em = $this->getDoctrine()->getManager();
 
         $user = $em->getRepository(User::class)->findOneBy([
-            'accountActivationToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountActivationToken)
+            'accountActivationToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountActivationToken),
+            'activated' => false
         ]);
 
         $this->addFlash(
@@ -80,7 +82,7 @@ class AccountActivationController extends DefaultController
             $translator->trans('flash.user.account_activated_successfully')
         );
 
-        if ($user !== null && $user->isActivated() === false) {
+        if ($user !== null) {
             $user->setActivated(true);
             $user->setAccountActivationToken(null);
 

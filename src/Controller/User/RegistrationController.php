@@ -5,8 +5,8 @@ namespace App\Controller\User;
 use App\Controller\DefaultController;
 use App\Entity\User;
 use App\Form\User\RegistrationType;
-use App\Helper\StringHelper;
 use App\Service\MailerService;
+use App\Service\UniqueRandomDataGeneratorService;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,6 +55,7 @@ class RegistrationController extends DefaultController
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @param MailerService $mailer
      * @param TranslatorInterface $translator
+     * @param UniqueRandomDataGeneratorService $uniqueRandomDataGenerator
      * @Route("/register-ajax", name="registration_ajax", methods="POST")
      * @return JsonResponse
      * @throws Exception
@@ -63,7 +64,8 @@ class RegistrationController extends DefaultController
         Request $request,
         UserPasswordEncoderInterface $passwordEncoder,
         MailerService $mailer,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        UniqueRandomDataGeneratorService $uniqueRandomDataGenerator
     ): JsonResponse
     {
         $user = new User();
@@ -77,7 +79,13 @@ class RegistrationController extends DefaultController
             $duplicateUser = $userRepository->findOneBy(['email' => $user->getEmail()]);
 
             if (empty($duplicateUser)) {
-                $this->handleSuccessfulRegistration($user, $passwordEncoder, $mailer, $request->getLocale());
+                $this->handleSuccessfulRegistration(
+                    $user,
+                    $passwordEncoder,
+                    $mailer,
+                    $request->getLocale(),
+                    $uniqueRandomDataGenerator
+                );
             } else {
                 $this->handleDuplicateUserRegistration($duplicateUser, $mailer, $request->getLocale());
             }
@@ -141,13 +149,15 @@ class RegistrationController extends DefaultController
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @param MailerService $mailer
      * @param string $locale
+     * @param UniqueRandomDataGeneratorService $uniqueRandomDataGenerator
      * @throws Exception
      */
     private function handleSuccessfulRegistration(
         User $user,
         UserPasswordEncoderInterface $passwordEncoder,
         MailerService $mailer,
-        string $locale
+        string $locale,
+        UniqueRandomDataGeneratorService $uniqueRandomDataGenerator
     ): void
     {
         $hashedPassword = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
@@ -155,29 +165,19 @@ class RegistrationController extends DefaultController
         $em = $this->getDoctrine()->getManager();
         $user->setPassword($hashedPassword);
 
-        // Generates username and retries if username already exists.
-        $loop = true;
-        while ($loop) {
-            $username = StringHelper::generateRandomString();
+        $user->setUsername(
+            $uniqueRandomDataGenerator->generateUniqueRandomString(
+                User::class,
+                'username'
+            )
+        );
 
-            $duplicate = $em->getRepository(User::class)->findOneBy(['username' => $username]);
-            if (is_null($duplicate)) {
-                $loop = false;
-                $user->setUsername($username);
-            }
-        }
-
-        // Generates activation token and retries if token already exists.
-        $loop = true;
-        while ($loop) {
-            $token = StringHelper::generateRandomString();
-
-            $duplicate = $em->getRepository(User::class)->findOneBy(['accountActivationToken' => $token]);
-            if (is_null($duplicate)) {
-                $loop = false;
-                $user->setAccountActivationToken($token);
-            }
-        }
+        $user->setAccountActivationToken(
+            $uniqueRandomDataGenerator->generateUniqueRandomString(
+                User::class,
+                'accountActivationToken'
+            )
+        );
 
         $mailer->registrationSuccess($user, $locale);
 

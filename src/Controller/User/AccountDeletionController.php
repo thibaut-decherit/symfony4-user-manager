@@ -6,6 +6,7 @@ use App\Controller\DefaultController;
 use App\Entity\User;
 use App\Helper\StringHelper;
 use App\Service\MailerService;
+use App\Service\UniqueRandomDataGeneratorService;
 use DateTime;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -41,6 +42,7 @@ class AccountDeletionController extends DefaultController
      * @param Request $request
      * @param MailerService $mailer
      * @param CsrfTokenManagerInterface $csrfTokenManager
+     * @param UniqueRandomDataGeneratorService $uniqueRandomDataGenerator
      * @Route("account/deletion-request", name="account_deletion_request", methods="POST")
      * @return RedirectResponse
      * @throws AccessDeniedException|Exception
@@ -48,7 +50,8 @@ class AccountDeletionController extends DefaultController
     public function request(
         Request $request,
         MailerService $mailer,
-        CsrfTokenManagerInterface $csrfTokenManager
+        CsrfTokenManagerInterface $csrfTokenManager,
+        UniqueRandomDataGeneratorService $uniqueRandomDataGenerator
     ): RedirectResponse
     {
         if ($this->isCsrfTokenValid('account_deletion_request', $request->get('_csrf_token')) === false) {
@@ -56,29 +59,21 @@ class AccountDeletionController extends DefaultController
         }
 
         $user = $this->getUser();
-        $em = $this->getDoctrine()->getManager();
 
-        // Generates account deletion token and retries if token already exists.
-        $loop = true;
-        while ($loop) {
-            $accountDeletionToken = StringHelper::generateRandomString();
-
-            $duplicate = $em->getRepository(User::class)->findOneBy([
-                'accountDeletionToken' => $accountDeletionToken
-            ]);
-
-            if (is_null($duplicate)) {
-                $loop = false;
-                $user->setAccountDeletionToken($accountDeletionToken);
-            }
-        }
-
+        $user->setAccountDeletionToken(
+            $uniqueRandomDataGenerator->generateUniqueRandomString(
+                User::class,
+                'accountDeletionToken'
+            )
+        );
         $user->setAccountDeletionRequestedAt(new DateTime());
 
-        $accountDeletionTokenLifetimeInMinutes = ceil($this->getParameter('app.account_deletion_token_lifetime') / 60);
+        $accountDeletionTokenLifetimeInMinutes = ceil(
+            $this->getParameter('app.account_deletion_token_lifetime') / 60
+        );
         $mailer->accountDeletionRequest($user, $accountDeletionTokenLifetimeInMinutes, $request->getLocale());
 
-        $em->flush();
+        $this->getDoctrine()->getManager()->flush();
 
         /*
          * Confirmation flash alert is handled by App/Security/AccountDeletionLogoutHandler which will retrieve

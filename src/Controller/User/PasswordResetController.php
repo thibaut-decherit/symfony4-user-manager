@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\User\PasswordResetType;
 use App\Helper\StringHelper;
 use App\Service\MailerService;
+use App\Service\UniqueRandomDataGeneratorService;
 use DateTime;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +30,7 @@ class PasswordResetController extends DefaultController
      * @param Request $request
      * @param TranslatorInterface $translator
      * @param MailerService $mailer
+     * @param UniqueRandomDataGeneratorService $uniqueRandomDataGenerator
      * @Route("/request", name="password_reset_request", methods={"GET", "POST"})
      * @return Response
      * @throws Exception
@@ -36,7 +38,8 @@ class PasswordResetController extends DefaultController
     public function request(
         Request $request,
         TranslatorInterface $translator,
-        MailerService $mailer
+        MailerService $mailer,
+        UniqueRandomDataGeneratorService $uniqueRandomDataGenerator
     ): Response
     {
         if ($request->isMethod('POST')) {
@@ -72,21 +75,18 @@ class PasswordResetController extends DefaultController
                 return $this->render('user/password_reset_request.html.twig');
             }
 
-            // Generates password reset token and retries if token already exists.
-            $loop = true;
-            while ($loop) {
-                $token = StringHelper::generateRandomString();
-
-                $duplicate = $em->getRepository(User::class)->findOneBy(['passwordResetToken' => $token]);
-                if (is_null($duplicate)) {
-                    $loop = false;
-                    $user->setPasswordResetToken($token);
-                }
-            }
+            $user->setPasswordResetToken(
+                $uniqueRandomDataGenerator->generateUniqueRandomString(
+                    User::class,
+                    'passwordResetToken'
+                )
+            );
 
             $user->setPasswordResetRequestedAt(new DateTime());
 
-            $passwordResetTokenLifetimeInMinutes = ceil($this->getParameter('app.password_reset_token_lifetime') / 60);
+            $passwordResetTokenLifetimeInMinutes = ceil(
+                $this->getParameter('app.password_reset_token_lifetime') / 60
+            );
             $mailer->passwordResetRequest($user, $passwordResetTokenLifetimeInMinutes, $request->getLocale());
 
             $em->flush();
