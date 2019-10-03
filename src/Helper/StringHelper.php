@@ -45,42 +45,6 @@ class StringHelper
     }
 
     /**
-     * Prevents potential slowdown or DoS caused by hashing very long passwords.
-     * Supports extended charsets.
-     *
-     * @param string $string
-     * @param int $length
-     * @param string $encoding
-     * @return string
-     */
-    public static function truncateToPasswordEncoderMaxLength(
-        string $string,
-        int $length = 4096,
-        string $encoding = 'UTF-8'
-    ): string
-    {
-        return mb_substr($string, 0, $length, $encoding);
-    }
-
-    /**
-     * Prevents potential slowdown or DoS caused by feeding an extremely long string to a MySQL query.
-     * Supports extended charsets.
-     *
-     * @param string $string
-     * @param int $length
-     * @param string $encoding
-     * @return string
-     */
-    public static function truncateToMySQLVarcharMaxLength(
-        string $string,
-        int $length = 255,
-        string $encoding = 'UTF-8'
-    ): string
-    {
-        return mb_substr($string, 0, $length, $encoding);
-    }
-
-    /**
      * Supports extended charsets, unlike native strtolower().
      *
      * @param string $string
@@ -102,6 +66,42 @@ class StringHelper
     public static function strToUpper(string $string, string $encoding = 'UTF-8'): string
     {
         return mb_strtoupper($string, $encoding);
+    }
+
+    /**
+     * Prevents potential slowdown or DoS caused by feeding an extremely long string to a MySQL query.
+     * Supports extended charsets.
+     *
+     * @param string $string
+     * @param int $length
+     * @param string $encoding
+     * @return string
+     */
+    public static function truncateToMySQLVarcharMaxLength(
+        string $string,
+        int $length = 255,
+        string $encoding = 'UTF-8'
+    ): string
+    {
+        return mb_substr($string, 0, $length, $encoding);
+    }
+
+    /**
+     * Prevents potential slowdown or DoS caused by hashing very long passwords.
+     * Supports extended charsets.
+     *
+     * @param string $string
+     * @param int $length
+     * @param string $encoding
+     * @return string
+     */
+    public static function truncateToPasswordEncoderMaxLength(
+        string $string,
+        int $length = 4096,
+        string $encoding = 'UTF-8'
+    ): string
+    {
+        return mb_substr($string, 0, $length, $encoding);
     }
 
     /**

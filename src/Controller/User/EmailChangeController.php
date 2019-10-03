@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\User\EmailChangeType;
 use App\Helper\StringHelper;
 use App\Service\MailerService;
+use App\Service\UniqueRandomDataGeneratorService;
 use DateTime;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -46,6 +47,7 @@ class EmailChangeController extends DefaultController
      * @param Request $request
      * @param TranslatorInterface $translator
      * @param MailerService $mailer
+     * @param UniqueRandomDataGeneratorService $uniqueRandomDataGenerator
      * @Route("account/email-change/request-ajax", name="email_change_request_ajax", methods="POST")
      * @return JsonResponse
      * @throws Exception
@@ -53,7 +55,8 @@ class EmailChangeController extends DefaultController
     public function changeRequest(
         Request $request,
         TranslatorInterface $translator,
-        MailerService $mailer
+        MailerService $mailer,
+        UniqueRandomDataGeneratorService $uniqueRandomDataGenerator
     ): JsonResponse
     {
         $user = $this->getUser();
@@ -118,24 +121,21 @@ class EmailChangeController extends DefaultController
 
             $em = $this->getDoctrine()->getManager();
 
-            // Generates email change token and retries if token already exists.
-            $loop = true;
-            while ($loop) {
-                $token = StringHelper::generateRandomString();
-
-                $duplicate = $em->getRepository(User::class)->findOneBy(['emailChangeToken' => $token]);
-                if (is_null($duplicate)) {
-                    $loop = false;
-                    $user->setEmailChangeToken($token);
-                }
-            }
+            $user->setEmailChangeToken(
+                $uniqueRandomDataGenerator->generateUniqueRandomString(
+                    User::class,
+                    'emailChangeToken'
+                )
+            );
 
             $user->setEmailChangeRequestedAt(new DateTime());
 
             // IF email address is not already registered to another account, sends verification email.
             $duplicate = $em->getRepository(User::class)->findOneBy(['email' => $user->getEmailChangePending()]);
             if (is_null($duplicate)) {
-                $emailChangeTokenLifetimeInMinutes = ceil($this->getParameter('app.email_change_token_lifetime') / 60);
+                $emailChangeTokenLifetimeInMinutes = ceil(
+                    $this->getParameter('app.email_change_token_lifetime') / 60
+                );
                 $mailer->emailChange($user, $emailChangeTokenLifetimeInMinutes, $request->getLocale());
             }
 

@@ -4,6 +4,7 @@ security:
     users:
       entity:
         class: App\Entity\User
+        property: username
 
   encoders:
     App\Entity\User:
