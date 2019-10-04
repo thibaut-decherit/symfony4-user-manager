@@ -256,7 +256,7 @@ class CspHeaderSetter
         /*
          * Allows Symfony Profiler to work properly as it relies on inline JS and CSS.
          * array_unique() prevents CSP duplicate source (e.g. 'unsafe-inline' is already in your script-src policy)
-         * error on certain browsers (e.g. Firefox).
+         * error on some browsers (e.g. Firefox).
          */
         $directives['script-src'] = array_unique(array_merge($directives['script-src'], $scriptSrcDevDirectiveContent));
         $directives['style-src'] = array_unique(array_merge($directives['style-src'], $styleSrcDevDirectiveContent));
