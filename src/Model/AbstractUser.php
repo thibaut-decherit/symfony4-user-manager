@@ -313,6 +313,9 @@ abstract class AbstractUser implements UserInterface
     {
         $this->password = $password;
 
+        // Now that the encrypted password has been set, the plain password can be discarded safely.
+        $this->eraseCredentials();
+
         return $this;
     }
 
@@ -582,8 +585,9 @@ abstract class AbstractUser implements UserInterface
         return $this;
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
+        $this->setPlainPassword(null);
     }
 
     /**

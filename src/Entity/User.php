@@ -37,6 +37,9 @@ class User extends AbstractUser
     {
         $this->password = $password;
 
+        // Now that the encrypted password has been set, the plain password can be discarded safely.
+        $this->eraseCredentials();
+
         return $this;
     }
 
