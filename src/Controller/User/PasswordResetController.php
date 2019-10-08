@@ -76,7 +76,7 @@ class PasswordResetController extends DefaultController
             }
 
             $user->setPasswordResetToken(
-                $uniqueRandomDataGenerator->generateUniqueRandomString(
+                $uniqueRandomDataGenerator->uniqueRandomString(
                     User::class,
                     'passwordResetToken'
                 )

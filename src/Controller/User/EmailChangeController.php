@@ -122,7 +122,7 @@ class EmailChangeController extends DefaultController
             $em = $this->getDoctrine()->getManager();
 
             $user->setEmailChangeToken(
-                $uniqueRandomDataGenerator->generateUniqueRandomString(
+                $uniqueRandomDataGenerator->uniqueRandomString(
                     User::class,
                     'emailChangeToken'
                 )

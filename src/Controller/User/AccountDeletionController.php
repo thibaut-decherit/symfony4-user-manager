@@ -61,7 +61,7 @@ class AccountDeletionController extends DefaultController
         $user = $this->getUser();
 
         $user->setAccountDeletionToken(
-            $uniqueRandomDataGenerator->generateUniqueRandomString(
+            $uniqueRandomDataGenerator->uniqueRandomString(
                 User::class,
                 'accountDeletionToken'
             )
