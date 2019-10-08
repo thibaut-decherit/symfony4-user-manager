@@ -27,6 +27,8 @@ parameters:
           - "'self'"
         form-action:
           - "'self'"
+        frame-ancestors:
+          - "'none'"
         img-src:
           - "'self'"
           - 'data:' # Required for Symfony SVGs (e.g. times icon in form input with validation error)

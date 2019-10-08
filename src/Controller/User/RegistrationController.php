@@ -166,14 +166,14 @@ class RegistrationController extends DefaultController
         $user->setPassword($hashedPassword);
 
         $user->setUsername(
-            $uniqueRandomDataGenerator->generateUniqueRandomString(
+            $uniqueRandomDataGenerator->uniqueRandomString(
                 User::class,
                 'username'
             )
         );
 
         $user->setAccountActivationToken(
-            $uniqueRandomDataGenerator->generateUniqueRandomString(
+            $uniqueRandomDataGenerator->uniqueRandomString(
                 User::class,
                 'accountActivationToken'
             )

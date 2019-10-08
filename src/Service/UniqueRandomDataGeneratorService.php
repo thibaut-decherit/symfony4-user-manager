@@ -2,14 +2,15 @@
 
 namespace App\Service;
 
-use App\Helper\StringHelper;
+use App\Helper\RandomDataGeneratorHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 
 /**
  * Class UniqueRandomDataGeneratorService
  *
- * Generates random unique data. Unique meaning it does not exist yet in database for given entity and property.
+ * Generates cryptographically secure pseudo-random unique data.
+ * Unique meaning it does not exist yet in database for given entity and property.
  *
  * @package App\Service
  */
@@ -32,12 +33,55 @@ class UniqueRandomDataGeneratorService
     /**
      * @param string $entityClass
      * @param string $propertyName
+     * @param $data
+     * @return bool
+     */
+    private function isUnique(string $entityClass, string $propertyName, $data): bool
+    {
+        $duplicate = $this->em->getRepository($entityClass)->findOneBy([
+            $propertyName => $data
+        ]);
+
+        return is_null($duplicate);
+    }
+
+    /**
+     * @param string $entityClass
+     * @param string $propertyName
+     * @param int $min
+     * @param int $max
+     * @param int $maxDecimalNbr
+     * @return float
+     * @throws Exception
+     */
+    public function uniqueRandomFloat(
+        string $entityClass,
+        string $propertyName,
+        int $min = 0,
+        int $max = 2147483647,
+        int $maxDecimalNbr = 1
+    ): float
+    {
+        while (true) {
+            $randomFloat = RandomDataGeneratorHelper::randomFloat($min, $max, $maxDecimalNbr);
+
+            if ($this->isUnique($entityClass, $propertyName, $randomFloat)) {
+                return $randomFloat;
+            }
+        }
+
+        throw new Exception('While loop should not have broken');
+    }
+
+    /**
+     * @param string $entityClass
+     * @param string $propertyName
      * @param int $min
      * @param int $max
      * @return int
      * @throws Exception
      */
-    public function generateUniqueRandomInteger(
+    public function uniqueRandomInteger(
         string $entityClass,
         string $propertyName,
         int $min = 0,
@@ -45,7 +89,7 @@ class UniqueRandomDataGeneratorService
     ): int
     {
         while (true) {
-            $randomInt = random_int($min, $max);
+            $randomInt = RandomDataGeneratorHelper::randomInteger($min, $max);
 
             if ($this->isUnique($entityClass, $propertyName, $randomInt)) {
                 return $randomInt;
@@ -62,10 +106,10 @@ class UniqueRandomDataGeneratorService
      * @return string
      * @throws Exception
      */
-    public function generateUniqueRandomString(string $entityClass, string $propertyName, int $entropy = 512): string
+    public function uniqueRandomString(string $entityClass, string $propertyName, int $entropy = 512): string
     {
         while (true) {
-            $randomString = StringHelper::generateRandomString($entropy);
+            $randomString = RandomDataGeneratorHelper::randomString($entropy);
 
             if ($this->isUnique($entityClass, $propertyName, $randomString)) {
                 return $randomString;
@@ -73,20 +117,5 @@ class UniqueRandomDataGeneratorService
         }
 
         throw new Exception('While loop should not have broken');
-    }
-
-    /**
-     * @param string $entityClass
-     * @param string $propertyName
-     * @param $data
-     * @return bool
-     */
-    private function isUnique(string $entityClass, string $propertyName, $data): bool
-    {
-        $duplicate = $this->em->getRepository($entityClass)->findOneBy([
-            $propertyName => $data
-        ]);
-
-        return is_null($duplicate);
     }
 }
