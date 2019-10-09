@@ -160,9 +160,10 @@ class RegistrationController extends DefaultController
         UniqueRandomDataGeneratorService $uniqueRandomDataGenerator
     ): void
     {
+        $em = $this->getDoctrine()->getManager();
+
         $hashedPassword = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
 
-        $em = $this->getDoctrine()->getManager();
         $user->setPassword($hashedPassword);
 
         $user->setUsername(
