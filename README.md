@@ -156,6 +156,7 @@ Feel free to tailor each feature to your needs.
 - Support for "static" headers specified in `config/response_header_setter/response_headers.yaml`
   - Currently includes security / privacy related headers:
     - Referrer-Policy
+    - Strict-Transport-Security (remember to register the domain on [https://hstspreload.org/](https://hstspreload.org/) or preload will not work)
     - X-Content-Type-Options
     - X-Frame-Options
     - X-XSS-Protection
