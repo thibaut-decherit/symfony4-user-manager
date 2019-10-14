@@ -49,7 +49,7 @@ class PasswordChangeController extends DefaultController
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @param TranslatorInterface $translator
-     * @Route("/ajax", name="password_change_ajax", methods="POST")
+     * @Route("-ajax", name="password_change_ajax", methods="POST")
      * @return JsonResponse
      */
     public function change(
