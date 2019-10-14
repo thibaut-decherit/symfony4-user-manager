@@ -228,7 +228,7 @@ class EmailChangeController extends DefaultController
      * Cancels email change of account matching token.
      *
      * @param Request $request
-     * @Route("/cancel", name="email_change_cancel", methods="POST")
+     * @Route("email-change/cancel", name="email_change_cancel", methods="POST")
      * @return RedirectResponse
      * @throws AccessDeniedException
      */
