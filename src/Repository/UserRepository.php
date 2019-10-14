@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -10,6 +11,28 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
+    /**
+     * @param string $role
+     * @return User|null
+     */
+    public function findOneUserByRole(string $role): ?User
+    {
+        $qb = $this->createQueryBuilder('user');
+        $qb
+            ->where('user.roles LIKE :roles')
+            ->andWhere('user.activated = true')
+            ->setParameter('roles', "%$role%")
+            ->setMaxResults(1);
+
+        $user = $qb->getQuery()->getResult();
+
+        if (isset($user[0])) {
+            return $user[0];
+        } else {
+            return null;
+        }
+    }
+
     /**
      * @param $days
      * @param $limit
