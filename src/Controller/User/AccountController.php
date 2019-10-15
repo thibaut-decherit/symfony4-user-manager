@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use App\Controller\DefaultController;
 use App\Form\User\UserInformationType;
+use App\Model\AbstractUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,6 +37,9 @@ class AccountController extends DefaultController
      */
     public function accountInformationForm(): Response
     {
+        /**
+         * @var AbstractUser $user
+         */
         $user = $this->getUser();
 
         $form = $this->createForm(UserInformationType::class, $user);

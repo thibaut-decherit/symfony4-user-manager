@@ -5,6 +5,7 @@ namespace App\Controller\User;
 use App\Controller\DefaultController;
 use App\Entity\User;
 use App\Helper\StringHelper;
+use App\Model\AbstractUser;
 use App\Service\MailerService;
 use App\Service\UniqueRandomDataGeneratorService;
 use DateTime;
@@ -58,6 +59,9 @@ class AccountDeletionController extends DefaultController
             throw new AccessDeniedException('Invalid CSRF token.');
         }
 
+        /**
+         * @var AbstractUser $user
+         */
         $user = $this->getUser();
 
         $user->setAccountDeletionToken(
@@ -108,6 +112,9 @@ class AccountDeletionController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
+        /**
+         * @var User $user
+         */
         $user = $em->getRepository(User::class)->findOneBy([
             'accountDeletionToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountDeletionToken)
         ]);
@@ -164,6 +171,9 @@ class AccountDeletionController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
+        /**
+         * @var User $user
+         */
         $user = $em->getRepository(User::class)->findOneBy([
             'accountDeletionToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountDeletionToken)
         ]);
@@ -210,6 +220,9 @@ class AccountDeletionController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
+        /**
+         * @var User $user
+         */
         $user = $em->getRepository(User::class)->findOneBy([
             'accountDeletionToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountDeletionToken)
         ]);

@@ -6,6 +6,7 @@ use App\Controller\DefaultController;
 use App\Entity\User;
 use App\Form\User\EmailChangeType;
 use App\Helper\StringHelper;
+use App\Model\AbstractUser;
 use App\Service\MailerService;
 use App\Service\UniqueRandomDataGeneratorService;
 use DateTime;
@@ -32,6 +33,9 @@ class EmailChangeController extends DefaultController
      */
     public function changeForm(): Response
     {
+        /**
+         * @var AbstractUser $user
+         */
         $user = $this->getUser();
 
         $form = $this->createForm(EmailChangeType::class, $user);
@@ -59,6 +63,9 @@ class EmailChangeController extends DefaultController
         UniqueRandomDataGeneratorService $uniqueRandomDataGenerator
     ): JsonResponse
     {
+        /**
+         * @var AbstractUser $user
+         */
         $user = $this->getUser();
 
         $form = $this->createForm(EmailChangeType::class, $user);
@@ -189,6 +196,9 @@ class EmailChangeController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
+        /**
+         * @var User $user
+         */
         $user = $em->getRepository(User::class)->findOneBy([
             'emailChangeToken' => StringHelper::truncateToMySQLVarcharMaxLength($emailChangeToken)
         ]);
@@ -246,6 +256,9 @@ class EmailChangeController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
+        /**
+         * @var User $user
+         */
         $user = $em->getRepository(User::class)->findOneBy([
             'emailChangeToken' => StringHelper::truncateToMySQLVarcharMaxLength($emailChangeToken)
         ]);
@@ -284,6 +297,9 @@ class EmailChangeController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
+        /**
+         * @var User $user
+         */
         $user = $em->getRepository(User::class)->findOneBy([
             'emailChangeToken' => StringHelper::truncateToMySQLVarcharMaxLength($emailChangeToken)
         ]);
