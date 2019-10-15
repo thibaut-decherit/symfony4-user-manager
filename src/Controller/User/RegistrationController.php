@@ -76,6 +76,9 @@ class RegistrationController extends DefaultController
         if ($form->isSubmitted() && $form->isValid()) {
             $userRepository = $this->getDoctrine()->getManager()->getRepository(User::class);
 
+            /**
+             * @var User $duplicateUser
+             */
             $duplicateUser = $userRepository->findOneBy(['email' => $user->getEmail()]);
 
             if (empty($duplicateUser)) {

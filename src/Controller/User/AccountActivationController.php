@@ -35,6 +35,9 @@ class AccountActivationController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
+        /**
+         * @var User $user
+         */
         $user = $em->getRepository(User::class)->findOneBy([
             'accountActivationToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountActivationToken),
             'activated' => false
@@ -72,6 +75,9 @@ class AccountActivationController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
+        /**
+         * @var User $user
+         */
         $user = $em->getRepository(User::class)->findOneBy([
             'accountActivationToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountActivationToken),
             'activated' => false

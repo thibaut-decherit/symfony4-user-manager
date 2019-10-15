@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use App\Controller\DefaultController;
 use App\Form\User\PasswordChangeType;
+use App\Model\AbstractUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,6 +27,9 @@ class PasswordChangeController extends DefaultController
      */
     public function changeForm(): Response
     {
+        /**
+         * @var AbstractUser $user
+         */
         $user = $this->getUser();
 
         $form = $this->createForm(PasswordChangeType::class, $user);
@@ -58,6 +62,9 @@ class PasswordChangeController extends DefaultController
         TranslatorInterface $translator
     ): JsonResponse
     {
+        /**
+         * @var AbstractUser $user
+         */
         $user = $this->getUser();
 
         $form = $this->createForm(PasswordChangeType::class, $user);

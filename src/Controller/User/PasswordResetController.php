@@ -53,8 +53,14 @@ class PasswordResetController extends DefaultController
             );
 
             if (preg_match('/^.+@\S+\.\S+$/', $businessUsernameOrEmail)) {
+                /**
+                 * @var User $user
+                 */
                 $user = $em->getRepository(User::class)->findOneBy(['email' => $businessUsernameOrEmail]);
             } else {
+                /**
+                 * @var User $user
+                 */
                 $user = $em->getRepository(User::class)->findOneBy(['businessUsername' => $businessUsernameOrEmail]);
             }
 
@@ -118,6 +124,9 @@ class PasswordResetController extends DefaultController
 
         $em = $this->getDoctrine()->getManager();
 
+        /**
+         * @var User $user
+         */
         $user = $em->getRepository(User::class)->findOneBy([
             'passwordResetToken' => StringHelper::truncateToMySQLVarcharMaxLength($passwordResetToken)
         ]);

@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use App\Model\AbstractUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -65,6 +66,9 @@ class OnAuthPasswordRehashIfAutoEncoderSettingsChange
      */
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event): void
     {
+        /**
+         * @var AbstractUser $user
+         */
         $user = $event->getAuthenticationToken()->getUser();
         $options = [
             'time_cost' => $this->timeCost,
