@@ -13,6 +13,7 @@ use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -56,7 +57,7 @@ class AccountDeletionController extends DefaultController
     ): RedirectResponse
     {
         if ($this->isCsrfTokenValid('account_deletion_request', $request->get('_csrf_token')) === false) {
-            throw new AccessDeniedException('Invalid CSRF token.');
+            throw new BadRequestHttpException('Invalid CSRF token.');
         }
 
         /**
@@ -160,7 +161,7 @@ class AccountDeletionController extends DefaultController
     public function cancel(Request $request): RedirectResponse
     {
         if ($this->isCsrfTokenValid('account_deletion_cancel', $request->get('_csrf_token')) === false) {
-            throw new AccessDeniedException('Invalid CSRF token.');
+            throw new BadRequestHttpException('Invalid CSRF token.');
         }
 
         $accountDeletionToken = $request->get('account_deletion_token');
@@ -209,7 +210,7 @@ class AccountDeletionController extends DefaultController
     ): RedirectResponse
     {
         if ($this->isCsrfTokenValid('account_deletion_delete', $request->get('_csrf_token')) === false) {
-            throw new AccessDeniedException('Invalid CSRF token.');
+            throw new BadRequestHttpException('Invalid CSRF token.');
         }
 
         $accountDeletionToken = $request->get('account_deletion_token');

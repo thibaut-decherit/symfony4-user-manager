@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -245,7 +246,7 @@ class EmailChangeController extends DefaultController
     public function cancel(Request $request): RedirectResponse
     {
         if ($this->isCsrfTokenValid('email_change_cancel', $request->get('_csrf_token')) === false) {
-            throw new AccessDeniedException('Invalid CSRF token.');
+            throw new BadRequestHttpException('Invalid CSRF token.');
         }
 
         $emailChangeToken = $request->get('email_change_token');
@@ -286,7 +287,7 @@ class EmailChangeController extends DefaultController
     public function change(Request $request, TranslatorInterface $translator): RedirectResponse
     {
         if ($this->isCsrfTokenValid('email_change', $request->get('_csrf_token')) === false) {
-            throw new AccessDeniedException('Invalid CSRF token.');
+            throw new BadRequestHttpException('Invalid CSRF token.');
         }
 
         $emailChangeToken = $request->get('email_change_token');
