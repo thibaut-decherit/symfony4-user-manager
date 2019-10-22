@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints\GroupSequence;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Class PasswordChangeType
@@ -33,6 +34,10 @@ class PasswordChangeType extends AbstractType
                     new Length([
                         'max' => 4096,
                         'groups' => ['Password_Length']
+                    ]),
+                    new NotBlank([
+                        'message' => 'form_errors.global.not_blank',
+                        'groups' => ['Password_Blank']
                     ]),
                     new UserPassword([
                         'message' => 'form_errors.user.wrong_password',
@@ -68,6 +73,7 @@ class PasswordChangeType extends AbstractType
              */
             'validation_groups' => new GroupSequence([
                 'Password_Length',
+                'Password_Blank',
                 'Password_Change'
             ])
         ]);
