@@ -12,9 +12,9 @@ use DateTime;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -44,7 +44,7 @@ class PasswordResetController extends DefaultController
     {
         if ($request->isMethod('POST')) {
             if ($this->isCsrfTokenValid('password_reset_request', $request->get('csrfToken')) === false) {
-                throw new AccessDeniedException('Invalid CSRF token.');
+                throw new BadRequestHttpException('Invalid CSRF token.');
             }
 
             $em = $this->getDoctrine()->getManager();

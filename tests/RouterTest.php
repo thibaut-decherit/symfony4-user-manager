@@ -26,9 +26,9 @@ class RouterTest extends AbstractWebTest
         $client = $this->getAnonymousClient();
 
         $client->request($method, $url);
+        $statusCode = $client->getResponse()->getStatusCode();
 
-        $this->assertNotEquals(500, $client->getResponse()->getStatusCode());
-        $this->assertNotEquals(404, $client->getResponse()->getStatusCode());
+        $this->assertTrue($this->isExpectedStatusCode($statusCode), "Got $statusCode response");
     }
 
     /**
@@ -61,9 +61,9 @@ class RouterTest extends AbstractWebTest
         $client = $this->getAuthenticatedClient();
 
         $client->request($method, $url);
+        $statusCode = $client->getResponse()->getStatusCode();
 
-        $this->assertNotEquals(500, $client->getResponse()->getStatusCode());
-        $this->assertNotEquals(404, $client->getResponse()->getStatusCode());
+        $this->assertTrue($this->isExpectedStatusCode($statusCode), "Got $statusCode response");
     }
 
     /**
