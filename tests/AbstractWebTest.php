@@ -47,6 +47,25 @@ abstract class AbstractWebTest extends WebTestCase
     }
 
     /**
+     * By default, checks if given HTTP status code is not access denied, crash or not found.
+     *
+     * @param int $statusCode
+     * @param array $expectedStatusCodes
+     * @return bool
+     */
+    protected function isExpectedStatusCode(
+        int $statusCode,
+        array $expectedStatusCodes = [
+            200,
+            302,
+            400
+        ]
+    ): bool
+    {
+        return in_array($statusCode, $expectedStatusCodes);
+    }
+
+    /**
      * @param KernelBrowser $client
      * @return KernelBrowser
      */
