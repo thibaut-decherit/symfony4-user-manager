@@ -17,13 +17,13 @@ body.on('submit', '#ajax-form-account-information-edit', function (e) {
             // Parses the JSON response to "unescape" the html code within
             const template = JSON.parse(response.template);
 
-            accountInformationEditForm.html(template);
+            accountInformationEditForm.replaceWith(template);
         })
         // Triggered if response status == 400 (form has errors)
         .fail(function (response) {
             // Parses the JSON response to "unescape" the html code within
             const TEMPLATE = JSON.parse(response.responseJSON.template);
             //  Replaces html content of html element with updated form (with errors and input values)
-            accountInformationEditForm.html(TEMPLATE);
+            accountInformationEditForm.replaceWith(TEMPLATE);
         });
 });

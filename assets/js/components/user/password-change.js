@@ -17,13 +17,13 @@ body.on('submit', '#ajax-form-change-password', function (e) {
             // Parses the JSON response to "unescape" the html code within
             const template = JSON.parse(response.template);
 
-            changePasswordForm.html(template);
+            changePasswordForm.replaceWith(template);
         })
         // Triggered if response status == 400 (form has errors)
         .fail(function (response) {
             // Parses the JSON response to "unescape" the html code within
             const template = JSON.parse(response.responseJSON.template);
             //  Replaces html content of html element with updated form (with errors and input values)
-            changePasswordForm.html(template);
+            changePasswordForm.replaceWith(template);
         });
 });

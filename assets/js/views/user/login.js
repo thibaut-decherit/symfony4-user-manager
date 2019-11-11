@@ -32,6 +32,6 @@ body.on('submit', '#ajax-form-login', function (e) {
             passwordField.val('');
             passwordField.removeAttr('required');
             loginErrorAlert.removeClass('d-none');
-            loginErrorAlert.html(response.responseJSON.errorMessage);
+            loginErrorAlert.replaceWith(response.responseJSON.errorMessage);
         });
 });

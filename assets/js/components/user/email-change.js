@@ -17,7 +17,7 @@ body.on('submit', '#ajax-form-change-email', function (e) {
             // Parses the JSON response to "unescape" the html code within
             const template = JSON.parse(response.template);
 
-            changeEmailForm.html(template);
+            changeEmailForm.replaceWith(template);
         })
         // Triggered if response status == 400 (form has errors)
         .fail(function (response) {
@@ -25,6 +25,6 @@ body.on('submit', '#ajax-form-change-email', function (e) {
             const template = JSON.parse(response.responseJSON.template);
             //  Replaces html content of html element with updated form
             // (with errors and input values)
-            changeEmailForm.html(template);
+            changeEmailForm.replaceWith(template);
         });
 });
