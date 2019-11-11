@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import {body} from '../helpers/jquery/selectors';
 
 body.on('submit', '#ajax-form-change-password', function (e) {

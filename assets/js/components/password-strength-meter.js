@@ -1,5 +1,6 @@
 import 'babel-polyfill'; // Required to use async await.
 import SHA1 from 'crypto-js/sha1';
+import $ from 'jquery';
 import estimatePasswordStrength from 'zxcvbn';
 import {body} from './helpers/jquery/selectors';
 
