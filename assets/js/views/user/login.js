@@ -2,7 +2,7 @@ import $ from 'jquery';
 import {body} from '../../components/helpers/jquery/selectors';
 
 body.on('submit', '#ajax-form-login', function (e) {
-    const LOGIN_FORM = $('#ajax-form-login');
+    const loginForm = $(this);
 
     // Prevents submit button default behaviour
     e.preventDefault();
@@ -19,19 +19,19 @@ body.on('submit', '#ajax-form-login', function (e) {
         })
         // Triggered if response status == 400 (form has errors)
         .fail(function (response) {
-            const LOGIN_ERROR_ALERT = $('#login-error-alert');
-            const LOGIN_FLASH_ALERT = $('#login-flash-alert');
-            const PASSWORD_FIELD = LOGIN_FORM.find('#password');
+            const loginErrorAlert = $('#login-error-alert');
+            const loginFlashAlert = $('#login-flash-alert');
+            const passwordField = loginForm.find('#password');
 
             /*
              Hides flash message showing if anonymous user just activated his account, reset his password or attempted
              to access protected route.
              */
-            LOGIN_FLASH_ALERT.addClass('d-none');
+            loginFlashAlert.addClass('d-none');
 
-            PASSWORD_FIELD.val('');
-            PASSWORD_FIELD.removeAttr('required');
-            LOGIN_ERROR_ALERT.removeClass('d-none');
-            LOGIN_ERROR_ALERT.html(response.responseJSON.errorMessage);
+            passwordField.val('');
+            passwordField.removeAttr('required');
+            loginErrorAlert.removeClass('d-none');
+            loginErrorAlert.html(response.responseJSON.errorMessage);
         });
 });

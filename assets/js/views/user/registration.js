@@ -2,7 +2,7 @@ import $ from 'jquery';
 import {body} from '../../components/helpers/jquery/selectors';
 
 body.on('submit', '#ajax-form-registration', function (e) {
-    const REGISTRATION_FORM = $('#ajax-form-registration');
+    const registrationForm = $(this);
 
     // Prevents submit button default behaviour
     e.preventDefault();
@@ -15,16 +15,16 @@ body.on('submit', '#ajax-form-registration', function (e) {
     // Triggered if response status == 200 (form is valid and data has been processed successfully)
         .done(function (response) {
             // Parses the JSON response to "unescape" the html code within
-            const TEMPLATE = JSON.parse(response.template);
+            const template = JSON.parse(response.template);
 
-            REGISTRATION_FORM.html(TEMPLATE);
+            registrationForm.html(template);
         })
         // Triggered if response status == 400 (form has errors)
         .fail(function (response) {
             // Parses the JSON response to "unescape" the html code within
-            const TEMPLATE = JSON.parse(response.responseJSON.template);
+            const template = JSON.parse(response.responseJSON.template);
             //  Replaces html content of html element id 'ajax-form-fos-user-registration' with updated form
             // (with errors and input values)
-            REGISTRATION_FORM.html(TEMPLATE);
+            registrationForm.html(template);
         });
 });
