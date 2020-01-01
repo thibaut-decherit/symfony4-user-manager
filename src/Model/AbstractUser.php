@@ -7,6 +7,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -29,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     groups={"Account_Information", "Registration"}
  * )
  */
-abstract class AbstractUser implements UserInterface
+abstract class AbstractUser implements EquatableInterface, UserInterface
 {
     /**
      * @var int
@@ -582,6 +583,42 @@ abstract class AbstractUser implements UserInterface
         $this->passwordResetRequestedAt = $passwordResetRequestedAt;
 
         return $this;
+    }
+
+    /**
+     * Compares user stored in session ($this) with his entry stored in database (UserInterface $user).
+     * IF it returns false, user is logged out.
+     *
+     * Useful e.g. to prevent user from retaining access rights even if relevant role has been removed from his database
+     * entry.
+     * Example: user logs in while having ROLE_RESTRICTED in his database entry, then an admin removes this role,
+     * without this check the application still considers the user has ROLE_RESTRICTED until he logs out.
+     *
+     * See https://symfony.com/doc/current/security/user_provider.html#understanding-how-users-are-refreshed-from-the-session
+     *
+     * @param UserInterface $user
+     * @return bool
+     */
+    public function isEqualTo(UserInterface $user)
+    {
+        if (!$user instanceof self) {
+            return false;
+        }
+
+        if ($this->getPassword() !== $user->getPassword()) {
+            return false;
+        }
+
+
+        if ($this->getUsername() !== $user->getUsername()) {
+            return false;
+        }
+
+        if($this->getRoles() !== $user->getRoles()) {
+            return false;
+        }
+
+        return true;
     }
 
     public function eraseCredentials(): void
