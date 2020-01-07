@@ -8,7 +8,6 @@ Continuation of [symfony3-user-manager](https://github.com/thibaut-decherit/symf
 - Webpack Encore (SCSS and JS compilation)
 - jQuery (AJAX and DOM manipulation)
 - Bootstrap 4 (forms and alerts)
-- Guzzle 6 (API consumption)
 - [zxcvbn](https://github.com/dropbox/zxcvbn) (password strength estimation)
 
 ## **Features**
