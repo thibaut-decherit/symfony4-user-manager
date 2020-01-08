@@ -1,5 +1,6 @@
 import 'babel-polyfill'; // Required to use async await.
 import SHA1 from 'crypto-js/sha1';
+import $ from 'jquery';
 import estimatePasswordStrength from 'zxcvbn';
 import {body} from './helpers/jquery/selectors';
 
@@ -34,9 +35,9 @@ async function checkPasswordStrength(plainPassword) {
 
     let passwordStrength = '';
 
-    if (passwordLength < 8 || passwordBreached || passwordStrengthEstimation < 3) {
+    if (passwordLength < 10 || passwordBreached || passwordStrengthEstimation < 3) {
         passwordStrength = 'weak';
-    } else if (passwordLength >= 8 && passwordLength < 16 && passwordStrengthEstimation >= 3) {
+    } else if (passwordLength >= 10 && passwordLength < 16 && passwordStrengthEstimation >= 3) {
         passwordStrength = 'average';
     } else {
         passwordStrength = 'good';

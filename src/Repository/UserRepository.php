@@ -34,11 +34,11 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * @param $days
-     * @param $limit
+     * @param int $days
+     * @param int $limit
      * @return array
      */
-    public function findUnactivatedAccountsOlderThan($days, $limit): array
+    public function findUnactivatedAccountsOlderThan(int $days, int $limit): array
     {
         $qb = $this->createQueryBuilder('user');
         $qb
