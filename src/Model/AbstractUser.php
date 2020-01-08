@@ -609,12 +609,11 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
             return false;
         }
 
-
         if ($this->getUsername() !== $user->getUsername()) {
             return false;
         }
 
-        if($this->getRoles() !== $user->getRoles()) {
+        if ($this->getRoles() !== $user->getRoles()) {
             return false;
         }
 
