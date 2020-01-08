@@ -13,7 +13,10 @@ use Exception;
 class RandomDataGeneratorHelper
 {
     /**
-     * Generates cryptographically secure pseudo-random floats.
+     * Generates pseudo-random floats.
+     * Warning: May or may not be cryptographically secure. Uses a cryptographically secure native function (random_int)
+     * but implementation could weaken randomness (e.g. because of trailing zeros removal in float's decimal and
+     * discarding of results greater than $max).
      *
      * @param int $min
      * @param int $max
@@ -24,10 +27,14 @@ class RandomDataGeneratorHelper
     public static function randomFloat(int $min = 0, int $max = 2147483647, int $maxDecimalNbr = 1): float
     {
         while (true) {
-            $decimal = random_int(0, 2147483647);
-            $decimal = $decimal / pow(10, strlen((string)$decimal));
+            $decimalString = '.';
 
-            $result = round(random_int($min, $max) + $decimal, $maxDecimalNbr);
+            for ($i = 0; $i < $maxDecimalNbr; $i++) {
+                $decimalString .= (string)random_int(0, 9);
+            }
+
+            $resultString = (string)random_int($min, $max) . $decimalString;
+            $result = (float)$resultString;
 
             if ($result <= $max) {
                 return $result;
