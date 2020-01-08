@@ -3,10 +3,13 @@
 namespace App\Validator\Constraints;
 
 use Exception;
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Exception\GuzzleException;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BreachedPasswordValidator extends ConstraintValidator
@@ -38,7 +41,10 @@ class BreachedPasswordValidator extends ConstraintValidator
      *
      * @param mixed $plainPassword
      * @param Constraint $constraint
-     * @throws GuzzleException
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function validate($plainPassword, Constraint $constraint): void
     {
@@ -47,16 +53,17 @@ class BreachedPasswordValidator extends ConstraintValidator
         $plainPasswordSHA1Suffix = substr($plainPasswordSHA1, 5);
 
         /*
-         * Try catch to avoid Guzzle exceptions (e.g. if the API is unreachable Guzzle will throw 500 ConnectException,
-         * without try catch it will crash the whole request and break the associated form)
+         * Try catch to avoid HttpClient exceptions (e.g. if the API is unreachable HttpClient will throw 500
+         * TransportException, without try catch it will crash the whole request and break the associated form)
          */
         try {
-            $guzzleClient = new GuzzleClient();
-            $guzzleRequest = $guzzleClient->request(
+            $client = HttpClient::create();
+            $response = $client->request(
                 'GET',
                 'https://api.pwnedpasswords.com/range/' . $plainPasswordSHA1Prefix
             );
-            $breachedPasswordsSuffixes = $guzzleRequest->getBody()->getContents();
+
+            $breachedPasswordsSuffixes = $response->getContent();
         } catch (Exception $e) {
             $breachedPasswordsSuffixes = '';
         }
