@@ -13,7 +13,7 @@ use Exception;
 class RandomDataGeneratorHelper
 {
     /**
-     * Generates pseudo-random floats.
+     * Generates a pseudo-random float.
      * Warning: May or may not be cryptographically secure. Uses a cryptographically secure native function (random_int)
      * but implementation could weaken randomness (e.g. because of trailing zeros removal in float's decimal and
      * discarding of results greater than $max).
@@ -45,7 +45,7 @@ class RandomDataGeneratorHelper
     }
 
     /**
-     * Generates cryptographically secure pseudo-random integers.
+     * Generates a cryptographically secure pseudo-random integer.
      *
      * @param int $min
      * @param int $max
@@ -58,7 +58,7 @@ class RandomDataGeneratorHelper
     }
 
     /**
-     * Returns an URI safe base64 encoded cryptographically secure pseudo-random string that does not contain
+     * Generates an URI safe base64 encoded cryptographically secure pseudo-random string that does not contain
      * "+", "/" or "=" which need to be URL encoded and make URLs unnecessarily longer.
      * With 512 bits of entropy this method will return a string of 86 characters, with 256 bits of entropy it will
      * return 43 characters, and so on.
