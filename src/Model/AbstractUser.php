@@ -47,7 +47,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      * This property should be considered as an user identifier, NOT as the user's username displayed on the application
      * and used to log-in.
      * Indeed, this username is stored in base64 format in the remember me cookie (which could potentially lead to
-     * private data leakage if the cookie is accessed by a third-party and/or malicious individual.
+     * private data leakage if the cookie is accessed by a third-party and/or malicious individual).
      * Furthermore, if you choose to use it as 'business' username, when an username is changed (e.g. edited by the user
      * himself on the account page) all remember me tokens for this user will be invalidated (because Symfony tries to
      * load the user by reading the base64 encoded username)
