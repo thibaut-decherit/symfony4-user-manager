@@ -1,7 +1,3 @@
-imports:
-  - resource: response_header_setter/response_headers.yaml
-  - resource: response_header_setter/content_security_policy.yaml
-
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 
@@ -39,7 +35,7 @@ services:
   # this creates a service per class whose id is the fully-qualified class name
   App\:
     resource: '../src/*'
-    exclude: '../src/{DependencyInjection,Entity,Migrations,Model,Tests,Kernel.php}'
+    exclude: '../src/{DependencyInjection,Entity,Migrations,Model,Tests,Kernel.php,DecheritResponseHeaderSetterBundle}'
 
   # controllers are imported separately to make sure services can be injected
   # as action arguments even if you don't extend any base controller class
@@ -59,15 +55,6 @@ services:
   App\EventListener\RedirectIfAuthenticated:
     tags:
       - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
-
-  App\EventListener\ResponseHeaderSetter\ResponseHeaderSetter:
-    arguments:
-      $kernelEnvironment: '%kernel.environment%'
-      $simpleHeaders: '%app.response_headers%'
-      $requestStack: '@request_stack'
-      $cspConfig: '%app.content_security_policy%'
-    tags:
-      - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
 
   App\EventListener\OnAuthPasswordRehashIfAutoEncoderSettingsChange:
     arguments:

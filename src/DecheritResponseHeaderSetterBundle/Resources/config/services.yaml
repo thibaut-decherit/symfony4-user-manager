@@ -1,0 +1,14 @@
+imports:
+  - resource: response_headers.yaml
+  - resource: content_security_policy.yaml
+
+services:
+  decherit.response_header_setter:
+    class: Decherit\ResponseHeaderSetterBundle\EventListener\ResponseHeaderSetter\ResponseHeaderSetter
+    arguments:
+      $kernelEnvironment: '%kernel.environment%'
+      $simpleHeaders: '%decherit_response_header_setter.response_headers%'
+      $requestStack: '@request_stack'
+      $cspConfig: '%decherit_response_header_setter.content_security_policy%'
+    tags:
+      - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }

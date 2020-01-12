@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventListener\ResponseHeaderSetter\DynamicResponseHeaderSetter;
+namespace Decherit\ResponseHeaderSetterBundle\EventListener\ResponseHeaderSetter\DynamicResponseHeaderSetter;
 
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -13,7 +13,7 @@ use Symfony\Component\Routing\RouterInterface;
  * Adds Content Security Policy header to a response.
  * See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
  *
- * @package App\EventListener\ResponseHeaderSetter\DynamicResponseHeaderSetter
+ * @package Decherit\ResponseHeaderSetterBundle\EventListener\ResponseHeaderSetter\DynamicResponseHeaderSetter
  */
 class CspHeaderSetter
 {

@@ -1,5 +1,5 @@
 parameters:
-  app.response_headers:
+  decherit_response_header_setter.response_headers:
     Referrer-Policy: strict-origin-when-cross-origin
 
     # Remember to register the domain on https://hstspreload.org/ or preload will not work.
