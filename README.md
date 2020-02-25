@@ -1,5 +1,5 @@
 # Symfony 4 User Manager
-My take on user management with Symfony 4.3.
+My take on user management with Symfony 4.4.
 
 Continuation of [symfony3-user-manager](https://github.com/thibaut-decherit/symfony3-user-manager).
 
@@ -143,9 +143,9 @@ Feel free to tailor each feature to your needs.
   - If email address or username is registered to an account and retry delay is expired or inexistant (first try), sends the email
 - Email address change
   - If form is valid and new email address is not the same than current email address, shows success message
+    - If new email address is not already registered to another account and retry delay is expired or inexistant (first try), also sends a verification email
+    - if new email address is already registered to another account, only shows success message without sending a verification email (we assume this is an enumeration attempt)
   - If form is valid but new email address is the same than current email address, shows error message
-  - If new email address is not already registered to another account and retry delay is expired or inexistant (first try), sends a verification email
-  - if new email address is already registered to another account, shows success message but doesn't send verification email
 
 **Important:** Spool emails from file should be enabled in production environment or the delay between form submission and server response could hint that an email has been sent.
 
