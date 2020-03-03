@@ -19,7 +19,7 @@
     "jquery": "^3.4.1",
     "node-sass": "^4.12.0",
     "popper.js": "^1.15.0",
-    "sass-loader": "^8.0.0",
+    "sass-loader": "^7.0.1",
     "zxcvbn": "^4.4.2"
   }
 }
