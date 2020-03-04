@@ -1,0 +1,17 @@
+# Form errors
+
+form_errors:
+  global:
+    max_length: Ce champ ne peut pas comporter plus de {{ limit }} caractères.
+    min_length: Ce champ doit comporter au moins {{ limit }} caractères.
+    not_blank: Ce champ ne peut pas être vide.
+  user:
+    alphanumeric_only_username: Votre nom d'utilisateur ne peut contenir que des caractères alphanumériques.
+    breached_password: "Ce mot de passe a été trouvé dans des fuites de données rendues publiques, il doit donc être
+    considéré comme non sûr car connu d'éventuels pirates."
+    password_max_length: Votre mot de passe ne peut pas comporter plus de {{ limit }} caractères.
+    password_min_length: Votre mot de passe doit comporter au moins {{ limit }} caractères.
+    repeat_password: Les deux champs mot de passe doivent correspondre.
+    unique_username: Ce nom d'utilisateur n'est pas disponible.
+    valid_email: Cette adresse email est invalide.
+    wrong_password: Mot de passe erroné.

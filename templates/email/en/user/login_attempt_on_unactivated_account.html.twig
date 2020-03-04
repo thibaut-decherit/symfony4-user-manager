@@ -1,6 +1,7 @@
-<p>Hey {{ user.businessUsername }}!</p>
+<p>Hello {{ user.businessUsername }},</p>
 <p>
-    A login attempt to your account has been detected but you have not yet verified your email address.
-    You can do so by clicking
+    A login attempt to your account has been detected but you have not yet activated your account.
+    You will not be able to log in until you have activated your account.
+    You can activate your account by clicking
     <a href="{{ url('account_activation_confirm', {'token' : user.accountActivationToken}) }}">here</a>.
 </p>
