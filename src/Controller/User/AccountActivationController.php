@@ -23,10 +23,11 @@ class AccountActivationController extends DefaultController
      * Renders account activation confirmation view where user can click a button to confirm the activation.
      *
      * @param Request $request
+     * @param TranslatorInterface $translator
      * @Route("/activate-account/confirm", name="account_activation_confirm", methods="GET")
      * @return RedirectResponse
      */
-    public function confirm(Request $request): Response
+    public function confirm(Request $request, TranslatorInterface $translator): Response
     {
         $accountActivationToken = $request->get('token');
 
@@ -45,7 +46,12 @@ class AccountActivationController extends DefaultController
         ]);
 
         if ($user === null) {
-            return $this->redirectToRoute('home');
+            $this->addFlash(
+                'account-activation-success',
+                $translator->trans('flash.user.account_activated_successfully')
+            );
+
+            return $this->redirectToRoute('login');
         }
 
         return $this->render('user/account_activation_confirm.html.twig', [
