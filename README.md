@@ -16,7 +16,7 @@ Feel free to tailor each feature to your needs.
 
 ### Internationalization
 - Content is compatible with translation files
-  - English and french translations included
+  - English and French translations included
   - Add your own, modify existing one
 
 ### Mailer
