@@ -1,0 +1,7 @@
+<p>Bonjour {{ user.businessUsername }},</p>
+<p>
+    Une tentative d'inscription avec votre adresse email a été détectée mais vous avez déjà un compte.
+    Ce compte n'a pas encore été activé et vous ne pouvez pas vous connecter tant que vous ne l'avez pas activé.
+    Vous pouvez l'activer en cliquant
+    <a href="{{ url('account_activation_confirm', {'token' : user.accountActivationToken}) }}">ici</a>.
+</p>

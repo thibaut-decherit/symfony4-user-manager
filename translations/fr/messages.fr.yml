@@ -1,0 +1,116 @@
+# Global
+
+global:
+  form:
+    cancel: Annuler
+    change_password: Changer le mot de passe
+    confirm: Confirmer
+    submit: Envoyer
+    save_changes: Enregistrer les modifications
+  logout: Déconnexion
+
+
+#Head
+
+head:
+  description: Mon approche de la gestion d'utilisateurs avec Symfony 4.4
+  language_code: fr-FR
+
+
+#Page titles
+
+page_title:
+  account_activation: Activation du compte
+  account_deletion: Suppression du compte
+  email_address_change: Changement d'adresse email
+  home: Accueil
+  login: Connexion
+  my_account: Mon compte
+  password_reset: Réinitialisation du mot de passe
+  registration: Inscription
+
+
+# Mailer
+
+mailer:
+  subjects:
+    account_deletion_request: Demande de suppression de compte
+    account_deletion_success: Compte supprimé avec succès
+    email_address_change: Changement d'adresse email
+    login_attempt: Tentative de connexion
+    password_reset: Réinitialisation du mot de passe
+    registration_attempt: Tentative d'inscription
+    welcome: Bienvenue
+
+
+# User
+
+user:
+  account_activation_confirm_instructions: Veuillez cliquer sur le bouton ci-dessous pour activer votre compte.
+  account_deletion_confirm_instructions: "Veuillez cliquer sur le bouton ci-dessous pour supprimer votre compte.
+  Si vous ne voulez pas supprimer votre compte, c'est votre dernière occasion d'annuler.
+  Une fois que vous aurez cliqué sur le bouton de confirmation votre compte ainsi que toutes ses données seront
+  supprimés de ce site. Cette action est irréversible."
+  account_deletion_instructions: "Nous allons vous envoyer un lien de suppression par email et vous déconnecter.
+  Veuillez cliquer sur ce lien et suivre les instructions pour supprimer votre compte."
+  account_deletion_question: Etes-vous sûr de vouloir supprimer votre compte ?
+  activate_my_account: Activer mon compte
+  current_password: Mot de passe actuel
+  delete_account: Supprimer le compte
+  delete_my_account: Supprimer mon compte
+  email_address: Adresse email
+  email_address_change_confirm_instructions_1/2: "Si vous cliquez sur le bouton ci-dessous, vous changerez l'adresse
+  email liée à votre compte de"
+  email_address_change_confirm_instructions_2/2: à
+  login: Connexion
+  new_password: Nouveau mot de passe
+  new_password_repeat: Répéter le nouveau mot de passe
+  password: Mot de passe
+  password_repeat: Répéter le mot de passe
+  register: "S'inscrire"
+  remember_me: Se souvenir de moi
+  send_email: "Envoyer l'email"
+  send_me_deletion_link: Envoyez-moi un lien de suppression
+  username: Nom d'utilisateur
+  username_or_email_address: Nom d'utilisateur ou adresse email
+
+
+# Password strength meter
+
+password_strength_meter:
+  password_strength: "Force du mot de passe:"
+  strength:
+    average: Moyenne
+    good: Bonne
+    weak: Faible
+
+
+# Flash
+
+flash:
+  user:
+    account_activated_successfully: Votre compte a été activé avec succès, vous pouvez vous connecter ci-dessous.
+    account_deletion_request_email_sent: Un lien de suppression a été envoyé à
+    account_deletion_success: Votre compte a été supprimé avec succès.
+    account_deletion_token_expired: Votre demande de suppression de compte a expiré.
+    already_current_email_address: Cette adresse email est déjà liée à votre compte.
+    email_address_change_request_sent_1/2: Un lien de vérification a été envoyé à
+    email_address_change_request_sent_2/2: , veuillez cliquer dessus pour confirmer ce changement.
+    email_address_change_success: est désormais l'adresse email liée à votre compte.
+    email_change_token_expired: Votre demande de changement d'adresse email a expiré.
+    greeting_anonymous: Bonjour, visiteur anonyme
+    greeting_authenticated: Bonjour,
+    information_updated: Informations enregistrées avec succès.
+    invalid_credentials: Identifiants de connexion invalides.
+    login_required: Vous devez vous connecter pour accéder à cette page.
+    password_reset_email_sent: Un email avec un lien de réinitialisation vous a été envoyé.
+    password_reset_success: "Votre nouveau mot de passe a bien été enregistré, vous pouvez l'utiliser ci-dessous pour
+    vous connecter."
+    password_reset_token_expired: "Votre demande de réinitialisation de mot de passe a expiré, vous pouvez la renouveler
+    ci-dessous."
+    password_updated: Nouveau mot de passe enregistré.
+    registration_success: Inscription réussie, vous allez recevoir un lien d'activation par email.
+    verification_link_retry_delay_not_expired_plural: "Veuillez patienter %delay% minutes avant de demander un nouveau
+    lien de vérification."
+    verification_link_retry_delay_not_expired_singular: "Veuillez patienter 1 minute avant de demander un nouveau lien
+    de vérification."

@@ -12,6 +12,6 @@ form_errors:
     password_max_length: Your password cannot be longer than {{ limit }} characters.
     password_min_length: Your password must be at least {{ limit }} characters long.
     repeat_password: The password fields must match.
-    unique_username: This username is already used.
+    unique_username: This username is not available.
     valid_email: This email address is not valid.
     wrong_password: Wrong password.

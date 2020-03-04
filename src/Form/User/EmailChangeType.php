@@ -26,6 +26,10 @@ class EmailChangeType extends AbstractType
                 'data' => '',
                 'required' => false,
                 'attr' => [
+                    /**
+                     * Will throw a missing translation error (false positive) in the profiler because Symfony always
+                     * attempts to translate label and placeholder values.
+                     */
                     'placeholder' => $builder->getData()->getEmail()
                 ]
             ]);

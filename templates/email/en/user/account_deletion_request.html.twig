@@ -1,9 +1,10 @@
-<p>Hey {{ user.username }}!</p>
+<p>Hello {{ user.businessUsername }},</p>
 <p>
     You have requested to delete your account. Bear in mind that this operation is <b>permanent</b>.
 </p>
 <p>
     Click <a href="{{ url('account_deletion_confirm', {'token' : user.accountDeletionToken}) }}">here</a>
-    to delete your account. You will then receive a last email confirming the successful deletion.
+    and follow the instructions to delete your account. You will then receive a last email confirming the successful
+    deletion.
     (This link will expire in {{ account_deletion_token_lifetime_in_minutes }} minutes)
 </p>

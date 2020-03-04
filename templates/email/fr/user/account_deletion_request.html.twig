@@ -1,0 +1,10 @@
+<p>Bonjour {{ user.businessUsername }},</p>
+<p>
+    Vous avez demandé la suppression de votre compte. Gardez à l'esprit que cette opération est <b>irréversible</b>.
+</p>
+<p>
+    Cliquez <a href="{{ url('account_deletion_confirm', {'token' : user.accountDeletionToken}) }}">ici</a>
+    et suivez les instructions pour supprimer votre compte. Vous recevrez ensuite un dernier email confirmant la
+    suppression.
+    (Ce lien expirera dans {{ account_deletion_token_lifetime_in_minutes }} minutes)
+</p>

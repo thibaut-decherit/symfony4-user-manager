@@ -13,7 +13,7 @@ global:
 #Head
 
 head:
-  description: My take on user management with Symfony 3.4
+  description: My take on user management with Symfony 4.4.
   language_code: en-US
 
 
@@ -51,8 +51,8 @@ user:
   If you don't want to delete your account, this is your last chance to abort.
   Once you click on the confirmation button your account and all data associated with it will be
   permanently removed from this website."
-  account_deletion_instructions: "We will send you a deletion link by email and log you out. If you click on this link
-  your account will be permanently deleted."
+  account_deletion_instructions: "We will send you a deletion link by email and log you out. Please click on this link
+  and follow the instructions to delete your account."
   account_deletion_question: Are you sure you want to delete your account?
   activate_my_account: Activate my account
   current_password: Current password
@@ -63,7 +63,6 @@ user:
   linked to your account from"
   email_address_change_confirm_instructions_2/2: to
   login: Login
-  login_attempt: Login attempt
   new_password: New password
   new_password_repeat: Repeat new password
   password: Password
@@ -90,25 +89,25 @@ password_strength_meter:
 
 flash:
   user:
-    account_activated_successfully: Your account has been activated successfully, you can log in below
+    account_activated_successfully: Your account has been activated successfully, you can log in below.
     account_deletion_request_email_sent: A deletion link has been sent to
-    account_deletion_success: Your account has beed successfully deleted
-    account_deletion_token_expired: Your account deletion request has expired
-    already_current_email_address: This email address is already registered to your account
+    account_deletion_success: Your account has beed successfully deleted.
+    account_deletion_token_expired: Your account deletion request has expired.
+    already_current_email_address: This email address is already registered to your account.
     email_address_change_request_sent_1/2: A verification link has been sent to
-    email_address_change_request_sent_2/2: , please click on it to confirm this change
-    email_address_change_success: is now registered as your email address
-    email_change_token_expired: Your email address change request has expired
+    email_address_change_request_sent_2/2: , please click on it to confirm this change.
+    email_address_change_success: is now registered as your email address.
+    email_change_token_expired: Your email address change request has expired.
     greeting_anonymous: Hi, anonymous visitor
     greeting_authenticated: Hi,
-    information_updated: Account information successfully updated
-    invalid_credentials: Wrong username or password
-    login_required: You must login to access this page
-    password_reset_email_sent: An email with a reset link has been sent to you
-    password_reset_success: Your password has been updated, you can now use it to log in below
-    password_reset_token_expired: Your password reset request has expired, please make a new one below
-    password_updated: Password successfully updated
-    registration_success: Registration successful, check your email address, you will receive an activation link shortly
+    information_updated: Account information successfully updated.
+    invalid_credentials: Wrong username or password.
+    login_required: You must login to access this page.
+    password_reset_email_sent: An email with a reset link has been sent to you.
+    password_reset_success: Your password has been updated, you can now use it to log in below.
+    password_reset_token_expired: Your password reset request has expired, please make a new one below.
+    password_updated: Password successfully updated.
+    registration_success: Registration successful, check your email address, you will receive an activation link shortly.
     verification_link_retry_delay_not_expired_plural: "You have to wait %delay% minutes before requesting another
     verification link."
     verification_link_retry_delay_not_expired_singular: "You have to wait 1 minute before requesting another
