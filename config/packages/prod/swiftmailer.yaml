@@ -1,4 +1,4 @@
 swiftmailer:
   spool: # See https://symfony.com/doc/current/email.html#spool-using-files
-    type: 'file'
+    type: 'file' # Required to prevent user enumeration effectively.
     path: '%kernel.project_dir%/var/spool'
