@@ -149,7 +149,7 @@ class EmailChangeController extends DefaultController
 
             $em->flush();
 
-            $successMessage = $this->render('flash_alert/message/user/_email_change_request_success.html.twig', [
+            $successMessage = $this->render('flash_alert/raw_messages/user/_email_change_request_success.html.twig', [
                 'user' => $user
             ]);
             $this->addFlash(
@@ -344,7 +344,7 @@ class EmailChangeController extends DefaultController
         $user->setEmailChangePending(null);
         $em->flush();
 
-        $successMessage = $this->render('flash_alert/message/user/_email_change_success.html.twig', [
+        $successMessage = $this->render('flash_alert/raw_messages/user/_email_change_success.html.twig', [
             'user' => $user
         ]);
         $this->addFlash(
