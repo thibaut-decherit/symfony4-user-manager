@@ -39,7 +39,7 @@ class AccountDeletionController extends DefaultController
     }
 
     /**
-     * Sends account deletion link by email to user then log him out.
+     * Sends account deletion link by email to user then logs him out.
      *
      * @param Request $request
      * @param MailerService $mailer
