@@ -5,6 +5,7 @@ namespace App\EventListener;
 use App\Model\AbstractUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 /**
@@ -66,6 +67,16 @@ class OnAuthPasswordRehashIfAutoEncoderSettingsChange
      */
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event): void
     {
+        /*
+         * onSecurityInteractiveLogin event is fired not only by a successful login (PostAuthenticationGuardToken) but
+         * also by an authentication through remember me token (RememberMeToken).
+         * But $event->getRequest()->request->get('password') is obviously empty during the later, thus crashing this
+         * event listener.
+         */
+        if (get_class($event->getAuthenticationToken()) !== PostAuthenticationGuardToken::class) {
+            return;
+        }
+
         /**
          * @var AbstractUser $user
          */
