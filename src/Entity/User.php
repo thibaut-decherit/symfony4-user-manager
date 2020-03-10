@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Helper\StringHelper;
 use App\Model\AbstractUser;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -137,7 +138,50 @@ class User extends AbstractUser
      */
     public function setRoles(array $roles): self
     {
-        $this->roles = $roles;
+        $this->roles = [];
+
+        foreach ($roles as $role) {
+            $this->addRole($role);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $role
+     * @return User
+     */
+    public function addRole(string $role): self
+    {
+        $role = StringHelper::strToUpper($role);
+
+        if ($role === static::ROLE_DEFAULT) {
+            return $this;
+        }
+
+        if (!in_array($role, $this->getRoles(), true)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $role
+     * @return User
+     */
+    public function removeRole(string $role): self
+    {
+        $role = StringHelper::strToUpper($role);
+
+        if ($role === static::ROLE_DEFAULT) {
+            return $this;
+        }
+
+        $key = array_search($role, $this->roles, true);
+        if ($key !== false) {
+            unset($this->roles[$key]);
+        }
 
         return $this;
     }

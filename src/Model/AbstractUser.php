@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Helper\StringHelper;
 use App\Validator\Constraints as CustomAssert;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,6 +33,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 abstract class AbstractUser implements EquatableInterface, UserInterface
 {
+    /**
+     * @var string
+     */
+    const ROLE_DEFAULT = 'ROLE_USER';
+
     /**
      * @var int
      *
@@ -245,7 +251,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     public function __construct()
     {
         $this->roles = [
-            'ROLE_USER'
+            static::ROLE_DEFAULT
         ];
         $this->registeredAt = new DateTime();
         $this->activated = false;
@@ -476,7 +482,12 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      */
     public function getRoles(): array
     {
-        return $this->roles;
+        $roles = $this->roles;
+
+        // Makes sure the user has the default role.
+        $roles[] = static::ROLE_DEFAULT;
+
+        return array_unique($roles);
     }
 
     /**
@@ -485,7 +496,50 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      */
     public function setRoles(array $roles)
     {
-        $this->roles = $roles;
+        $this->roles = [];
+
+        foreach ($roles as $role) {
+            $this->addRole($role);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $role
+     * @return $this
+     */
+    public function addRole(string $role)
+    {
+        $role = StringHelper::strToUpper($role);
+
+        if ($role === static::ROLE_DEFAULT) {
+            return $this;
+        }
+
+        if (!in_array($role, $this->getRoles(), true)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $role
+     * @return $this
+     */
+    public function removeRole(string $role)
+    {
+        $role = StringHelper::strToUpper($role);
+
+        if ($role === static::ROLE_DEFAULT) {
+            return $this;
+        }
+
+        $key = array_search($role, $this->roles, true);
+        if ($key !== false) {
+            unset($this->roles[$key]);
+        }
 
         return $this;
     }
