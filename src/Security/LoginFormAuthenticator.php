@@ -24,6 +24,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment as Twig;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -75,6 +76,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     private $mailer;
 
     /**
+     * @var Twig
+     */
+    private $twig;
+
+    /**
      * LoginFormAuthenticator constructor.
      * @param EntityManagerInterface $em
      * @param RouterInterface $router
@@ -91,7 +97,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         CsrfTokenManagerInterface $csrfTokenManager,
         TranslatorInterface $translator,
         SessionInterface $session,
-        MailerService $mailer
+        MailerService $mailer,
+        Twig $twig
     )
     {
         $this->em = $em;
@@ -101,6 +108,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $this->translator = $translator;
         $this->session = $session;
         $this->mailer = $mailer;
+        $this->twig = $twig;
     }
 
     public function supports(Request $request)
@@ -222,10 +230,16 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             $this->mailer->loginAttemptOnNonActivatedAccount($user, $request->getLocale());
         }
 
-        $errorMessage = $this->translator->trans('flash.user.invalid_credentials');
+        $this->session->getFlashBag()->add(
+            'login-failed',
+            $this->translator->trans('flash.user.invalid_credentials')
+        );
+
+        $template = $this->twig->render('form/user/_login.html.twig');
+        $jsonTemplate = json_encode($template);
 
         return new JsonResponse([
-            'errorMessage' => $errorMessage
+            'template' => $jsonTemplate
         ], 400);
     }
 
