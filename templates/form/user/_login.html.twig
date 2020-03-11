@@ -1,10 +1,38 @@
+{% include 'flash_alert/_alert.html.twig' with {
+    'alert_type': 'account-activation-success',
+    'alert_id': 'login-flash-alert',
+    'alert_style': 'success',
+    'text_align': 'center'
+} %}
+
+{% include 'flash_alert/_alert.html.twig' with {
+    'alert_type': 'login-failed',
+    'alert_id': 'login-flash-alert',
+    'alert_style': 'danger',
+    'text_align': 'center'
+} %}
+
+{% include 'flash_alert/_alert.html.twig' with {
+    'alert_type': 'password-reset-success',
+    'alert_id': 'login-flash-alert',
+    'alert_style': 'success',
+    'text_align': 'center'
+} %}
+
+{% include 'flash_alert/_alert.html.twig' with {
+    'alert_type': 'login-required-error',
+    'alert_id': 'login-flash-alert',
+    'alert_style': 'danger',
+    'text_align': 'center'
+} %}
+
 <form action="{{ path('login') }}" method="post" id="ajax-form-login" class="col p-0 my-3">
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('login') }}" id="csrf-token"/>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('login') }}"/>
 
     <div class="form-group">
         <input
-                type="text" class="form-control border-input rounded-0" id="username"
-                name="businessUsername" placeholder="{{ 'user.username_or_email_address'|trans }}"
+                type="text" class="form-control border-input rounded-0" name="businessUsername"
+                placeholder="{{ 'user.username_or_email_address'|trans }}"
                 aria-label="{{ 'user.username_or_email_address'|trans }}"
                 aria-describedby="{{ 'user.username_or_email_address'|trans }}" required="required"
         />
@@ -12,19 +40,21 @@
 
     <div class="form-group">
         <input
-                type="password" class="form-control border-input rounded-0" id="password" name="password"
+                type="password" class="form-control border-input rounded-0" name="password"
                 placeholder="{{ 'user.password'|trans }}" aria-label="{{ 'user.password'|trans }}"
                 aria-describedby="{{ 'user.password'|trans }}"
                 required="required"
         />
     </div>
+
     <div class="col d-flex justify-content-between form-group form-check">
-        <input class="form-check-input" type="checkbox" id="remember_me" name="_remember_me" value="on"/>
+        <input class="form-check-input" type="checkbox" id="remember_me" name="_remember_me"/>
         <label class="form-check-label" for="remember_me">{{ 'user.remember_me'|trans }}</label>
     </div>
-    <input
-            class="btn btn-primary border-0 btn-block rounded-0 text-white" type="submit" id="_submit"
-            name="_submit"
-            value="{{ 'user.login'|trans }}"
-    />
+
+    <button
+            class="btn btn-primary border-0 btn-block rounded-0 text-white" type="submit"
+    >
+        {{ 'user.login'|trans }}
+    </button>
 </form>
