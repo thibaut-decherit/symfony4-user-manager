@@ -1,12 +1,7 @@
-<form action="{{ path('email_change') }}" method="post" id="form-button-email-change">
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('email_change') }}" id="csrf-token"/>
-    <input
-            type="hidden" name="email_change_token" value="{{ user.emailChangeToken }}"
-            id="email-change-token"
-    />
-    <input
-            class="btn btn-success border-0 rounded-0 text-white" type="submit" id="_submit"
-            name="_submit"
-            value="{{ 'global.form.confirm'|trans }}"
-    />
+<form action="{{ path('email_change') }}" method="post" id="form-button-email-change" class="disable-on-submit">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('email_change') }}"/>
+    <input type="hidden" name="email_change_token" value="{{ user.emailChangeToken }}"/>
+    <button class="btn btn-success border-0 rounded-0 text-white" type="submit">
+        {{ 'global.form.confirm'|trans }}
+    </button>
 </form>

@@ -2,7 +2,7 @@
     'action': path('registration_ajax'),
     'attr': {
         'id': 'ajax-form-registration',
-        'class': 'col p-0 my-3'
+        'class': 'col p-0 my-3 disable-on-submit'
     }
 }) }}
 
@@ -31,8 +31,8 @@
 </div>
 
 <div class="form-group">
-    <input type="submit" class="btn btn-primary border-0 btn-block rounded-0 text-white"
-           value="{{ 'user.register'|trans }}"
-    />
+    <button class="btn btn-primary border-0 btn-block rounded-0 text-white" type="submit">
+        {{ 'user.register'|trans }}
+    </button>
 </div>
 {{ form_end(form) }}

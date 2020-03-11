@@ -2,7 +2,7 @@
     'action': path('account_information_edit_ajax'),
     'attr': {
         'id': 'ajax-form-account-information-edit',
-        'class': 'col p-0 my-3'
+        'class': 'col p-0 my-3 disable-on-submit'
     }
 }) }}
 
@@ -18,9 +18,8 @@
 </div>
 
 <div class="form-group">
-    <input
-            class="btn btn-primary border-0 rounded-0 text-white" type="submit"
-            value="{{ 'global.form.save_changes'|trans }}"
-    />
+    <button class="btn btn-primary border-0 rounded-0 text-white" type="submit">
+        {{ 'global.form.save_changes'|trans }}
+    </button>
 </div>
 {{ form_end(form) }}
