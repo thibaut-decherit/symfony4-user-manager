@@ -27,6 +27,8 @@ Encore
     .addEntry('email-change', './assets/js/components/user/email-change.js')
     .addEntry('login', './assets/js/views/user/login.js')
     .addEntry('password-change', './assets/js/components/user/password-change.js')
+    .addEntry('password-reset', './assets/js/views/user/password-reset.js')
+    .addEntry('password-reset-request', './assets/js/views/user/password-reset-request.js')
     .addEntry('password-strength-meter', './assets/js/components/password-strength-meter.js')
     .addEntry('registration', './assets/js/views/user/registration.js')
 

@@ -39,9 +39,7 @@ class RedirectIfAuthenticatedTest extends AbstractWebTest
             ['GET', '/activate-account/confirm'],
             ['GET', '/login'],
             ['GET', '/password-reset/request'],
-            ['POST', '/password-reset/request'],
             ['GET', '/password-reset/reset'],
-            ['POST', '/password-reset/reset'],
             ['GET', '/register'],
             ['POST', '/register-ajax']
         ];

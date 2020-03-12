@@ -98,9 +98,9 @@ class RouterTest extends AbstractWebTest
             ['GET', '/email-change/confirm'],
             ['GET', '/login'],
             ['GET', '/password-reset/request'],
-            ['POST', '/password-reset/request'],
+            ['POST', '/password-reset/request-ajax'],
             ['GET', '/password-reset/reset'],
-            ['POST', '/password-reset/reset'],
+            ['POST', '/password-reset/reset-ajax'],
             ['GET', '/register'],
             ['POST', '/register-ajax']
         ];
