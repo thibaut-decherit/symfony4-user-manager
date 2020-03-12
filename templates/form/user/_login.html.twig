@@ -26,7 +26,7 @@
     'text_align': 'center'
 } %}
 
-<form action="{{ path('login') }}" method="post" id="ajax-form-login" class="col p-0 my-3">
+<form action="{{ path('login') }}" method="post" id="ajax-form-login" class="col p-0 my-3 disable-on-submit">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('login') }}"/>
 
     <div class="form-group">
@@ -52,9 +52,7 @@
         <label class="form-check-label" for="remember_me">{{ 'user.remember_me'|trans }}</label>
     </div>
 
-    <button
-            class="btn btn-primary border-0 btn-block rounded-0 text-white" type="submit"
-    >
+    <button class="btn btn-primary border-0 btn-block rounded-0 text-white" type="submit">
         {{ 'user.login'|trans }}
     </button>
 </form>

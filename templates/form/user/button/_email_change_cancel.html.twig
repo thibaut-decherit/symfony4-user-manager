@@ -1,15 +1,10 @@
 <form
         action="{{ path('email_change_cancel') }}" method="post" id="form-button-email-change-cancel"
-        class="mr-2"
+        class="mr-2 disable-on-submit"
 >
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('email_change_cancel') }}" id="csrf-token"/>
-    <input
-            type="hidden" name="email_change_token" value="{{ user.emailChangeToken }}"
-            id="email-change-token"
-    />
-    <input
-            class="btn btn-secondary border-0 rounded-0 text-white" type="submit" id="_submit"
-            name="_submit"
-            value="{{ 'global.form.cancel'|trans }}"
-    />
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('email_change_cancel') }}"/>
+    <input type="hidden" name="email_change_token" value="{{ user.emailChangeToken }}"/>
+    <button class="btn btn-secondary border-0 rounded-0 text-white" type="submit">
+        {{ 'global.form.cancel'|trans }}
+    </button>
 </form>

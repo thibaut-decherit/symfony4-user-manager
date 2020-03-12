@@ -1,7 +1,7 @@
 {% extends '_base.html.twig' %}
 
 {% block body %}
-    <h1>{{ website_name }}</h1>
+    <h1>{{ globals.website_name }}</h1>
 
     {% include 'flash_alert/_alert.html.twig' with {
         'alert_type': 'email-change-error',

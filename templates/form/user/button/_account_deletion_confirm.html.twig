@@ -1,12 +1,10 @@
-<form action="{{ path('account_deletion_delete') }}" method="post" id="form-button-account-deletion-delete">
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('account_deletion_delete') }}" id="csrf-token"/>
-    <input
-            type="hidden" name="account_deletion_token" value="{{ user.accountDeletionToken }}"
-            id="account-deletion-token"
-    />
-    <input
-            class="btn btn-danger border-0 rounded-0 text-white" type="submit" id="_submit"
-            name="_submit"
-            value="{{ 'user.delete_my_account'|trans }}"
-    />
+<form
+        action="{{ path('account_deletion_delete') }}" method="post" id="form-button-account-deletion-delete"
+        class="disable-on-submit"
+>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('account_deletion_delete') }}"/>
+    <input type="hidden" name="account_deletion_token" value="{{ user.accountDeletionToken }}"/>
+    <button class="btn btn-danger border-0 rounded-0 text-white" type="submit">
+        {{ 'user.delete_my_account'|trans }}
+    </button>
 </form>

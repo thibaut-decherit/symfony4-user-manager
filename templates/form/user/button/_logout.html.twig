@@ -1,8 +1,6 @@
-<form action="{{ path('logout') }}" method="post" id="form-button-logout">
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}" id="csrf-token"/>
-    <input
-            class="btn btn-danger border-0 rounded-0 text-white" type="submit" id="_submit"
-            name="_submit"
-            value="{{ 'global.logout'|trans }}"
-    />
+<form action="{{ path('logout') }}" method="post" id="form-button-logout" class="disable-on-submit">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}"/>
+    <button class="btn btn-danger border-0 rounded-0 text-white" type="submit">
+        {{ 'global.logout'|trans }}
+    </button>
 </form>
