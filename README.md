@@ -76,6 +76,7 @@ Feel free to tailor each feature to your needs.
 
 ### Password reset
 - Password reset form with username/email compatible field
+- Request and reset forms submitted with AJAX to avoid refresh
 - Custom flash message with Bootstrap alert success on successful submit
 - Customizable delay between each reset request
   - Shows previous success flash message even if delay is not expired (email is probably on the way and the user is impatient)
