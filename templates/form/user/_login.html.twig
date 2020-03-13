@@ -1,32 +1,33 @@
-{% include 'flash_alert/_alert.html.twig' with {
-    'alert_type': 'account-activation-success',
-    'alert_id': 'login-flash-alert',
-    'alert_style': 'success',
-    'text_align': 'center'
-} %}
-
-{% include 'flash_alert/_alert.html.twig' with {
-    'alert_type': 'login-failed',
-    'alert_id': 'login-flash-alert',
-    'alert_style': 'danger',
-    'text_align': 'center'
-} %}
-
-{% include 'flash_alert/_alert.html.twig' with {
-    'alert_type': 'password-reset-success',
-    'alert_id': 'login-flash-alert',
-    'alert_style': 'success',
-    'text_align': 'center'
-} %}
-
-{% include 'flash_alert/_alert.html.twig' with {
-    'alert_type': 'login-required-error',
-    'alert_id': 'login-flash-alert',
-    'alert_style': 'danger',
-    'text_align': 'center'
-} %}
-
 <form action="{{ path('login') }}" method="post" id="ajax-form-login" class="col p-0 my-3 disable-on-submit">
+
+    {% include 'flash_alert/_alert.html.twig' with {
+        'alert_type': 'account-activation-success',
+        'alert_id': 'login-flash-alert',
+        'alert_style': 'success',
+        'text_align': 'center'
+    } %}
+
+    {% include 'flash_alert/_alert.html.twig' with {
+        'alert_type': 'login-failed',
+        'alert_id': 'login-flash-alert',
+        'alert_style': 'danger',
+        'text_align': 'center'
+    } %}
+
+    {% include 'flash_alert/_alert.html.twig' with {
+        'alert_type': 'password-reset-success',
+        'alert_id': 'login-flash-alert',
+        'alert_style': 'success',
+        'text_align': 'center'
+    } %}
+
+    {% include 'flash_alert/_alert.html.twig' with {
+        'alert_type': 'login-required-error',
+        'alert_id': 'login-flash-alert',
+        'alert_style': 'danger',
+        'text_align': 'center'
+    } %}
+
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('login') }}"/>
 
     <div class="form-group">
