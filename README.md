@@ -133,9 +133,11 @@ Feel free to tailor each feature to your needs.
 ### User enumeration prevention
 - Registration
   - If form is valid, shows success message even if email address is already registered to another account
+  - If form is valid, hashes password even if email address is already registered to another account (password hashing takes some time, not hashing the submitted password if user already exists shortens the response time and could help user enumeration)
   - If email address is already registered to another account and is:
     - verified: sends an email to the existing user, suggesting him to reset his password (we assume user is trying to create a new account because he forgot the password)
     - unverified: sends an email to the existing user with a verification link (similar logic)
+  - If email address is already registered to another account, hashes password (password hashing takes some time, not hashing the submitted password if user already exists shortens the response time and could help user enumeration)
 - Login
   - Same error message if wrong password or if user doesn't exist
   - If email address is not yet verified a new verification email is sent
