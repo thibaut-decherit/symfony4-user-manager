@@ -127,7 +127,7 @@ class PasswordResetController extends DefaultController
     }
 
     /**
-     * Renders and handles password reset form.
+     * Renders the password reset form.
      *
      * @param Request $request
      * @param TranslatorInterface $translator
@@ -196,7 +196,7 @@ class PasswordResetController extends DefaultController
     }
 
     /**
-     * Renders and handles password reset form.
+     * Handles the password reset form submitted with ajax.
      *
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
@@ -210,15 +210,11 @@ class PasswordResetController extends DefaultController
         TranslatorInterface $translator
     ): JsonResponse
     {
-        $passwordResetToken = '';
-
-        if (isset($request->get('App_user')['passwordResetToken'])) {
-            $passwordResetToken = $request->get('App_user')['passwordResetToken'];
-        }
-
-        if (empty($passwordResetToken)) {
+        if (empty($request->get('App_user')['passwordResetToken'])) {
             throw new BadRequestHttpException('Invalid password reset token.');
         }
+
+        $passwordResetToken = $request->get('App_user')['passwordResetToken'];
 
         $em = $this->getDoctrine()->getManager();
 
