@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Helper\StringHelper;
 use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -148,18 +149,37 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @param mixed $credentials
      * @param UserProviderInterface $userProvider
      * @return User|null
+     * @throws Exception
      */
     public function getUser($credentials, UserProviderInterface $userProvider): ?User
     {
         $businessUsernameOrEmail = $credentials['businessUsername'];
 
         if (preg_match('/^.+@\S+\.\S+$/', $businessUsernameOrEmail)) {
-            return $this->em->getRepository(User::class)->findOneBy(['email' => $businessUsernameOrEmail]);
+            $user = $this->em->getRepository(User::class)->findOneBy(['email' => $businessUsernameOrEmail]);
+        } else {
+            $user = $this->em->getRepository(User::class)->findOneBy([
+                'businessUsername' => $businessUsernameOrEmail
+            ]);
         }
 
-        return $this->em->getRepository(User::class)->findOneBy([
-            'businessUsername' => $businessUsernameOrEmail
-        ]);
+        if (empty($user)) {
+            $this->fakeAuthentication($credentials['password']);
+        }
+
+        return $user;
+    }
+
+    /**
+     * If user is not found in database, hashes the password anyway to prevent user enumeration.
+     *
+     * @param string $password
+     * @throws Exception
+     */
+    private function fakeAuthentication(string $password): void
+    {
+        $user = new User();
+        $this->passwordEncoder->encodePassword($user, $password);
     }
 
     /**
