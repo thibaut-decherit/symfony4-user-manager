@@ -90,7 +90,13 @@ class RegistrationController extends DefaultController
                     $uniqueRandomDataGenerator
                 );
             } else {
-                $this->handleDuplicateUserRegistration($duplicateUser, $mailer, $request->getLocale());
+                $this->handleDuplicateUserRegistration(
+                    $user,
+                    $duplicateUser,
+                    $passwordEncoder,
+                    $mailer,
+                    $request->getLocale()
+                );
             }
 
             // Renders and json encode the original form (required to empty form fields)
@@ -127,7 +133,9 @@ class RegistrationController extends DefaultController
     /**
      * Sends an email to existing user if registration attempt with already registered email address.
      *
+     * @param User $user
      * @param User $duplicateUser
+     * @param UserPasswordEncoderInterface $passwordEncoder
      * @param MailerService $mailer
      * @param string $locale
      * @throws LoaderError
@@ -135,11 +143,16 @@ class RegistrationController extends DefaultController
      * @throws SyntaxError
      */
     private function handleDuplicateUserRegistration(
+        User $user,
         User $duplicateUser,
+        UserPasswordEncoderInterface $passwordEncoder,
         MailerService $mailer,
         string $locale
     ): void
     {
+        // Hashes the password anyway to prevent user enumeration.
+        $passwordEncoder->encodePassword($user, $user->getPlainPassword());
+
         if ($duplicateUser->isActivated()) {
             $mailer->registrationAttemptOnExistingVerifiedEmailAddress($duplicateUser, $locale);
         } else {

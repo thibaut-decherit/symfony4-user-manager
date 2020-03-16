@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Helper\StringHelper;
 use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -122,7 +123,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function getCredentials(Request $request): array
     {
-        $businessUsername = StringHelper::truncateToMySQLVarcharMaxLength($request->get('businessUsername'));
+        $login = StringHelper::truncateToMySQLVarcharMaxLength($request->get('login'));
         $password = StringHelper::truncateToPasswordEncoderMaxLength($request->get('password'));
         $csrfToken = $request->get('_csrf_token');
 
@@ -132,11 +133,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
         $request->getSession()->set(
             Security::LAST_USERNAME,
-            $businessUsername
+            $login
         );
 
         return [
-            'businessUsername' => $businessUsername,
+            'login' => $login,
             'password' => $password
         ];
     }
@@ -148,18 +149,37 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @param mixed $credentials
      * @param UserProviderInterface $userProvider
      * @return User|null
+     * @throws Exception
      */
     public function getUser($credentials, UserProviderInterface $userProvider): ?User
     {
-        $businessUsernameOrEmail = $credentials['businessUsername'];
+        $login = $credentials['login'];
 
-        if (preg_match('/^.+@\S+\.\S+$/', $businessUsernameOrEmail)) {
-            return $this->em->getRepository(User::class)->findOneBy(['email' => $businessUsernameOrEmail]);
+        if (preg_match('/^.+@\S+\.\S+$/', $login)) {
+            $user = $this->em->getRepository(User::class)->findOneBy(['email' => $login]);
+        } else {
+            $user = $this->em->getRepository(User::class)->findOneBy([
+                'businessUsername' => $login
+            ]);
         }
 
-        return $this->em->getRepository(User::class)->findOneBy([
-            'businessUsername' => $businessUsernameOrEmail
-        ]);
+        if (empty($user)) {
+            $this->fakeAuthentication($credentials['password']);
+        }
+
+        return $user;
+    }
+
+    /**
+     * If user is not found in database, hashes the password anyway to prevent user enumeration.
+     *
+     * @param string $password
+     * @throws Exception
+     */
+    private function fakeAuthentication(string $password): void
+    {
+        $user = new User();
+        $this->passwordEncoder->encodePassword($user, $password);
     }
 
     /**
@@ -212,17 +232,17 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         // IF account is not yet activated, send a reminder email with an activation link
         if ($exception instanceof DisabledException) {
-            $businessUsernameOrEmail = $request->request->get('businessUsername');
+            $login = $request->request->get('login');
             $user = null;
 
-            if (preg_match('/^.+@\S+\.\S+$/', $businessUsernameOrEmail)) {
+            if (preg_match('/^.+@\S+\.\S+$/', $login)) {
                 $user = $this->em->getRepository(User::class)->findOneBy([
-                    'email' => $businessUsernameOrEmail,
+                    'email' => $login,
                     'activated' => false
                 ]);
             } else {
                 $user = $this->em->getRepository(User::class)->findOneBy([
-                    'businessUsername' => $businessUsernameOrEmail,
+                    'businessUsername' => $login,
                     'activated' => false
                 ]);
             }
