@@ -130,15 +130,15 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      *     groups={"Registration"}
      * )
      * @Assert\Length(
-     *      min = 2,
-     *      max = 255,
-     *      minMessage = "form_errors.global.min_length",
-     *      maxMessage = "form_errors.global.max_length",
-     *      groups={"Registration"}
+     *     min = 2,
+     *     max = 255,
+     *     minMessage = "form_errors.global.min_length",
+     *     maxMessage = "form_errors.global.max_length",
+     *     groups={"Registration"}
      * )
      * @Assert\Email(
-     *      message = "form_errors.user.valid_email",
-     *      groups={"Registration"}
+     *     message = "form_errors.user.valid_email",
+     *     groups={"Registration"}
      * )
      */
     protected $email;
@@ -153,15 +153,15 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      *     groups={"Email_Change"}
      * )
      * @Assert\Length(
-     *      min = 2,
-     *      max = 255,
-     *      minMessage = "form_errors.global.min_length",
-     *      maxMessage = "form_errors.global.max_length",
-     *      groups={"Email_Change"}
+     *     min = 2,
+     *     max = 255,
+     *     minMessage = "form_errors.global.min_length",
+     *     maxMessage = "form_errors.global.max_length",
+     *     groups={"Email_Change"}
      * )
      * @Assert\Email(
-     *      message = "form_errors.user.valid_email",
-     *      groups={"Email_Change"}
+     *     message = "form_errors.user.valid_email",
+     *     groups={"Email_Change"}
      * )
      */
     protected $emailChangePending;
