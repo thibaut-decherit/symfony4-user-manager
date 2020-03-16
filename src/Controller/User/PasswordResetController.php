@@ -64,20 +64,20 @@ class PasswordResetController extends DefaultController
         }
 
         $em = $this->getDoctrine()->getManager();
-        $businessUsernameOrEmail = StringHelper::truncateToMySQLVarcharMaxLength(
-            $request->request->get('businessUsernameOrEmail')
+        $login = StringHelper::truncateToMySQLVarcharMaxLength(
+            $request->request->get('login')
         );
 
-        if (preg_match('/^.+@\S+\.\S+$/', $businessUsernameOrEmail)) {
+        if (preg_match('/^.+@\S+\.\S+$/', $login)) {
             /**
              * @var User $user
              */
-            $user = $em->getRepository(User::class)->findOneBy(['email' => $businessUsernameOrEmail]);
+            $user = $em->getRepository(User::class)->findOneBy(['email' => $login]);
         } else {
             /**
              * @var User $user
              */
-            $user = $em->getRepository(User::class)->findOneBy(['businessUsername' => $businessUsernameOrEmail]);
+            $user = $em->getRepository(User::class)->findOneBy(['businessUsername' => $login]);
         }
 
         $this->addFlash(
