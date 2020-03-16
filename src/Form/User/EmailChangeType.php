@@ -24,7 +24,6 @@ class EmailChangeType extends AbstractType
             ->add('emailChangePending', EmailType::class, [
                 'label' => 'user.email_address',
                 'data' => '',
-                'required' => false,
                 'attr' => [
                     /**
                      * Will throw a missing translation error (false positive) in the profiler because Symfony always
