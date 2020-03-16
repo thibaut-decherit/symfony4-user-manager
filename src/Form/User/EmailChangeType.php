@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class UserInformationType
+ * Class EmailChangeType
  * @package App\Form\User
  */
 class EmailChangeType extends AbstractType

@@ -3,7 +3,7 @@
 namespace App\Controller\User;
 
 use App\Controller\DefaultController;
-use App\Form\User\UserInformationType;
+use App\Form\User\AccountInformationType;
 use App\Model\AbstractUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,7 +42,7 @@ class AccountController extends DefaultController
          */
         $user = $this->getUser();
 
-        $form = $this->createForm(UserInformationType::class, $user);
+        $form = $this->createForm(AccountInformationType::class, $user);
 
         return $this->render('form/user/_account_information.html.twig', [
             'form' => $form->createView()
@@ -61,7 +61,7 @@ class AccountController extends DefaultController
     {
         $user = $this->getUser();
 
-        $form = $this->createForm(UserInformationType::class, $user);
+        $form = $this->createForm(AccountInformationType::class, $user);
 
         $form->handleRequest($request);
 
