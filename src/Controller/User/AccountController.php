@@ -73,6 +73,7 @@ class AccountController extends DefaultController
                 $translator->trans('flash.user.information_updated')
             );
 
+            $form = $this->createForm(AccountInformationType::class, $user);
             $template = $this->render('form/user/_account_information.html.twig', [
                 'form' => $form->createView()
             ]);
