@@ -82,6 +82,7 @@ class PasswordChangeController extends DefaultController
                 $translator->trans('flash.user.password_updated')
             );
 
+            $form = $this->createForm(PasswordChangeType::class, $user);
             $template = $this->render('form/user/_password_change.html.twig', [
                 'form' => $form->createView()
             ]);

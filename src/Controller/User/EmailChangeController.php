@@ -117,6 +117,7 @@ class EmailChangeController extends DefaultController
                     $errorMessage
                 );
 
+                $form = $this->createForm(EmailChangeType::class, $user);
                 $template = $this->render('form/user/_email_change.html.twig', [
                     'form' => $form->createView()
                 ]);
@@ -157,6 +158,7 @@ class EmailChangeController extends DefaultController
                 $successMessage->getContent()
             );
 
+            $form = $this->createForm(EmailChangeType::class, $user);
             $template = $this->render('form/user/_email_change.html.twig', [
                 'form' => $form->createView()
             ]);

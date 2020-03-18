@@ -79,7 +79,7 @@ user:
 # Password strength meter
 
 password_strength_meter:
-  password_strength: "Force du mot de passe:"
+  password_strength: "Force du mot de passe :"
   strength:
     average: Moyenne
     good: Bonne
