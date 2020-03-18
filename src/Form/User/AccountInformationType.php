@@ -9,10 +9,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class UserInformationType
+ * Class AccountInformationType
  * @package App\Form\User
  */
-class UserInformationType extends AbstractType
+class AccountInformationType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder

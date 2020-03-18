@@ -26,16 +26,13 @@ class RegistrationType extends AbstractType
         $builder
             ->add('businessUsername', TextType::class, [
                 'label' => 'user.username',
-                'required' => false
             ])
             ->add('email', EmailType::class, [
                 'label' => 'user.email_address',
-                'required' => false
             ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'form_errors.user.repeat_password',
-                'required' => false,
                 'first_options' => [
                     'label' => 'user.password'
                 ],
