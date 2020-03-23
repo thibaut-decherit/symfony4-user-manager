@@ -31,7 +31,7 @@ parameters:
           - "'none'"
         img-src:
           - "'self'"
-          - 'data:' # Required for Symfony SVGs (e.g. times icon in form input with validation error)
+          - 'data:' # Required for Bootstrap 4 SVGs (e.g. times icon in form input with validation error)
         script-src:
           - "'self'"
         style-src:
