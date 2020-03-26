@@ -154,11 +154,12 @@ class AccountDeletionController extends DefaultController
      * Cancels deletion of account matching deletion token.
      *
      * @param Request $request
+     * @param TranslatorInterface $translator
      * @Route("/delete-account/cancel", name="account_deletion_cancel", methods="POST")
      * @return RedirectResponse
      * @throws AccessDeniedException
      */
-    public function cancel(Request $request): RedirectResponse
+    public function cancel(Request $request, TranslatorInterface $translator): RedirectResponse
     {
         if ($this->isCsrfTokenValid('account_deletion_cancel', $request->get('_csrf_token')) === false) {
             throw new BadRequestHttpException('Invalid CSRF token.');

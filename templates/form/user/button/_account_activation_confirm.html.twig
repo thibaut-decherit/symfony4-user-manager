@@ -1,7 +1,4 @@
-<form
-        action="{{ path('account_activation_activate') }}" method="post" id="form-button-account-activation-activate"
-        class="disable-on-submit"
->
+<form action="{{ path('account_activation_activate') }}" method="post" class="disable-on-submit">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('account_activation_activate') }}"/>
     <input type="hidden" name="account_activation_token" value="{{ user.accountActivationToken }}"/>
     <button class="btn btn-primary border-0 btn-block rounded-0 text-white" type="submit">

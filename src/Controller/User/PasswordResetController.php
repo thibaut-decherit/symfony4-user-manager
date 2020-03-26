@@ -134,10 +134,7 @@ class PasswordResetController extends DefaultController
      * @Route("/reset", name="password_reset", methods="GET")
      * @return Response
      */
-    public function resetForm(
-        Request $request,
-        TranslatorInterface $translator
-    ): Response
+    public function resetForm(Request $request, TranslatorInterface $translator): Response
     {
         $passwordResetToken = $request->get('token');
 
