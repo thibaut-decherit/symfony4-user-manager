@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use DateTime;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -34,21 +35,19 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * @param int $days
+     * @param DateTime $minDate
      * @param int $limit
      * @return array
      */
-    public function findUnactivatedAccountsOlderThan(int $days, int $limit): array
+    public function findUnactivatedAccountsOlderThan(DateTime $minDate, int $limit): array
     {
         $qb = $this->createQueryBuilder('user');
         $qb
             ->where('user.activated = false')
-            ->andWhere("user.registeredAt < DATE_SUB(CURRENT_TIME(), :days, 'day')")
-            ->setParameter('days', $days)
+            ->andWhere("user.registeredAt < :minDate")
+            ->setParameter('minDate', $minDate)
             ->setMaxResults($limit);
 
-        $users = $qb->getQuery()->getResult();
-
-        return $users;
+        return $qb->getQuery()->getResult();
     }
 }
