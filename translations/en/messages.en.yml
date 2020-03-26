@@ -92,6 +92,7 @@ flash:
   user:
     account_activated_successfully: Your account has been activated successfully, you can log in below.
     account_deletion_request_email_sent: A deletion link has been sent to
+    account_deletion_cancel_success: Your account deletion has been canceled.
     account_deletion_success: Your account has beed successfully deleted.
     account_deletion_token_expired: Your account deletion request has expired.
     already_current_email_address: This email address is already registered to your account.

@@ -187,6 +187,11 @@ class AccountDeletionController extends DefaultController
             $em->flush();
         }
 
+        $this->addFlash(
+            'account-deletion-cancel-success',
+            $translator->trans('flash.user.account_deletion_cancel_success')
+        );
+
         return $this->redirectToRoute('home');
     }
 
