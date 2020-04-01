@@ -293,10 +293,10 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     }
 
     /**
-     * @param string $businessUsername
+     * @param string|null $businessUsername
      * @return AbstractUser
      */
-    public function setBusinessUsername(string $businessUsername): AbstractUser
+    public function setBusinessUsername(?string $businessUsername): AbstractUser
     {
         $this->businessUsername = $businessUsername;
 
@@ -353,10 +353,10 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     }
 
     /**
-     * @param string $email
+     * @param string|null $email
      * @return $this
      */
-    public function setEmail(string $email)
+    public function setEmail(?string $email)
     {
         $this->email = $email;
 

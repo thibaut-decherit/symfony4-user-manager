@@ -56,10 +56,10 @@ class User extends AbstractUser
     }
 
     /**
-     * @param string $email
-     * @return User
+     * @param string|null $email
+     * @return $this
      */
-    public function setEmail(string $email): self
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 
