@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import {body} from '../helpers/jquery/selectors';
+import '../password-strength-meter';
 
 body.on('submit', '#ajax-form-change-password', function (e) {
     const changePasswordForm = $(this);
@@ -12,7 +13,7 @@ body.on('submit', '#ajax-form-change-password', function (e) {
         url: $(this).attr('action'),
         data: $(this).serialize()
     })
-    // Triggered if response status == 200 (form is valid and data has been processed successfully)
+        // Triggered if response status == 200 (form is valid and data has been processed successfully)
         .done(function (response) {
             // Parses the JSON response to "unescape" the html code within
             const template = JSON.parse(response.template);
