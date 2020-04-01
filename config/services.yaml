@@ -80,3 +80,7 @@ services:
       $mailerAddress: '%env(MAILER_SENDER)%'
       $replyToAddress: '%env(MAILER_REPLY_TO)%'
       $websiteName: '%app.website_name%'
+
+  App\Twig\ArrayMergeRecursive:
+    tags:
+      - { name: twig.extension }
