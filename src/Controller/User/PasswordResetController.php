@@ -9,6 +9,7 @@ use App\Helper\StringHelper;
 use App\Service\MailerService;
 use App\Service\UniqueRandomDataGeneratorService;
 use DateTime;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,6 +49,7 @@ class PasswordResetController extends DefaultController
      * @param UniqueRandomDataGeneratorService $uniqueRandomDataGenerator
      * @Route("/request-ajax", name="password_reset_request_ajax", methods="POST")
      * @return JsonResponse
+     * @throws Exception
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
