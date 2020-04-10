@@ -53,7 +53,7 @@ class EmailChangeController extends DefaultController
      * @param TranslatorInterface $translator
      * @param MailerService $mailer
      * @param UniqueRandomDataGeneratorService $uniqueRandomDataGenerator
-     * @Route("account/email-change/request-ajax", name="email_change_request_ajax", methods="POST")
+     * @Route("/account/email-change/request-ajax", name="email_change_request_ajax", methods="POST")
      * @return JsonResponse
      * @throws Exception
      */
@@ -186,7 +186,7 @@ class EmailChangeController extends DefaultController
      *
      * @param Request $request
      * @param TranslatorInterface $translator
-     * @Route("email-change/confirm", name="email_change_confirm", methods="GET")
+     * @Route("/email-change/confirm", name="email_change_confirm", methods="GET")
      * @return RedirectResponse
      */
     public function confirm(Request $request, TranslatorInterface $translator): Response
@@ -241,7 +241,7 @@ class EmailChangeController extends DefaultController
      * Cancels email change of account matching token.
      *
      * @param Request $request
-     * @Route("email-change/cancel", name="email_change_cancel", methods="POST")
+     * @Route("/email-change/cancel", name="email_change_cancel", methods="POST")
      * @return RedirectResponse
      * @throws AccessDeniedException
      */
@@ -282,7 +282,7 @@ class EmailChangeController extends DefaultController
      *
      * @param Request $request
      * @param TranslatorInterface $translator
-     * @Route("email-change/change", name="email_change", methods="POST")
+     * @Route("/email-change/change", name="email_change", methods="POST")
      * @return RedirectResponse
      * @throws AccessDeniedException
      */

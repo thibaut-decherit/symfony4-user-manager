@@ -45,7 +45,7 @@ class AccountDeletionController extends DefaultController
      * @param MailerService $mailer
      * @param CsrfTokenManagerInterface $csrfTokenManager
      * @param UniqueRandomDataGeneratorService $uniqueRandomDataGenerator
-     * @Route("account/deletion-request", name="account_deletion_request", methods="POST")
+     * @Route("/account/deletion-request", name="account_deletion_request", methods="POST")
      * @return RedirectResponse
      * @throws AccessDeniedException|Exception
      */
