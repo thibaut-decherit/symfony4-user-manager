@@ -255,7 +255,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             $this->translator->trans('flash.user.invalid_credentials')
         );
 
-        $template = $this->twig->render('form/user/_login.html.twig');
+        $template = $this->twig->render('form/user/_login.html.twig', [
+            'login' => $request->get('login')
+        ]);
         $jsonTemplate = json_encode($template);
 
         return new JsonResponse([

@@ -1,3 +1,5 @@
+{% set login = login is defined ? login : null %}
+
 <form action="{{ path('login') }}" method="post" id="ajax-form-login" class="col p-0 my-3 disable-on-submit">
 
     {% include 'flash_alert/_alert.html.twig' with {
@@ -36,6 +38,7 @@
                 placeholder="{{ 'user.username_or_email_address'|trans }}"
                 aria-label="{{ 'user.username_or_email_address'|trans }}"
                 aria-describedby="{{ 'user.username_or_email_address'|trans }}" required="required"
+                {% if login is not empty %}value="{{ login }}"{% endif %}
         />
     </div>
 
