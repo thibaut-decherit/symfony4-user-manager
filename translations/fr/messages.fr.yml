@@ -92,6 +92,7 @@ flash:
   user:
     account_activated_successfully: Votre compte a été activé avec succès, vous pouvez vous connecter ci-dessous.
     account_deletion_request_email_sent: Un lien de suppression a été envoyé à
+    account_deletion_cancel_success: La suppression de votre compte a été annulée.
     account_deletion_success: Votre compte a été supprimé avec succès.
     account_deletion_token_expired: Votre demande de suppression de compte a expiré.
     already_current_email_address: Cette adresse email est déjà liée à votre compte.

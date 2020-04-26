@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Class ManageAccountController
+ * Class AccountController
  * @package App\Controller\User
  *
  * @Route("/account")

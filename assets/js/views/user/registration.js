@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import {body} from '../../components/helpers/jquery/selectors';
+import '../../components/password-strength-meter';
 
 body.on('submit', '#ajax-form-registration', function (e) {
     const registrationForm = $(this);

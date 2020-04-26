@@ -3,7 +3,10 @@
 namespace App\Command;
 
 use App\Entity\User;
+use DateInterval;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -41,6 +44,7 @@ class RemoveUnactivatedAccountsCommand extends Command
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     * @throws Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
@@ -48,16 +52,18 @@ class RemoveUnactivatedAccountsCommand extends Command
         $removedCount = 0;
         $hasResults = true;
         $days = $input->getArgument('days');
+        $minDate = (new DateTime())->sub(new DateInterval("P{$days}D"));
 
         $this->startOutput($output, $days);
 
         while ($hasResults) {
-            $users = $this->em->getRepository(User::class)->findUnactivatedAccountsOlderThan($days, $limit);
+            $users = $this->em->getRepository(User::class)->findUnactivatedAccountsOlderThan($minDate, $limit);
 
             foreach ($users as $user) {
-                $removedCount++;
                 $this->em->remove($user);
                 $this->em->flush();
+
+                $removedCount++;
             }
 
             if (empty($users)) {

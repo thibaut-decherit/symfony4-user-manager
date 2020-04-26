@@ -30,6 +30,11 @@
         'alert_style': 'danger',
         'text_align': 'center'
     } %}
+    {% include 'flash_alert/_alert.html.twig' with {
+        'alert_type': 'account-deletion-cancel-success',
+        'alert_style': 'success',
+        'text_align': 'center'
+    } %}
 
     {% if is_granted("ROLE_USER") %}
         <div class="d-flex">
