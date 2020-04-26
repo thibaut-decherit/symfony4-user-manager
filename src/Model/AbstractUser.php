@@ -653,7 +653,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      * @param UserInterface $user
      * @return bool
      */
-    public function isEqualTo(UserInterface $user)
+    public function isEqualTo(UserInterface $user): bool
     {
         if (!$user instanceof self) {
             return false;
