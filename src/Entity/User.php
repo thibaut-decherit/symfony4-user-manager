@@ -20,10 +20,10 @@ use Doctrine\ORM\Mapping as ORM;
 class User extends AbstractUser
 {
     /**
-     * @param string $username
+     * @param string|null $username
      * @return User
      */
-    public function setUsername(string $username): self
+    public function setUsername(?string $username): self
     {
         $this->username = $username;
 
@@ -31,10 +31,21 @@ class User extends AbstractUser
     }
 
     /**
-     * @param string $password
+     * @param string|null $businessUsername
      * @return User
      */
-    public function setPassword(string $password): self
+    public function setBusinessUsername(?string $businessUsername): self
+    {
+        $this->businessUsername = $businessUsername;
+
+        return $this;
+    }
+
+    /**
+     * @param string|null $password
+     * @return User
+     */
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 
@@ -57,7 +68,7 @@ class User extends AbstractUser
 
     /**
      * @param string|null $email
-     * @return $this
+     * @return User
      */
     public function setEmail(?string $email): self
     {
