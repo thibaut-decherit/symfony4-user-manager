@@ -39,7 +39,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     const ROLE_DEFAULT = 'ROLE_USER';
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -58,7 +58,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      * himself on the account page) all remember me tokens for this user will be invalidated (because Symfony tries to
      * load the user by reading the base64 encoded username)
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(type="string", length=86, unique=true)
      */
@@ -67,7 +67,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     /**
      * The 'business' username of the user, displayed on the application and used to log-in.
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(type="string", length=255, unique=true)
      *
@@ -91,7 +91,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     protected $businessUsername;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(type="string", length=255)
      */
@@ -121,7 +121,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     protected $plainPassword;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(type="string", length=255, unique=true)
      *
@@ -197,7 +197,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     /**
      * ORM mapping not needed if password hash algorithm generates it's own salt (e.g bcrypt)
      *
-     * @var string
+     * @var string|null
      *
      */
     protected $salt;
@@ -258,9 +258,9 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -304,9 +304,9 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
