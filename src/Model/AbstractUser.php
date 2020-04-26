@@ -39,7 +39,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     const ROLE_DEFAULT = 'ROLE_USER';
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -58,7 +58,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      * himself on the account page) all remember me tokens for this user will be invalidated (because Symfony tries to
      * load the user by reading the base64 encoded username)
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(type="string", length=86, unique=true)
      */
@@ -67,7 +67,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     /**
      * The 'business' username of the user, displayed on the application and used to log-in.
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(type="string", length=255, unique=true)
      *
@@ -91,7 +91,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     protected $businessUsername;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(type="string", length=255)
      */
@@ -121,7 +121,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     protected $plainPassword;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(type="string", length=255, unique=true)
      *
@@ -197,7 +197,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     /**
      * ORM mapping not needed if password hash algorithm generates it's own salt (e.g bcrypt)
      *
-     * @var string
+     * @var string|null
      *
      */
     protected $salt;
@@ -258,9 +258,9 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -274,10 +274,10 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     }
 
     /**
-     * @param string $username
+     * @param string|null $username
      * @return $this
      */
-    public function setUsername(string $username)
+    public function setUsername(?string $username)
     {
         $this->username = $username;
 
@@ -293,10 +293,10 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     }
 
     /**
-     * @param string $businessUsername
-     * @return AbstractUser
+     * @param string|null $businessUsername
+     * @return $this
      */
-    public function setBusinessUsername(string $businessUsername): AbstractUser
+    public function setBusinessUsername(?string $businessUsername)
     {
         $this->businessUsername = $businessUsername;
 
@@ -304,18 +304,18 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
 
     /**
-     * @param string $password
+     * @param string|null $password
      * @return $this
      */
-    public function setPassword(string $password)
+    public function setPassword(?string $password)
     {
         $this->password = $password;
 
@@ -353,10 +353,10 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     }
 
     /**
-     * @param string $email
+     * @param string|null $email
      * @return $this
      */
-    public function setEmail(string $email)
+    public function setEmail(?string $email)
     {
         $this->email = $email;
 
@@ -653,7 +653,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      * @param UserInterface $user
      * @return bool
      */
-    public function isEqualTo(UserInterface $user)
+    public function isEqualTo(UserInterface $user): bool
     {
         if (!$user instanceof self) {
             return false;
@@ -685,7 +685,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      */
     public function isAccountDeletionTokenExpired(int $accountDeletionTokenLifetime): bool
     {
-        return $this->getAccountDeletionRequestedAt()->getTimestamp() + $accountDeletionTokenLifetime < time();
+        return ($this->getAccountDeletionRequestedAt()->getTimestamp() + $accountDeletionTokenLifetime) < time();
     }
 
     /**
@@ -694,7 +694,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      */
     public function isEmailChangeRequestRetryDelayExpired(int $emailChangeRequestRetryDelay): bool
     {
-        return $this->getEmailChangeRequestedAt()->getTimestamp() + $emailChangeRequestRetryDelay < time();
+        return ($this->getEmailChangeRequestedAt()->getTimestamp() + $emailChangeRequestRetryDelay) < time();
     }
 
     /**
@@ -703,7 +703,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      */
     public function isEmailChangeTokenExpired(int $emailChangeTokenLifetime): bool
     {
-        return $this->getEmailChangeRequestedAt()->getTimestamp() + $emailChangeTokenLifetime < time();
+        return ($this->getEmailChangeRequestedAt()->getTimestamp() + $emailChangeTokenLifetime) < time();
     }
 
     /**
@@ -712,7 +712,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      */
     public function isPasswordResetRequestRetryDelayExpired(int $passwordResetRequestRetryDelay): bool
     {
-        return $this->getPasswordResetRequestedAt()->getTimestamp() + $passwordResetRequestRetryDelay < time();
+        return ($this->getPasswordResetRequestedAt()->getTimestamp() + $passwordResetRequestRetryDelay) < time();
     }
 
     /**
@@ -721,6 +721,6 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      */
     public function isPasswordResetTokenExpired(int $passwordResetTokenLifetime): bool
     {
-        return $this->getPasswordResetRequestedAt()->getTimestamp() + $passwordResetTokenLifetime < time();
+        return ($this->getPasswordResetRequestedAt()->getTimestamp() + $passwordResetTokenLifetime) < time();
     }
 }

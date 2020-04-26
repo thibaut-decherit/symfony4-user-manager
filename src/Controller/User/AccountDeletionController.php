@@ -45,7 +45,7 @@ class AccountDeletionController extends DefaultController
      * @param MailerService $mailer
      * @param CsrfTokenManagerInterface $csrfTokenManager
      * @param UniqueRandomDataGeneratorService $uniqueRandomDataGenerator
-     * @Route("account/deletion-request", name="account_deletion_request", methods="POST")
+     * @Route("/account/deletion-request", name="account_deletion_request", methods="POST")
      * @return RedirectResponse
      * @throws AccessDeniedException|Exception
      */
@@ -154,11 +154,12 @@ class AccountDeletionController extends DefaultController
      * Cancels deletion of account matching deletion token.
      *
      * @param Request $request
+     * @param TranslatorInterface $translator
      * @Route("/delete-account/cancel", name="account_deletion_cancel", methods="POST")
      * @return RedirectResponse
      * @throws AccessDeniedException
      */
-    public function cancel(Request $request): RedirectResponse
+    public function cancel(Request $request, TranslatorInterface $translator): RedirectResponse
     {
         if ($this->isCsrfTokenValid('account_deletion_cancel', $request->get('_csrf_token')) === false) {
             throw new BadRequestHttpException('Invalid CSRF token.');
@@ -185,6 +186,11 @@ class AccountDeletionController extends DefaultController
 
             $em->flush();
         }
+
+        $this->addFlash(
+            'account-deletion-cancel-success',
+            $translator->trans('flash.user.account_deletion_cancel_success')
+        );
 
         return $this->redirectToRoute('home');
     }

@@ -11,13 +11,10 @@
 {#
 IF this template is included in a page and extra_data is defined, merge twig_to_js_global_data with extra_data into one
 single twig_to_js_data object.
-Warning: if extra_data contains keys already defined in twig_to_js_global_data, extra_data will overwrite those
-twig_to_js_global_data keys. See https://twig.symfony.com/doc/2.x/filters/merge.html
-
 ELSE just assign twig_to_js_global_data to twig_to_js_data.
 #}
 {% if extra_data is defined %}
-    {% set twig_to_js_data = twig_to_js_global_data|merge(extra_data) %}
+    {% set twig_to_js_data = twig_to_js_global_data|array_merge_recursive(extra_data) %}
 {% else %}
     {% set twig_to_js_data = twig_to_js_global_data %}
 {% endif %}

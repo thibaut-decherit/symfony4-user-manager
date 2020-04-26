@@ -11,7 +11,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -274,7 +276,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     }
 
     /**
-     * This is called if the client accesses a URI/resource that requires authentication, but no authentication details were sent.
+     * This is called if the client accesses a URI/resource that requires authentication, but no authentication details
+     * were sent.
      *
      * @param Request $request
      * @param AuthenticationException|null $exception
@@ -282,6 +285,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function start(Request $request, AuthenticationException $exception = null): RedirectResponse
     {
+        // If user is already authenticated, throws 403 error instead of redirecting him to login page.
+        if ($exception instanceof AuthenticationException && !$exception->getToken() instanceof AnonymousToken) {
+            throw new AccessDeniedHttpException();
+        }
+
         $this->session->getFlashBag()->add(
             'login-required-error',
             $this->translator->trans('flash.user.login_required')

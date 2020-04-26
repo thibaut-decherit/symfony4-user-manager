@@ -7,7 +7,7 @@
 {% set text_align = text_align is defined ? 'text-' ~ text_align : '' %}
 
 {% for message in app.flashes(alert_type) %}
-    <div class="alert {{ alert_dismissible ? 'alert-dismissible' }} {{ alert_style }} rounded-0"
+    <div class="alert{{ alert_dismissible ? ' alert-dismissible' }} {{ alert_style }} rounded-0"
          role="alert"
          {% if alert_id is defined %}id="{{ alert_id }}"{% endif %}
     >

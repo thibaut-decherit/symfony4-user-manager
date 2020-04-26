@@ -9,6 +9,7 @@ use App\Helper\StringHelper;
 use App\Service\MailerService;
 use App\Service\UniqueRandomDataGeneratorService;
 use DateTime;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +25,7 @@ use Twig\Error\SyntaxError;
 /**
  * Class PasswordResettingController
  * @package App\Controller\User
- * @Route("password-reset")
+ * @Route("/password-reset")
  */
 class PasswordResetController extends DefaultController
 {
@@ -48,6 +49,7 @@ class PasswordResetController extends DefaultController
      * @param UniqueRandomDataGeneratorService $uniqueRandomDataGenerator
      * @Route("/request-ajax", name="password_reset_request_ajax", methods="POST")
      * @return JsonResponse
+     * @throws Exception
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -134,10 +136,7 @@ class PasswordResetController extends DefaultController
      * @Route("/reset", name="password_reset", methods="GET")
      * @return Response
      */
-    public function resetForm(
-        Request $request,
-        TranslatorInterface $translator
-    ): Response
+    public function resetForm(Request $request, TranslatorInterface $translator): Response
     {
         $passwordResetToken = $request->get('token');
 

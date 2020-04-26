@@ -5,28 +5,20 @@ import {translations} from './twigData/data/translations'
 function handleButton(button) {
     button.attr('disabled', true);
 
-    const buttonIcon = button.find(
-        "span[class^='fas fa-']," +
-        "span[class^='far fa-']," +
-        "span[class^='fal fa-']," +
-        "span[class^='fad fa-']," +
-        "span[class^='fab fa-']"
-    );
+    const buttonIcon = button.find("span[class*=' fa-']");
+
+    const spinner = `
+            <div class="spinner-border spinner-border-sm mr-2" role="status">
+                <span class="sr-only">${translations.global.loading}</span>
+            </div>
+        `;
 
     // IF button has an icon already, replaces it with spinner icon. ELSE, prepends spinner icon to button content.
     if (buttonIcon.exists()) {
-        buttonIcon.replaceWith(`
-            <div class="spinner-border spinner-border-sm mr-2" role="status">
-                <span class="sr-only">${translations.global.loading}</span>
-            </div>
-        `);
+        buttonIcon.replaceWith(spinner);
     } else {
         // Use .append if you want the spinner to be displayed after the button label instead of before it.
-        button.prepend(`
-            <div class="spinner-border spinner-border-sm mr-2" role="status">
-                <span class="sr-only">${translations.global.loading}</span>
-            </div>
-        `);
+        button.prepend(spinner);
     }
 }
 
