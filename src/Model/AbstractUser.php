@@ -203,21 +203,21 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     protected $salt;
 
     /**
-     * @var array
+     * @var array|null
      *
      * @ORM\Column(type="json")
      */
     protected $roles;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      *
      * @ORM\Column(type="datetime")
      */
     protected $registeredAt;
 
     /**
-     * @var bool
+     * @var bool|null
      *
      * @ORM\Column(type="boolean")
      */
@@ -491,10 +491,10 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     }
 
     /**
-     * @param array $roles
+     * @param array|null $roles
      * @return $this
      */
-    public function setRoles(array $roles)
+    public function setRoles(?array $roles)
     {
         $this->roles = [];
 
@@ -553,10 +553,10 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     }
 
     /**
-     * @param DateTime $registeredAt
+     * @param DateTime|null $registeredAt
      * @return $this
      */
-    public function setRegisteredAt(DateTime $registeredAt)
+    public function setRegisteredAt(?DateTime $registeredAt)
     {
         $this->registeredAt = $registeredAt;
 
@@ -572,10 +572,10 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     }
 
     /**
-     * @param bool $activated
+     * @param bool|null $activated
      * @return $this
      */
-    public function setActivated(bool $activated)
+    public function setActivated(?bool $activated)
     {
         $this->activated = $activated;
 
