@@ -30,6 +30,7 @@ class RemoveUnactivatedAccountsCommand extends Command
     public function __construct(EntityManagerInterface $em)
     {
         parent::__construct();
+
         $this->em = $em;
     }
 
