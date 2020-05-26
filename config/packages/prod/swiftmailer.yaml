@@ -1,4 +1,6 @@
 swiftmailer:
   spool: # See https://symfony.com/doc/current/email.html#spool-using-files
-    type: 'file' # Required to prevent user enumeration effectively.
+    # Required to improve UX and user enumeration prevention (timing attack still doable, generating an email makes the
+    # request at least 50ms slower compared to a request not generating an email)
+    type: 'file'
     path: '%kernel.project_dir%/var/spool'
