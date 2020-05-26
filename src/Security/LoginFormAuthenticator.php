@@ -231,7 +231,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         // IF account is not yet activated, send a reminder email with an activation link
         if ($exception instanceof DisabledException) {
-            $login = $request->request->get('login');
+            $login = $request->get('login');
             $user = null;
 
             if (preg_match('/^.+@\S+\.\S+$/', $login)) {
@@ -250,7 +250,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         }
 
         if ($exception instanceof UsernameNotFoundException) {
-            $this->fakeAuthentication($request->request->get('password'));
+            $this->fakeAuthentication($request->get('password'));
         }
 
         $this->session->getFlashBag()->add(
