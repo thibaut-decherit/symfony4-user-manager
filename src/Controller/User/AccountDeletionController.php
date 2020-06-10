@@ -33,7 +33,7 @@ class AccountDeletionController extends DefaultController
      *
      * @return Response
      */
-    public function show(): Response
+    public function view(): Response
     {
         return $this->render('user/account_deletion.html.twig');
     }

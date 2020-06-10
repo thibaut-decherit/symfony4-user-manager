@@ -23,7 +23,7 @@ use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
 /**
- * Class PasswordResettingController
+ * Class PasswordResetController
  * @package App\Controller\User
  * @Route("/password-reset")
  */
