@@ -10,8 +10,8 @@ framework:
     sid_length: 64
     sid_bits_per_character: 6
     name: __Host-sessionId
-    cookie_secure: true
-    cookie_samesite: lax
+    cookie_secure: '%app.auth_cookies_secure%'
+    cookie_samesite: '%app.auth_cookies_same_site%'
 
   #esi: true
   #fragments: true
