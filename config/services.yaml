@@ -22,10 +22,19 @@ parameters:
   app.argon2id_memory_cost: 128000 # Default is 65536
   app.argon2id_time_cost: 10 # Default is 4
 
+  # Applies to session and remember me cookies.
+  app.auth_cookies_same_site: lax
+  app.auth_cookies_secure: auto
+
   app.email_change_request_send_email_again_delay: 120 # seconds
   app.email_change_token_lifetime: 3600 # seconds
   app.password_reset_request_send_email_again_delay: 120 # seconds
   app.password_reset_token_lifetime: 3600 # seconds
+
+  app.remember_me_cookie_lifetime: 31556952 # 1 year in seconds
+  app.remember_me_cookie_path: /
+  app.remember_me_cookie_name: __Host-rememberMe
+  app.remember_me_cookie_secret: '%kernel.secret%'
 
 services:
   # default configuration for services in *this* file
@@ -80,6 +89,21 @@ services:
       $mailerAddress: '%env(MAILER_SENDER)%'
       $replyToAddress: '%env(MAILER_REPLY_TO)%'
       $websiteName: '%app.website_name%'
+
+  App\Service\RememberMeCookieService:
+    arguments:
+      $userProviders: ['@security.user.provider.concrete.users']
+      $secret: '%app.remember_me_cookie_secret%'
+      $providerKey: main
+      $options: {
+        lifetime: '%app.remember_me_cookie_lifetime%',
+        name: '%app.remember_me_cookie_name%',
+        path: '%app.remember_me_cookie_path%',
+        domain: null,
+        secure: '%app.auth_cookies_secure%',
+        httponly: true,
+        samesite: '%app.auth_cookies_same_site%'
+      }
 
   App\Twig\ArrayMergeRecursive:
     tags:

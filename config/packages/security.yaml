@@ -29,8 +29,10 @@ security:
           - App\Security\AccountDeletionLogoutHandler
         csrf_token_generator: security.csrf.token_manager
       remember_me:
-        secret: '%kernel.secret%'
-        name: __Host-rememberMe
+        lifetime: '%app.remember_me_cookie_lifetime%'
+        name: '%app.remember_me_cookie_name%'
+        path: '%app.remember_me_cookie_path%'
+        secret: '%app.remember_me_cookie_secret%'
 
       # activate different ways to authenticate
       # https://symfony.com/doc/current/security.html#firewalls-authentication
