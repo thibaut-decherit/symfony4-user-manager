@@ -9,6 +9,8 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
   app.website_name: '%env(WEBSITE_NAME)%'
+  app.website_scheme: '%env(WEBSITE_SCHEME)%'
+  app.website_host: '%env(WEBSITE_HOST)%'
 
   app.account_deletion_token_lifetime: 3600 # seconds
 
@@ -32,9 +34,11 @@ services:
   _defaults:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-    public: false # Allows optimizing the container by removing unused services; this also means
+
+    # Allows optimizing the container by removing unused services; this also means
     # fetching services directly from the container via $container->get() won't work.
     # The best practice is to be explicit about your dependencies anyway.
+    public: false
 
   # makes classes in src/ available to be used as services
   # this creates a service per class whose id is the fully-qualified class name
@@ -80,6 +84,9 @@ services:
       $mailerAddress: '%env(MAILER_SENDER)%'
       $replyToAddress: '%env(MAILER_REPLY_TO)%'
       $websiteName: '%app.website_name%'
+      $websiteScheme: '%app.website_scheme%'
+      $websiteHost: '%app.website_host%'
+      $kernelEnvironment: '%kernel.environment%'
 
   App\Twig\ArrayMergeRecursive:
     tags:

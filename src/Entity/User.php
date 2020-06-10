@@ -14,14 +14,13 @@ use Doctrine\ORM\Mapping as ORM;
  * Class extending Model\AbstractUser which contains everything required to manage an user account so you can focus on
  * business and project specific attributes and functions.
  *
- * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User extends AbstractUser
 {
     /**
      * @param string|null $username
-     * @return User
+     * @return $this
      */
     public function setUsername(?string $username): self
     {
@@ -32,7 +31,7 @@ class User extends AbstractUser
 
     /**
      * @param string|null $businessUsername
-     * @return User
+     * @return $this
      */
     public function setBusinessUsername(?string $businessUsername): self
     {
@@ -43,7 +42,7 @@ class User extends AbstractUser
 
     /**
      * @param string|null $password
-     * @return User
+     * @return $this
      */
     public function setPassword(?string $password): self
     {
@@ -57,7 +56,7 @@ class User extends AbstractUser
 
     /**
      * @param string|null $plainPassword
-     * @return User
+     * @return $this
      */
     public function setPlainPassword(?string $plainPassword): self
     {
@@ -68,7 +67,7 @@ class User extends AbstractUser
 
     /**
      * @param string|null $email
-     * @return User
+     * @return $this
      */
     public function setEmail(?string $email): self
     {
@@ -79,7 +78,7 @@ class User extends AbstractUser
 
     /**
      * @param string|null $emailChangePending
-     * @return User
+     * @return $this
      */
     public function setEmailChangePending(?string $emailChangePending): self
     {
@@ -90,7 +89,7 @@ class User extends AbstractUser
 
     /**
      * @param string|null $emailChangeToken
-     * @return User
+     * @return $this
      */
     public function setEmailChangeToken(?string $emailChangeToken): self
     {
@@ -101,7 +100,7 @@ class User extends AbstractUser
 
     /**
      * @param DateTime|null $emailChangeRequestedAt
-     * @return User
+     * @return $this
      */
     public function setEmailChangeRequestedAt(?DateTime $emailChangeRequestedAt): self
     {
@@ -112,7 +111,7 @@ class User extends AbstractUser
 
     /**
      * @param string|null $accountDeletionToken
-     * @return User
+     * @return $this
      */
     public function setAccountDeletionToken(?string $accountDeletionToken): self
     {
@@ -123,7 +122,7 @@ class User extends AbstractUser
 
     /**
      * @param DateTime|null $accountDeletionRequestedAt
-     * @return User
+     * @return $this
      */
     public function setAccountDeletionRequestedAt(?DateTime $accountDeletionRequestedAt): self
     {
@@ -134,7 +133,7 @@ class User extends AbstractUser
 
     /**
      * @param string|null $salt
-     * @return User
+     * @return $this
      */
     public function setSalt(?string $salt): self
     {
@@ -144,10 +143,10 @@ class User extends AbstractUser
     }
 
     /**
-     * @param array $roles
-     * @return User
+     * @param array|null $roles
+     * @return $this
      */
-    public function setRoles(array $roles): self
+    public function setRoles(?array $roles): self
     {
         $this->roles = [];
 
@@ -160,7 +159,7 @@ class User extends AbstractUser
 
     /**
      * @param string $role
-     * @return User
+     * @return $this
      */
     public function addRole(string $role): self
     {
@@ -179,7 +178,7 @@ class User extends AbstractUser
 
     /**
      * @param string $role
-     * @return User
+     * @return $this
      */
     public function removeRole(string $role): self
     {
@@ -198,10 +197,10 @@ class User extends AbstractUser
     }
 
     /**
-     * @param DateTime $registeredAt
-     * @return User
+     * @param DateTime|null $registeredAt
+     * @return $this
      */
-    public function setRegisteredAt(DateTime $registeredAt): self
+    public function setRegisteredAt(?DateTime $registeredAt): self
     {
         $this->registeredAt = $registeredAt;
 
@@ -209,10 +208,10 @@ class User extends AbstractUser
     }
 
     /**
-     * @param bool $activated
-     * @return User
+     * @param bool|null $activated
+     * @return $this
      */
-    public function setActivated(bool $activated): self
+    public function setActivated(?bool $activated): self
     {
         $this->activated = $activated;
 
@@ -221,7 +220,7 @@ class User extends AbstractUser
 
     /**
      * @param string|null $accountActivationToken
-     * @return User
+     * @return $this
      */
     public function setAccountActivationToken(?string $accountActivationToken): self
     {
@@ -232,7 +231,7 @@ class User extends AbstractUser
 
     /**
      * @param string|null $passwordResetToken
-     * @return User
+     * @return $this
      */
     public function setPasswordResetToken(?string $passwordResetToken): self
     {
@@ -243,7 +242,7 @@ class User extends AbstractUser
 
     /**
      * @param DateTime|null $passwordResetRequestedAt
-     * @return User
+     * @return $this
      */
     public function setPasswordResetRequestedAt(?DateTime $passwordResetRequestedAt): self
     {

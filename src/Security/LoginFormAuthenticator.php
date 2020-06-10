@@ -84,7 +84,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     private $twig;
 
     /**
-     * LoginFormAuthenticator constructor.
+     * LoginFormAuthenticator constructor
+     *
      * @param EntityManagerInterface $em
      * @param RouterInterface $router
      * @param UserPasswordEncoderInterface $passwordEncoder
@@ -92,6 +93,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @param TranslatorInterface $translator
      * @param SessionInterface $session
      * @param MailerService $mailer
+     * @param Twig $twig
      */
     public function __construct(
         EntityManagerInterface $em,
