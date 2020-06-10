@@ -19,6 +19,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\DisabledException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -84,7 +85,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     private $twig;
 
     /**
-     * LoginFormAuthenticator constructor.
+     * LoginFormAuthenticator constructor
+     *
      * @param EntityManagerInterface $em
      * @param RouterInterface $router
      * @param UserPasswordEncoderInterface $passwordEncoder
@@ -92,6 +94,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @param TranslatorInterface $translator
      * @param SessionInterface $session
      * @param MailerService $mailer
+     * @param Twig $twig
      */
     public function __construct(
         EntityManagerInterface $em,
@@ -151,7 +154,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @param mixed $credentials
      * @param UserProviderInterface $userProvider
      * @return User|null
-     * @throws Exception
      */
     public function getUser($credentials, UserProviderInterface $userProvider): ?User
     {
@@ -165,10 +167,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             ]);
         }
 
-        if (empty($user)) {
-            $this->fakeAuthentication($credentials['password']);
-        }
-
         return $user;
     }
 
@@ -176,7 +174,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * If user is not found in database, hashes the password anyway to prevent user enumeration.
      *
      * @param string $password
-     * @throws Exception
      */
     private function fakeAuthentication(string $password): void
     {
@@ -234,7 +231,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         // IF account is not yet activated, send a reminder email with an activation link
         if ($exception instanceof DisabledException) {
-            $login = $request->request->get('login');
+            $login = $request->get('login');
             $user = null;
 
             if (preg_match('/^.+@\S+\.\S+$/', $login)) {
@@ -250,6 +247,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             }
 
             $this->mailer->loginAttemptOnNonActivatedAccount($user, $request->getLocale());
+        }
+
+        if ($exception instanceof UsernameNotFoundException) {
+            $this->fakeAuthentication($request->get('password'));
         }
 
         $this->session->getFlashBag()->add(
