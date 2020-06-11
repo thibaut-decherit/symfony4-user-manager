@@ -672,6 +672,10 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      */
     public function isAccountDeletionTokenExpired(int $accountDeletionTokenLifetime): bool
     {
+        if (is_null($this->getAccountDeletionRequestedAt())) {
+            return true;
+        }
+
         return ($this->getAccountDeletionRequestedAt()->getTimestamp() + $accountDeletionTokenLifetime) < time();
     }
 
@@ -681,6 +685,10 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      */
     public function isEmailChangeRequestRetryDelayExpired(int $emailChangeRequestRetryDelay): bool
     {
+        if (is_null($this->getEmailChangeRequestedAt())) {
+            return true;
+        }
+
         return ($this->getEmailChangeRequestedAt()->getTimestamp() + $emailChangeRequestRetryDelay) < time();
     }
 
@@ -690,6 +698,10 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      */
     public function isEmailChangeTokenExpired(int $emailChangeTokenLifetime): bool
     {
+        if (is_null($this->getEmailChangeRequestedAt())) {
+            return true;
+        }
+
         return ($this->getEmailChangeRequestedAt()->getTimestamp() + $emailChangeTokenLifetime) < time();
     }
 
@@ -699,6 +711,10 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      */
     public function isPasswordResetRequestRetryDelayExpired(int $passwordResetRequestRetryDelay): bool
     {
+        if (is_null($this->getPasswordResetRequestedAt())) {
+            return true;
+        }
+
         return ($this->getPasswordResetRequestedAt()->getTimestamp() + $passwordResetRequestRetryDelay) < time();
     }
 
@@ -708,6 +724,10 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      */
     public function isPasswordResetTokenExpired(int $passwordResetTokenLifetime): bool
     {
+        if (is_null($this->getPasswordResetRequestedAt())) {
+            return true;
+        }
+
         return ($this->getPasswordResetRequestedAt()->getTimestamp() + $passwordResetTokenLifetime) < time();
     }
 }
