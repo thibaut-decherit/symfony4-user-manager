@@ -2,9 +2,11 @@
 
 namespace App\Model;
 
-use App\Helper\StringHelper;
+use App\Entity\UserRole;
 use App\Validator\Constraints as CustomAssert;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -203,9 +205,9 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     protected $salt;
 
     /**
-     * @var array|null
+     * @var Collection|UserRole[]
      *
-     * @ORM\Column(type="json")
+     * @ORM\ManyToMany(targetEntity="App\Entity\UserRole", mappedBy="users")
      */
     protected $roles;
 
@@ -250,9 +252,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      */
     public function __construct()
     {
-        $this->roles = [
-            static::ROLE_DEFAULT
-        ];
+        $this->roles = new ArrayCollection();
         $this->registeredAt = new DateTime();
         $this->activated = false;
     }
@@ -478,67 +478,54 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
     }
 
     /**
+     * @return Collection|UserRole[]
+     */
+    public function getRolesCollection(): Collection
+    {
+        return $this->roles;
+    }
+
+    /**
      * @return array
      */
     public function getRoles(): array
     {
         $roles = $this->roles;
-
-        // Makes sure the user has the default role.
-        $roles[] = static::ROLE_DEFAULT;
-
-        return array_unique($roles);
-    }
-
-    /**
-     * @param array|null $roles
-     * @return $this
-     */
-    public function setRoles(?array $roles)
-    {
-        $this->roles = [];
+        $rolesNames = [];
 
         foreach ($roles as $role) {
-            $this->addRole($role);
+            $rolesNames[] = $role->getName();
         }
 
-        return $this;
+        // Adds the default role.
+        $rolesNames[] = static::ROLE_DEFAULT;
+
+        return array_unique($rolesNames);
     }
 
     /**
-     * @param string $role
+     * @param UserRole $role
      * @return $this
      */
-    public function addRole(string $role)
+    public function addRole(UserRole $role)
     {
-        $role = StringHelper::strToUpper($role);
-
-        if ($role === static::ROLE_DEFAULT) {
-            return $this;
-        }
-
-        if (!in_array($role, $this->getRoles(), true)) {
+        if (!$this->roles->contains($role)) {
             $this->roles[] = $role;
+            $role->addUser($this);
         }
 
         return $this;
     }
 
     /**
-     * @param string $role
+     * @param UserRole $role
      * @return $this
      */
-    public function removeRole(string $role)
+    public function removeRole(UserRole $role)
     {
-        $role = StringHelper::strToUpper($role);
-
-        if ($role === static::ROLE_DEFAULT) {
-            return $this;
-        }
-
-        $key = array_search($role, $this->roles, true);
-        if ($key !== false) {
-            unset($this->roles[$key]);
+        if ($this->roles->contains($role)) {
+            $this->roles->removeElement($role);
+            $role->removeUser($this);
         }
 
         return $this;
