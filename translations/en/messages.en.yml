@@ -9,6 +9,8 @@ global:
     save_changes: Save Changes
   loading: Loading
   logout: Logout
+  no_internet: No internet connection
+  unknown_error: Unknown error
 
 
 #Head

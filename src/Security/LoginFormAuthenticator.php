@@ -266,7 +266,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
         return new JsonResponse([
             'template' => $jsonTemplate
-        ], 400);
+        ], 422);
     }
 
     /**

@@ -90,9 +90,9 @@ class AccountController extends DefaultController
         ]);
         $jsonTemplate = json_encode($template->getContent());
 
-        // Returns the html form and 400 Bad Request status to js
+        // Returns the html form and 422 Unprocessable Entity status to js
         return new JsonResponse([
             'template' => $jsonTemplate
-        ], 400);
+        ], 422);
     }
 }
