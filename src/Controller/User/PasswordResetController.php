@@ -88,12 +88,11 @@ class PasswordResetController extends DefaultController
         );
 
         // Renders and json encode the updated form (with flash message)
-        $template = $this->render('form/user/_password_reset_request.html.twig');
-        $jsonTemplate = json_encode($template->getContent());
+        $template = $this->renderView('form/user/_password_reset_request.html.twig');
 
         if ($user === null) {
             return new JsonResponse([
-                'template' => $jsonTemplate
+                'template' => json_encode($template)
             ], 200);
         }
 
@@ -103,7 +102,7 @@ class PasswordResetController extends DefaultController
         if ($user->getPasswordResetRequestedAt() !== null
             && $user->isPasswordResetRequestRetryDelayExpired($passwordResetRequestRetryDelay) === false) {
             return new JsonResponse([
-                'template' => $jsonTemplate
+                'template' => json_encode($template)
             ], 200);
         }
 
@@ -124,7 +123,7 @@ class PasswordResetController extends DefaultController
         $em->flush();
 
         return new JsonResponse([
-            'template' => $jsonTemplate
+            'template' => json_encode($template)
         ], 200);
     }
 
@@ -309,14 +308,13 @@ class PasswordResetController extends DefaultController
         ];
 
         // Renders and json encode the updated form (with flash message)
-        $template = $this->render('form/user/_password_reset.html.twig', [
+        $template = $this->renderView('form/user/_password_reset.html.twig', [
             'form' => $form->createView(),
             'password_blacklist' => json_encode($passwordBlacklist)
         ]);
-        $jsonTemplate = json_encode($template->getContent());
 
         return new JsonResponse([
-            'template' => $jsonTemplate
+            'template' => json_encode($template)
         ], 422);
     }
 }

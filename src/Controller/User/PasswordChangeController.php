@@ -87,13 +87,12 @@ class PasswordChangeController extends DefaultController
             );
 
             $form = $this->createForm(PasswordChangeType::class, $user);
-            $template = $this->render('form/user/_password_change.html.twig', [
+            $template = $this->renderView('form/user/_password_change.html.twig', [
                 'form' => $form->createView()
             ]);
-            $jsonTemplate = json_encode($template->getContent());
 
             $jsonResponse = new JsonResponse([
-                'template' => $jsonTemplate
+                'template' => json_encode($template)
             ], 200);
 
             // Changing password invalids current remember me cookie so it must be refreshed.
@@ -105,14 +104,13 @@ class PasswordChangeController extends DefaultController
         }
 
         // Renders and json encode the updated form (with errors)
-        $template = $this->render('form/user/_password_change.html.twig', [
+        $template = $this->renderView('form/user/_password_change.html.twig', [
             'form' => $form->createView()
         ]);
-        $jsonTemplate = json_encode($template->getContent());
 
         // Returns the html form and 422 Unprocessable Entity status to js
         return new JsonResponse([
-            'template' => $jsonTemplate
+            'template' => json_encode($template)
         ], 422);
     }
 }
