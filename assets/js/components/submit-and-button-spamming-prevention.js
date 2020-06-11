@@ -1,6 +1,6 @@
 // Disables (submit) button, prevents submit spamming and displays loading spinner.
 import {body} from './helpers/jquery/selectors';
-import {translations} from './twigData/data/translations';
+import {translations} from './twig-data/data/translations';
 
 function handleButton(button) {
     button.attr('disabled', true);
