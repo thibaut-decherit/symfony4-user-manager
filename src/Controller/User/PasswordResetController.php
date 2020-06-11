@@ -237,7 +237,7 @@ class PasswordResetController extends DefaultController
                     [],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 )
-            ], 400);
+            ], 422);
         }
 
         $passwordResetTokenLifetime = $this->getParameter('app.password_reset_token_lifetime');
@@ -260,7 +260,7 @@ class PasswordResetController extends DefaultController
                     [],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 )
-            ], 400);
+            ], 422);
         }
 
         $form = $this->createForm(PasswordResetType::class, $user);
@@ -317,6 +317,6 @@ class PasswordResetController extends DefaultController
 
         return new JsonResponse([
             'template' => $jsonTemplate
-        ], 400);
+        ], 422);
     }
 }

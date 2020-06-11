@@ -1,30 +1,4 @@
-import $ from 'jquery';
-import {body} from '../helpers/jquery/selectors';
+import {handleAjaxForm} from '../helpers/AjaxFormHelper';
 import '../password-strength-meter';
 
-body.on('submit', '#ajax-form-change-password', function (e) {
-    const changePasswordForm = $(this);
-
-    // Prevents submit button default behaviour
-    e.preventDefault();
-
-    $.ajax({
-        type: $(this).attr('method'),
-        url: $(this).attr('action'),
-        data: $(this).serialize()
-    })
-        // Triggered if response status == 200 (form is valid and data has been processed successfully)
-        .done(function (response) {
-            // Parses the JSON response to "unescape" the html code within
-            const template = JSON.parse(response.template);
-
-            changePasswordForm.replaceWith(template);
-        })
-        // Triggered if response status == 400 (form has errors)
-        .fail(function (response) {
-            // Parses the JSON response to "unescape" the html code within
-            const template = JSON.parse(response.responseJSON.template);
-            //  Replaces html content of html element with updated form (with errors and input values)
-            changePasswordForm.replaceWith(template);
-        });
-});
+handleAjaxForm('ajax-form-change-password');

@@ -2,26 +2,6 @@
 import {body} from './helpers/jquery/selectors';
 import {translations} from './twig-data/data/translations';
 
-function handleButton(button) {
-    button.attr('disabled', true);
-
-    const buttonIcon = button.find("span[class*=' fa-']");
-
-    const spinner = `
-            <div class="spinner-border spinner-border-sm mr-2" role="status">
-                <span class="sr-only">${translations.global.loading}</span>
-            </div>
-        `;
-
-    // IF button has an icon already, replaces it with spinner icon. ELSE, prepends spinner icon to button content.
-    if (buttonIcon.exists()) {
-        buttonIcon.replaceWith(spinner);
-    } else {
-        // Use .append if you want the spinner to be displayed after the button label instead of before it.
-        button.prepend(spinner);
-    }
-}
-
 body.on('submit', '.disable-on-submit', function () {
     /*
     Listens to submit event on form instead of listening to click event on submit button to avoid button disabling
@@ -34,10 +14,67 @@ body.on('submit', '.disable-on-submit', function () {
         return false;
     }
 
-    handleButton(submitButton);
+    lockButton(submitButton);
 });
 
 // Disables button to prevent spamming and displays loading spinner.
 body.on('click', '.disable-on-click', function () {
-    handleButton($(this));
+    lockButton($(this));
 });
+
+document.addEventListener('submit-and-button-spamming-prevention.unlock-form', event => {
+    if (event.detail.jQueryForm === null) {
+        return;
+    }
+
+    const submitButton = event.detail.jQueryForm.find('[type="submit"]');
+    if (submitButton.attr('disabled')) {
+        unlockButton(submitButton);
+    }
+}, false);
+
+document.addEventListener('submit-and-button-spamming-prevention.unlock-button', event => {
+    const jQueryButton = event.detail.jQueryButton;
+    if (jQueryButton.attr('disabled')) {
+        unlockButton(jQueryButton);
+    }
+}, false);
+
+function lockButton(jQueryButton) {
+    const buttonIcon = jQueryButton.find("span[class*=' fa-']");
+
+    const spinnerIcon = `
+            <div class="spinner-border spinner-border-sm mr-2" role="status">
+                <span class="sr-only">${translations.global.loading}</span>
+            </div>
+        `;
+
+    jQueryButton.attr('disabled', true);
+
+    // IF button has an icon already, hides it first.
+    if (buttonIcon.exists()) {
+        // Button icon is hidden, thus allowing to "restore" it later if necessary. (e.g. with unlockButton()).
+        buttonIcon.hide();
+    }
+
+    /*
+    Then prepends spinner icon to button content.
+    Use .append if you want the spinner to be displayed after the button label instead of before it.
+     */
+    jQueryButton.prepend(spinnerIcon);
+}
+
+function unlockButton(jQueryButton) {
+    jQueryButton.removeAttr('disabled');
+
+    const spinnerIcon = jQueryButton.find("div[class*='spinner-']");
+    const buttonIcon = jQueryButton.find("span[class*=' fa-']");
+
+    if (spinnerIcon.exists()) {
+        spinnerIcon.remove();
+    }
+
+    if (buttonIcon.exists()) {
+        buttonIcon.show();
+    }
+}

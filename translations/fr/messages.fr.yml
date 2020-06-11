@@ -9,6 +9,8 @@ global:
     save_changes: Enregistrer les modifications
   loading: Chargement en cours
   logout: Déconnexion
+  no_internet: Pas de connexion internet
+  unknown_error: Erreur inconnue
 
 
 #Head
