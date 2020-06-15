@@ -103,7 +103,9 @@ export function handleAjaxForm(formId, options = {}, callbacks = {}) {
                 }
 
                 if (options.successScrollToTop) {
-                    scrollToTop($('#' + jQueryNewForm.attr('id')));
+                    const jQueryForm = formHasBeenUpdated ? jQueryNewForm : jQueryOriginalForm;
+
+                    scrollToTop($('#' + jQueryForm.attr('id')));
                 }
 
                 formSuccess = true;
