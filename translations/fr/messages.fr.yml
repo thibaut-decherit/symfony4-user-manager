@@ -62,9 +62,8 @@ user:
   delete_account: Supprimer le compte
   delete_my_account: Supprimer mon compte
   email_address: Adresse email
-  email_address_change_confirm_instructions_1/2: "Si vous cliquez sur le bouton ci-dessous, vous changerez l'adresse
-  email liée à votre compte de"
-  email_address_change_confirm_instructions_2/2: à
+  email_address_change_confirm_instructions: "Si vous cliquez sur le bouton ci-dessous, vous changerez l'adresse
+  email liée à votre compte de {{ old_email }} à {{ new_email }}."
   login: Connexion
   new_password: Nouveau mot de passe
   new_password_repeat: Répéter le nouveau mot de passe
@@ -93,17 +92,17 @@ password_strength_meter:
 flash:
   user:
     account_activated_successfully: Votre compte a été activé avec succès, vous pouvez vous connecter ci-dessous.
-    account_deletion_request_email_sent: Un lien de suppression a été envoyé à
+    account_deletion_request_email_sent: "Un lien de suppression a été envoyé à {{ email }}."
     account_deletion_cancel_success: La suppression de votre compte a été annulée.
     account_deletion_success: Votre compte a été supprimé avec succès.
     account_deletion_token_expired: Votre demande de suppression de compte a expiré.
     already_current_email_address: Cette adresse email est déjà liée à votre compte.
-    email_address_change_request_sent_1/2: Un lien de vérification a été envoyé à
-    email_address_change_request_sent_2/2: , veuillez cliquer dessus pour confirmer ce changement.
-    email_address_change_success: est désormais l'adresse email liée à votre compte.
+    email_address_change_request_sent: "Un lien de vérification a été envoyé à {{ email }}, veuillez cliquer dessus
+    pour confirmer ce changement."
+    email_address_change_success: "{{ email }} est désormais l'adresse email liée à votre compte."
     email_change_token_expired: Votre demande de changement d'adresse email a expiré.
     greeting_anonymous: Bonjour, visiteur anonyme
-    greeting_authenticated: Bonjour,
+    greeting_authenticated: "Bonjour, {{ username }}"
     information_updated: Informations enregistrées avec succès.
     invalid_credentials: Identifiants de connexion invalides.
     login_required: Vous devez vous connecter pour accéder à cette page.

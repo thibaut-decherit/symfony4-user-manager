@@ -1,1 +1,3 @@
-<span class="font-weight-bold">{{ user.email }}</span> {{ 'flash.user.email_address_change_success'|trans }}
+{{ 'flash.user.email_address_change_success'|trans({
+    '{{ email }}': '<span class="font-weight-bold">' ~ user.emailChangePending|escape ~ '</span>'
+})|raw }}

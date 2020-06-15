@@ -10,10 +10,16 @@
     <div class="row mb-3">
         <div class="col">
             <p>
-                {{ 'user.email_address_change_confirm_instructions_1/2'|trans }}
-                <span class="font-weight-bold">{{ user.email }}</span>
-                {{ 'user.email_address_change_confirm_instructions_2/2'|trans }}
-                <span class="font-weight-bold">{{ user.emailChangePending }}</span>
+                {{ 'user.email_address_change_confirm_instructions'|trans({
+                    '{{ old_email }}':
+                        '<span class="font-weight-bold">'
+                            ~ user.email|escape
+                        ~ '</span>',
+                    '{{ new_email }}':
+                        '<span class="font-weight-bold">'
+                            ~ user.emailChangePending|escape
+                        ~ '</span>'
+                })|raw }}
             </p>
         </div>
     </div>
