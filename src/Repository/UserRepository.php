@@ -6,6 +6,7 @@ use App\Entity\User;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -23,23 +24,24 @@ class UserRepository extends ServiceEntityRepository
     /**
      * @param string $role
      * @return User|null
+     * @throws NonUniqueResultException
      */
-    public function findOneUserByRole(string $role): ?User
+    public function findOneUserByRole(string $role = 'ROLE_USER'): ?User
     {
         $qb = $this->createQueryBuilder('user');
-        $qb
-            ->where('user.roles LIKE :roles')
-            ->andWhere('user.activated = true')
-            ->setParameter('roles', "%$role%")
-            ->setMaxResults(1);
 
-        $user = $qb->getQuery()->getResult();
+        $qb->where('user.activated = true');
 
-        if (isset($user[0])) {
-            return $user[0];
-        } else {
-            return null;
+        if ($role !== 'ROLE_USER') {
+            $qb
+                ->innerJoin('user.roles', 'roles')
+                ->andWhere('roles.name = :role')
+                ->setParameter('role', $role);
         }
+
+        $qb->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     /**
