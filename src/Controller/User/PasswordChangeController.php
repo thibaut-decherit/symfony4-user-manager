@@ -103,12 +103,12 @@ class PasswordChangeController extends DefaultController
             return $jsonResponse;
         }
 
-        // Renders and json encode the updated form (with errors)
+        // Renders and json encode the updated form (with errors).
         $template = $this->renderView('form/user/_password_change.html.twig', [
             'form' => $form->createView()
         ]);
 
-        // Returns the html form and 422 Unprocessable Entity status to js
+        // Returns the html form and 422 Unprocessable Entity status to js.
         return new JsonResponse([
             'template' => json_encode($template)
         ], 422);

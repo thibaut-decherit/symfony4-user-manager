@@ -117,12 +117,12 @@ class RegistrationController extends DefaultController
             ], 200);
         }
 
-        // Renders and json encode the updated form (with errors and input values)
+        // Renders and json encode the updated form (with errors and input values).
         $template = $this->renderView('form/user/_registration.html.twig', [
             'form' => $form->createView()
         ]);
 
-        // Returns the html form and 422 Unprocessable Entity status to js
+        // Returns the html form and 422 Unprocessable Entity status to js.
         return new JsonResponse([
             'template' => json_encode($template)
         ], 422);
