@@ -58,7 +58,8 @@ abstract class AbstractWebTest extends WebTestCase
         array $expectedStatusCodes = [
             200,
             302,
-            400
+            400,
+            422
         ]
     ): bool
     {
@@ -98,7 +99,7 @@ abstract class AbstractWebTest extends WebTestCase
      * @return KernelBrowser
      * @throws Exception
      */
-    private function setGuardAuthenticatedUser(KernelBrowser $client, string $role): KernelBrowser
+    private function setGuardAuthenticatedUser(KernelBrowser $client, string $role = 'ROLE_USER'): KernelBrowser
     {
         $session = $client->getContainer()->get('session');
 

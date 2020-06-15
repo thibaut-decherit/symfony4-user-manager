@@ -171,3 +171,26 @@ Feel free to tailor each feature to your needs.
       - `plain`: specify the URL of your report-uri logger endpoint
       - `match`: specify the route name, router will handle URL generation. Can only be used if your report-uri logger is part of the same application
     - Dev environment directives to generate (less secure) directives allowing Symfony Profiler to work properly. The Profiler relies on inline JS and CSS, which you are strongly advised to block in production environment to counter XSS. Current whitelists block these by default in production environment.
+
+## **Testing**
+
+You need to create `.env.test.local` containing a valid `DATABASE_URL` env variable so tests are able to use the database.
+
+You need an activated user in database, otherwise tests requiring an authenticated user will fail.
+
+These env variables are also required but you can leave them blank (`VARIABLE_EXAMPLE=`):
+- `MAILER_URL`
+- `MAILER_HOST`
+- `MAILER_SENDER`
+- `MAILER_REPLY_TO`
+
+Run tests with `php bin/phpunit`.
+
+Existing tests include:
+- Basic routing tests **(tests/RouterTest.php)**
+  - Test if public page accessible while authenticated anonymously does not return 500 nor 404 response to anonymous user
+  - Test if page only accessible while authenticated redirects anonymous user to login page
+  - Test if page only accessible while authenticated does not return 500 nor 404 response to authenticated user
+  - Add your own routes to `providePrivateUrls()` and `providePublicUrls()`
+- Test if logout is successful, needs improvements **(tests/Controller/User/SecurityControllerTest.php)**
+- Test if public page accessible only while authenticated anonymously  returns 302 response to authenticated user **(tests/EventListener/RedirectIfAuthenticatedTest.php)**

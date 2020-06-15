@@ -9,6 +9,8 @@ global:
     save_changes: Save Changes
   loading: Loading
   logout: Logout
+  no_internet: No internet connection
+  unknown_error: Unknown error
 
 
 #Head
@@ -60,9 +62,8 @@ user:
   delete_account: Delete account
   delete_my_account: Delete my account
   email_address: Email address
-  email_address_change_confirm_instructions_1/2: "If you click on the button below, you will change the email address
-  linked to your account from"
-  email_address_change_confirm_instructions_2/2: to
+  email_address_change_confirm_instructions: "If you click on the button below, you will change the email address linked
+  to your account from {{ old_email }} to {{ new_email }}."
   login: Login
   new_password: New password
   new_password_repeat: Repeat new password
@@ -91,17 +92,17 @@ password_strength_meter:
 flash:
   user:
     account_activated_successfully: Your account has been activated successfully, you can log in below.
-    account_deletion_request_email_sent: A deletion link has been sent to
+    account_deletion_request_email_sent: "A deletion link has been sent to {{ email }}."
     account_deletion_cancel_success: Your account deletion has been canceled.
     account_deletion_success: Your account has beed successfully deleted.
     account_deletion_token_expired: Your account deletion request has expired.
     already_current_email_address: This email address is already registered to your account.
-    email_address_change_request_sent_1/2: A verification link has been sent to
-    email_address_change_request_sent_2/2: , please click on it to confirm this change.
-    email_address_change_success: is now registered as your email address.
+    email_address_change_request_sent: "A verification link has been sent to {{ email }}, please click on it to confirm
+    this change."
+    email_address_change_success: "{{ email }} is now registered as your email address."
     email_change_token_expired: Your email address change request has expired.
     greeting_anonymous: Hi, anonymous visitor
-    greeting_authenticated: Hi,
+    greeting_authenticated: "Hi, {{ username }}"
     information_updated: Account information successfully updated.
     invalid_credentials: Wrong username or password.
     login_required: You must login to access this page.

@@ -1,6 +1,7 @@
 @import './app';
 
 $font-family-base: sans-serif;
+$font-size-base: 1rem !default;
 $theme-colors: (
         'primary': $custom-color-primary,
         'secondary': $custom-color-secondary,

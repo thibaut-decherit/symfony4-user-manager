@@ -5,6 +5,7 @@ namespace App\Controller\User;
 use App\Controller\DefaultController;
 use App\Form\User\PasswordChangeType;
 use App\Model\AbstractUser;
+use App\Service\RememberMeCookieService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,6 +52,7 @@ class PasswordChangeController extends DefaultController
      * Handles the password change form submitted with ajax.
      *
      * @param Request $request
+     * @param RememberMeCookieService $rememberMeCookieService
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @param TranslatorInterface $translator
      * @Route("-ajax", name="password_change_ajax", methods="POST")
@@ -58,6 +60,7 @@ class PasswordChangeController extends DefaultController
      */
     public function change(
         Request $request,
+        RememberMeCookieService $rememberMeCookieService,
         UserPasswordEncoderInterface $passwordEncoder,
         TranslatorInterface $translator
     ): JsonResponse
@@ -72,6 +75,7 @@ class PasswordChangeController extends DefaultController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $hasValidRememberMeCookie = $rememberMeCookieService->hasValidCookie($request);
             $hashedPassword = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
 
             $user->setPassword($hashedPassword);
@@ -83,25 +87,30 @@ class PasswordChangeController extends DefaultController
             );
 
             $form = $this->createForm(PasswordChangeType::class, $user);
-            $template = $this->render('form/user/_password_change.html.twig', [
+            $template = $this->renderView('form/user/_password_change.html.twig', [
                 'form' => $form->createView()
             ]);
-            $jsonTemplate = json_encode($template->getContent());
 
-            return new JsonResponse([
-                'template' => $jsonTemplate
+            $jsonResponse = new JsonResponse([
+                'template' => json_encode($template)
             ], 200);
+
+            // Changing password invalids current remember me cookie so it must be refreshed.
+            if ($hasValidRememberMeCookie) {
+                $rememberMeCookieService->setCookie($jsonResponse, $user, $request);
+            }
+
+            return $jsonResponse;
         }
 
         // Renders and json encode the updated form (with errors)
-        $template = $this->render('form/user/_password_change.html.twig', [
+        $template = $this->renderView('form/user/_password_change.html.twig', [
             'form' => $form->createView()
         ]);
-        $jsonTemplate = json_encode($template->getContent());
 
-        // Returns the html form and 400 Bad Request status to js
+        // Returns the html form and 422 Unprocessable Entity status to js
         return new JsonResponse([
-            'template' => $jsonTemplate
-        ], 400);
+            'template' => json_encode($template)
+        ], 422);
     }
 }
