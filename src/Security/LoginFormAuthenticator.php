@@ -6,7 +6,6 @@ use App\Entity\User;
 use App\Helper\StringHelper;
 use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -261,7 +260,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $template = $this->twig->render('form/user/_login.html.twig', [
             'login' => $request->get('login')
         ]);
-        $jsonTemplate = json_encode($template);
 
         return new JsonResponse([
             'template' => json_encode($template)
