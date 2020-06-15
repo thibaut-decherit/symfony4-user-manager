@@ -74,25 +74,23 @@ class AccountController extends DefaultController
             );
 
             $form = $this->createForm(AccountInformationType::class, $user);
-            $template = $this->render('form/user/_account_information.html.twig', [
+            $template = $this->renderView('form/user/_account_information.html.twig', [
                 'form' => $form->createView()
             ]);
-            $jsonTemplate = json_encode($template->getContent());
 
             return new JsonResponse([
-                'template' => $jsonTemplate
+                'template' => json_encode($template)
             ], 200);
         }
 
         // Renders and json encode the updated form (with errors and input values)
-        $template = $this->render('form/user/_account_information.html.twig', [
+        $template = $this->renderView('form/user/_account_information.html.twig', [
             'form' => $form->createView()
         ]);
-        $jsonTemplate = json_encode($template->getContent());
 
         // Returns the html form and 422 Unprocessable Entity status to js
         return new JsonResponse([
-            'template' => $jsonTemplate
+            'template' => json_encode($template)
         ], 422);
     }
 }
