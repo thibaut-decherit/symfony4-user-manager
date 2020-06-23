@@ -105,48 +105,14 @@ class AccountDeletionController extends DefaultController
      */
     public function confirm(Request $request, TranslatorInterface $translator): Response
     {
-        $accountDeletionToken = $request->get('token');
+        $validation = $this->validateConfirmation($request->get('token'), $translator);
 
-        if (empty($accountDeletionToken)) {
-            return $this->redirectToRoute('home');
-        }
-
-        $em = $this->getDoctrine()->getManager();
-
-        /**
-         * @var User $user
-         */
-        $user = $em->getRepository(User::class)->findOneBy([
-            'accountDeletionToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountDeletionToken)
-        ]);
-
-        if ($user === null) {
-            $this->addFlash(
-                'account-deletion-error',
-                $translator->trans('flash.user.account_deletion_token_expired')
-            );
-
-            return $this->redirectToRoute('home');
-        }
-
-        $accountDeletionTokenLifetime = $this->getParameter('app.account_deletion_token_lifetime');
-
-        if ($user->isAccountDeletionTokenExpired($accountDeletionTokenLifetime)) {
-            $user->setAccountDeletionToken(null);
-            $user->setAccountDeletionRequestedAt(null);
-
-            $em->flush();
-
-            $this->addFlash(
-                'account-deletion-error',
-                $translator->trans('flash.user.account_deletion_token_expired')
-            );
-
+        if ($validation['isValid'] === false) {
             return $this->redirectToRoute('home');
         }
 
         return $this->render('user/account_deletion_confirm.html.twig', [
-            'user' => $user
+            'user' => $validation['user']
         ]);
     }
 
@@ -219,50 +185,18 @@ class AccountDeletionController extends DefaultController
             throw new BadRequestHttpException('Invalid CSRF token.');
         }
 
-        $accountDeletionToken = $request->get('account_deletion_token');
+        $validation = $this->validateConfirmation($request->get('account_deletion_token'), $translator);
 
-        if (empty($accountDeletionToken)) {
+        if ($validation['isValid'] === false) {
             return $this->redirectToRoute('home');
         }
 
-        $em = $this->getDoctrine()->getManager();
-
-        /**
-         * @var User $user
-         */
-        $user = $em->getRepository(User::class)->findOneBy([
-            'accountDeletionToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountDeletionToken)
-        ]);
-
-        if ($user === null) {
-            $this->addFlash(
-                'account-deletion-error',
-                $translator->trans('flash.user.account_deletion_token_expired')
-            );
-
-            return $this->redirectToRoute('home');
-        }
-
-        $accountDeletionTokenLifetime = $this->getParameter('app.account_deletion_token_lifetime');
-
-        if ($user->isAccountDeletionTokenExpired($accountDeletionTokenLifetime)) {
-            $user->setAccountDeletionToken(null);
-            $user->setAccountDeletionRequestedAt(null);
-
-            $em->flush();
-
-            $this->addFlash(
-                'account-deletion-error',
-                $translator->trans('flash.user.account_deletion_token_expired')
-            );
-
-            return $this->redirectToRoute('home');
-        }
+        $user = $validation['user'];
 
         $currentUser = $this->getUser();
 
         /*
-         * If user requesting deletion is logged in, he is logged out and account deletion is handled to
+         * If user requesting deletion is logged in, he is logged out and account deletion is handed to
          * App/EventListener/AccountDeletionLogoutHandler to prevent 500 error "$user must be an instanceof
          * UserInterface, an object implementing a __toString method, or a primitive string."
          */
@@ -307,5 +241,65 @@ class AccountDeletionController extends DefaultController
         );
 
         return $this->redirectToRoute('home');
+    }
+
+    /**
+     * Handles the validation logic shared between $this->confirm() and $this->delete().
+     * Returns an array containing a bool 'isValid' and a User|null 'user'.
+     *
+     * @param string $accountDeletionToken
+     * @param TranslatorInterface $translator
+     * @return array
+     */
+    private function validateConfirmation(string $accountDeletionToken, TranslatorInterface $translator): array
+    {
+        $validation = [
+            'isValid' => false,
+            'user' => null
+        ];
+
+        if (empty($accountDeletionToken)) {
+            return $validation;
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        /**
+         * @var User $user
+         */
+        $user = $em->getRepository(User::class)->findOneBy([
+            'accountDeletionToken' => StringHelper::truncateToMySQLVarcharMaxLength($accountDeletionToken)
+        ]);
+
+        if ($user === null) {
+            $this->addFlash(
+                'account-deletion-error',
+                $translator->trans('flash.user.account_deletion_token_expired')
+            );
+
+            return $validation;
+        }
+
+        $validation['user'] = $user;
+
+        $accountDeletionTokenLifetime = $this->getParameter('app.account_deletion_token_lifetime');
+
+        if ($user->isAccountDeletionTokenExpired($accountDeletionTokenLifetime)) {
+            $user->setAccountDeletionToken(null);
+            $user->setAccountDeletionRequestedAt(null);
+
+            $em->flush();
+
+            $this->addFlash(
+                'account-deletion-error',
+                $translator->trans('flash.user.account_deletion_token_expired')
+            );
+
+            return $validation;
+        }
+
+        $validation['isValid'] = true;
+
+        return $validation;
     }
 }
