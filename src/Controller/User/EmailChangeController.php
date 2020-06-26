@@ -292,11 +292,11 @@ class EmailChangeController extends DefaultController
      * Handles the validation logic shared between $this->confirm() and $this->change().
      * Returns an array containing a bool 'isValid' and a User|null 'user'.
      *
-     * @param string $emailChangeToken
+     * @param string|null $emailChangeToken
      * @param TranslatorInterface $translator
      * @return array
      */
-    private function validateConfirmation(string $emailChangeToken, TranslatorInterface $translator): array
+    private function validateConfirmation(?string $emailChangeToken, TranslatorInterface $translator): array
     {
         $validation = [
             'isValid' => false,

@@ -247,11 +247,11 @@ class AccountDeletionController extends DefaultController
      * Handles the validation logic shared between $this->confirm() and $this->delete().
      * Returns an array containing a bool 'isValid' and a User|null 'user'.
      *
-     * @param string $accountDeletionToken
+     * @param string|null $accountDeletionToken
      * @param TranslatorInterface $translator
      * @return array
      */
-    private function validateConfirmation(string $accountDeletionToken, TranslatorInterface $translator): array
+    private function validateConfirmation(?string $accountDeletionToken, TranslatorInterface $translator): array
     {
         $validation = [
             'isValid' => false,
