@@ -192,7 +192,6 @@ class AccountDeletionController extends DefaultController
         }
 
         $user = $validation['user'];
-
         $currentUser = $this->getUser();
 
         /*
@@ -213,22 +212,6 @@ class AccountDeletionController extends DefaultController
         }
 
         $em = $this->getDoctrine()->getManager();
-
-        $accountDeletionTokenLifetime = $this->getParameter('app.account_deletion_token_lifetime');
-
-        if ($user->isAccountDeletionTokenExpired($accountDeletionTokenLifetime)) {
-            $user->setAccountDeletionRequestedAt(null);
-            $user->setAccountDeletionToken(null);
-
-            $em->flush();
-
-            $this->addFlash(
-                'account-deletion-error',
-                $translator->trans('flash.user.account_deletion_token_expired')
-            );
-
-            return $this->redirectToRoute('home');
-        }
 
         $em->remove($user);
         $em->flush();
