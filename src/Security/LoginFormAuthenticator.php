@@ -84,6 +84,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     private $twig;
 
     /**
+     * @var int
+     */
+    private $passwordMaxLength;
+
+    /**
      * LoginFormAuthenticator constructor
      *
      * @param EntityManagerInterface $em
@@ -94,6 +99,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @param SessionInterface $session
      * @param MailerService $mailer
      * @param Twig $twig
+     * @param int $passwordMaxLength
      */
     public function __construct(
         EntityManagerInterface $em,
@@ -103,7 +109,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         TranslatorInterface $translator,
         SessionInterface $session,
         MailerService $mailer,
-        Twig $twig
+        Twig $twig,
+        int $passwordMaxLength
     )
     {
         $this->em = $em;
@@ -114,6 +121,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $this->session = $session;
         $this->mailer = $mailer;
         $this->twig = $twig;
+        $this->passwordMaxLength = $passwordMaxLength;
     }
 
     public function supports(Request $request)
@@ -128,7 +136,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function getCredentials(Request $request): array
     {
         $login = StringHelper::truncateToMySQLVarcharMaxLength($request->get('login'));
-        $password = StringHelper::truncateToPasswordEncoderMaxLength($request->get('password'));
+        $password = StringHelper::truncateToPasswordEncoderMaxLength(
+            $request->get('password'),
+            $this->passwordMaxLength
+        );
         $csrfToken = $request->get('_csrf_token');
 
         if (false === $this->csrfTokenManager->isTokenValid(new CsrfToken('login', $csrfToken))) {
