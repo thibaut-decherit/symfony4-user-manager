@@ -30,6 +30,13 @@ parameters:
 
   app.email_change_request_send_email_again_delay: 120 # seconds
   app.email_change_token_lifetime: 3600 # seconds
+
+  # Warning: If you lower app.password_max_length in production it can truncate current password during auth (e.g. login
+  # or password change attempt) prior to hashing, resulting in a failed auth and forcing the user to reset his password
+  # through the reset password feature.
+  app.password_max_length: 100  # If set too high, could allow DoS attacks by submitting a very long password.
+  app.password_min_length: 8
+
   app.password_reset_request_send_email_again_delay: 120 # seconds
   app.password_reset_token_lifetime: 3600 # seconds
 
@@ -88,6 +95,10 @@ services:
     arguments:
       $sessionLogoutHandler: '@security.logout.handler.session'
 
+  App\Security\LoginFormAuthenticator:
+    arguments:
+      $passwordMaxLength: '%app.password_max_length%'
+
   App\Service\MailerService:
     arguments:
       $mailerAddress: '%env(MAILER_SENDER)%'
@@ -115,3 +126,8 @@ services:
   App\Twig\ArrayMergeRecursive:
     tags:
       - { name: twig.extension }
+
+  App\Validator\Constraints\PasswordLengthValidator:
+    arguments:
+      $minLength: '%app.password_min_length%'
+      $maxLength: '%app.password_max_length%'

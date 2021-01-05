@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Helper\RandomDataGeneratorHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use RuntimeException;
 
 /**
  * Class UniqueRandomDataGeneratorService
@@ -62,7 +63,7 @@ class UniqueRandomDataGeneratorService
         int $maxDecimalNbr = 1
     ): float
     {
-        while (true) {
+        for ($i = 0; $i < 1000; $i++) {
             $randomFloat = RandomDataGeneratorHelper::randomFloat($min, $max, $maxDecimalNbr);
 
             if ($this->isUnique($entityClass, $propertyName, $randomFloat)) {
@@ -70,7 +71,7 @@ class UniqueRandomDataGeneratorService
             }
         }
 
-        throw new Exception('While loop should not have broken');
+        throw new RuntimeException('For loop should not have broken.');
     }
 
     /**
@@ -88,7 +89,7 @@ class UniqueRandomDataGeneratorService
         int $max = 2147483647
     ): int
     {
-        while (true) {
+        for ($i = 0; $i < 1000; $i++) {
             $randomInt = RandomDataGeneratorHelper::randomInteger($min, $max);
 
             if ($this->isUnique($entityClass, $propertyName, $randomInt)) {
@@ -96,7 +97,7 @@ class UniqueRandomDataGeneratorService
             }
         }
 
-        throw new Exception('While loop should not have broken');
+        throw new RuntimeException('For loop should not have broken.');
     }
 
     /**
@@ -108,7 +109,7 @@ class UniqueRandomDataGeneratorService
      */
     public function uniqueRandomString(string $entityClass, string $propertyName, int $entropy = 512): string
     {
-        while (true) {
+        for ($i = 0; $i < 1000; $i++) {
             $randomString = RandomDataGeneratorHelper::randomString($entropy);
 
             if ($this->isUnique($entityClass, $propertyName, $randomString)) {
@@ -116,6 +117,6 @@ class UniqueRandomDataGeneratorService
             }
         }
 
-        throw new Exception('While loop should not have broken');
+        throw new RuntimeException('For loop should not have broken.');
     }
 }

@@ -166,12 +166,12 @@ class EmailChangeController extends DefaultController
             ], 200);
         }
 
-        // Renders and json encode the updated form (with errors)
+        // Renders and json encode the updated form (with errors).
         $template = $this->renderView('form/user/_email_change.html.twig', [
             'form' => $form->createView(),
         ]);
 
-        // Returns the html form and 422 Unprocessable Entity status to js
+        // Returns the html form and 422 Unprocessable Entity status to js.
         return new JsonResponse([
             'template' => json_encode($template)
         ], 422);
@@ -187,49 +187,14 @@ class EmailChangeController extends DefaultController
      */
     public function confirm(Request $request, TranslatorInterface $translator): Response
     {
-        $emailChangeToken = $request->get('token');
+        $validation = $this->validateConfirmation($request->get('token'), $translator);
 
-        if (empty($emailChangeToken)) {
-            return $this->redirectToRoute('home');
-        }
-
-        $em = $this->getDoctrine()->getManager();
-
-        /**
-         * @var User $user
-         */
-        $user = $em->getRepository(User::class)->findOneBy([
-            'emailChangeToken' => StringHelper::truncateToMySQLVarcharMaxLength($emailChangeToken)
-        ]);
-
-        if ($user === null) {
-            $this->addFlash(
-                'email-change-error',
-                $translator->trans('flash.user.email_change_token_expired')
-            );
-
-            return $this->redirectToRoute('home');
-        }
-
-        $emailChangeTokenLifetime = $this->getParameter('app.email_change_token_lifetime');
-
-        if ($user->isEmailChangeTokenExpired($emailChangeTokenLifetime)) {
-            $user->setEmailChangePending(null);
-            $user->setEmailChangeRequestedAt(null);
-            $user->setEmailChangeToken(null);
-
-            $em->flush();
-
-            $this->addFlash(
-                'email-change-error',
-                $translator->trans('flash.user.email_change_token_expired')
-            );
-
+        if ($validation['isValid'] === false) {
             return $this->redirectToRoute('home');
         }
 
         return $this->render('user/email_change_confirm.html.twig', [
-            'user' => $user
+            'user' => $validation['user']
         ]);
     }
 
@@ -288,10 +253,58 @@ class EmailChangeController extends DefaultController
             throw new BadRequestHttpException('Invalid CSRF token.');
         }
 
-        $emailChangeToken = $request->get('email_change_token');
+        $validation = $this->validateConfirmation($request->get('email_change_token'), $translator);
+
+        if ($validation['isValid'] === false) {
+            return $this->redirectToRoute('home');
+        }
+
+        $user = $validation['user'];
+
+        $em = $this->getDoctrine()->getManager();
+
+        $duplicate = $em->getRepository(User::class)->findOneBy([
+            'email' => $user->getEmailChangePending()
+        ]);
+
+        if ($duplicate === null) {
+            $user->setEmail($user->getEmailChangePending());
+        }
+
+        $successMessage = $this->render('flash_alert/raw_messages/user/_email_change_success.html.twig', [
+            'user' => $user
+        ]);
+
+        $user->setEmailChangeToken(null);
+        $user->setEmailChangeRequestedAt(null);
+        $user->setEmailChangePending(null);
+        $em->flush();
+
+        $this->addFlash(
+            'email-change-success-raw',
+            $successMessage->getContent()
+        );
+
+        return $this->redirectToRoute('home');
+    }
+
+    /**
+     * Handles the validation logic shared between $this->confirm() and $this->change().
+     * Returns an array containing a bool 'isValid' and a User|null 'user'.
+     *
+     * @param string|null $emailChangeToken
+     * @param TranslatorInterface $translator
+     * @return array
+     */
+    private function validateConfirmation(?string $emailChangeToken, TranslatorInterface $translator): array
+    {
+        $validation = [
+            'isValid' => false,
+            'user' => null
+        ];
 
         if (empty($emailChangeToken)) {
-            return $this->redirectToRoute('home');
+            return $validation;
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -309,8 +322,10 @@ class EmailChangeController extends DefaultController
                 $translator->trans('flash.user.email_change_token_expired')
             );
 
-            return $this->redirectToRoute('home');
+            return $validation;
         }
+
+        $validation['user'] = $user;
 
         $emailChangeTokenLifetime = $this->getParameter('app.email_change_token_lifetime');
 
@@ -326,30 +341,11 @@ class EmailChangeController extends DefaultController
                 $translator->trans('flash.user.email_change_token_expired')
             );
 
-            return $this->redirectToRoute('home');
+            return $validation;
         }
 
-        $duplicate = $em->getRepository(User::class)->findOneBy([
-            'email' => $user->getEmailChangePending()
-        ]);
+        $validation['isValid'] = true;
 
-        if ($duplicate === null) {
-            $user->setEmail($user->getEmailChangePending());
-        }
-
-        $user->setEmailChangeToken(null);
-        $user->setEmailChangeRequestedAt(null);
-        $user->setEmailChangePending(null);
-        $em->flush();
-
-        $successMessage = $this->render('flash_alert/raw_messages/user/_email_change_success.html.twig', [
-            'user' => $user
-        ]);
-        $this->addFlash(
-            'email-change-success-raw',
-            $successMessage->getContent()
-        );
-
-        return $this->redirectToRoute('home');
+        return $validation;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Helper;
 
 use Exception;
+use RuntimeException;
 
 /**
  * Class RandomDataGeneratorHelper
@@ -26,10 +27,10 @@ class RandomDataGeneratorHelper
      */
     public static function randomFloat(int $min = 0, int $max = 2147483647, int $maxDecimalNbr = 1): float
     {
-        while (true) {
+        for ($i = 0; $i < 1000; $i++) {
             $decimalString = '.';
 
-            for ($i = 0; $i < $maxDecimalNbr; $i++) {
+            for ($j = 0; $j < $maxDecimalNbr; $j++) {
                 $decimalString .= (string)random_int(0, 9);
             }
 
@@ -41,7 +42,7 @@ class RandomDataGeneratorHelper
             }
         }
 
-        throw new Exception('While loop should not have broken');
+        throw new RuntimeException('For loop should not have broken.');
     }
 
     /**

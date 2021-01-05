@@ -109,11 +109,7 @@ abstract class AbstractUser implements EquatableInterface, UserInterface
      *     message="form_errors.global.not_blank",
      *     groups={"Password_Change", "Registration"}
      * )
-     * @Assert\Length(
-     *     min=8,
-     *     max=4096,
-     *     minMessage="form_errors.user.password_min_length",
-     *     maxMessage="form_errors.user.password_max_length",
+     * @CustomAssert\PasswordLength(
      *     groups={"Password_Change", "Registration"}
      * )
      * @CustomAssert\BreachedPassword(

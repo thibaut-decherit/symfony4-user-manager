@@ -6,7 +6,6 @@ use App\Entity\User;
 use App\Helper\StringHelper;
 use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +18,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\DisabledException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -84,6 +84,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     private $twig;
 
     /**
+     * @var int
+     */
+    private $passwordMaxLength;
+
+    /**
      * LoginFormAuthenticator constructor
      *
      * @param EntityManagerInterface $em
@@ -94,6 +99,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @param SessionInterface $session
      * @param MailerService $mailer
      * @param Twig $twig
+     * @param int $passwordMaxLength
      */
     public function __construct(
         EntityManagerInterface $em,
@@ -103,7 +109,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         TranslatorInterface $translator,
         SessionInterface $session,
         MailerService $mailer,
-        Twig $twig
+        Twig $twig,
+        int $passwordMaxLength
     )
     {
         $this->em = $em;
@@ -114,6 +121,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $this->session = $session;
         $this->mailer = $mailer;
         $this->twig = $twig;
+        $this->passwordMaxLength = $passwordMaxLength;
     }
 
     public function supports(Request $request)
@@ -128,7 +136,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function getCredentials(Request $request): array
     {
         $login = StringHelper::truncateToMySQLVarcharMaxLength($request->get('login'));
-        $password = StringHelper::truncateToPasswordEncoderMaxLength($request->get('password'));
+        $password = StringHelper::truncateToPasswordEncoderMaxLength(
+            $request->get('password'),
+            $this->passwordMaxLength
+        );
         $csrfToken = $request->get('_csrf_token');
 
         if (false === $this->csrfTokenManager->isTokenValid(new CsrfToken('login', $csrfToken))) {
@@ -153,7 +164,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @param mixed $credentials
      * @param UserProviderInterface $userProvider
      * @return User|null
-     * @throws Exception
      */
     public function getUser($credentials, UserProviderInterface $userProvider): ?User
     {
@@ -167,10 +177,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             ]);
         }
 
-        if (empty($user)) {
-            $this->fakeAuthentication($credentials['password']);
-        }
-
         return $user;
     }
 
@@ -178,7 +184,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * If user is not found in database, hashes the password anyway to prevent user enumeration.
      *
      * @param string $password
-     * @throws Exception
      */
     private function fakeAuthentication(string $password): void
     {
@@ -236,7 +241,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         // IF account is not yet activated, send a reminder email with an activation link
         if ($exception instanceof DisabledException) {
-            $login = $request->request->get('login');
+            $login = $request->get('login');
             $user = null;
 
             if (preg_match('/^.+@\S+\.\S+$/', $login)) {
@@ -254,6 +259,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             $this->mailer->loginAttemptOnNonActivatedAccount($user, $request->getLocale());
         }
 
+        if ($exception instanceof UsernameNotFoundException) {
+            $this->fakeAuthentication($request->get('password'));
+        }
+
         $this->session->getFlashBag()->add(
             'login-failed',
             $this->translator->trans('flash.user.invalid_credentials')
@@ -262,7 +271,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $template = $this->twig->render('form/user/_login.html.twig', [
             'login' => $request->get('login')
         ]);
-        $jsonTemplate = json_encode($template);
 
         return new JsonResponse([
             'template' => json_encode($template)
