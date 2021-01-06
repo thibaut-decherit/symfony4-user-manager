@@ -12,7 +12,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.10.2",
     "@symfony/webpack-encore": "^0.28.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.3.1",
     "core-js": "^3.2.1",
